@@ -1,0 +1,18 @@
+class Solution {
+    int[] result;
+    public int[] getModifiedArray(int length, int[][] updates) {
+        result = new int[length];
+        for(int[] update:updates){
+            int start = update[0];
+            int end = update[1];
+            int inc = update[2];
+            helper(result, start, end, inc);
+        }
+        return result;
+    }
+    public void helper(int[] result, int start, int end, int inc){
+        for(int i=start;i<=end;i++){
+            result[i]+=inc;
+        }
+    }
+}
