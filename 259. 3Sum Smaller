@@ -1,0 +1,22 @@
+//O(n2) time and O(1) space solution
+class Solution {
+    public int threeSumSmaller(int[] nums, int target) {
+        if(nums==null || nums.length<3) return 0;
+        Arrays.sort(nums);
+        int result = 0;
+        for(int i=0;i<nums.length-2;i++){
+            int low = i+1 , high = nums.length-1;
+            while(low<high){
+                int sum = nums[i]+nums[low]+nums[high];
+                if(sum<target){
+                    result+=high-low;
+                    low++;
+                }
+                else{
+                    high--;
+                }
+            }
+        }
+        return result;
+    }
+}
