@@ -1,0 +1,27 @@
+/* The knows API is defined in the parent class Relation.
+      boolean knows(int a, int b); */
+//O(n) time and O(n) space
+public class Solution extends Relation {
+    public int findCelebrity(int n) {
+        if(n<=0) return -1;
+        if(n==1) return 0;
+        Stack<Integer> stack = new Stack();
+        for(int i=0;i<n;i++)
+            stack.push(i);
+        while(stack.size()>1){
+            int a = stack.pop();
+            int b = stack.pop();
+            if(knows(a,b))
+                stack.push(b);
+            else
+                stack.push(a);
+        }
+        int c = stack.pop();
+        for(int i=0;i<n;i++){
+            if(i==c) continue;
+            if(knows(c,i) || !knows(i,c))
+                return -1;
+        }
+        return c;
+    }
+}
