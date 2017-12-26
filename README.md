@@ -1,2 +1,2 @@
-# LCLocked
-My solutions to LeetCode locked questions in Java
+# LC
+My solutions to LeetCode questions in Java
