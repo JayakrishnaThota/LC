@@ -1,0 +1,20 @@
+//O(nk) where n is the number of elements and k is the length of the smallest string and O(1) space
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        //Edge case
+        if(strs==null || strs.length==0) return "";
+        Arrays.sort(strs); //O(nlogn)
+        String key = strs[0];
+        String result = "";
+        boolean flag = false;
+        for(int i=0;i<key.length();i++){
+            char c = key.charAt(i);
+            for(int j=1;j<strs.length;j++){
+                if(strs[j].charAt(i)!=c)
+                    return result;
+            }
+            result= result+c+"";
+        }
+        return result;
+    }
+}
