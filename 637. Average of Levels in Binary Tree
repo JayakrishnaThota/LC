@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public List<Double> averageOfLevels(TreeNode root) {
+         List<Double> list = new ArrayList();
+        if(root==null) return list;
+        Queue<TreeNode> q = new LinkedList();
+        q.offer(root);
+        while(!q.isEmpty()){
+            int level = q.size();
+            double d = 0;
+            for(int i=0;i<level;i++){
+                TreeNode temp = q.poll();
+                d+=temp.val;
+                if(temp.left!=null) q.offer(temp.left);
+                if(temp.right!=null) q.offer(temp.right);
+            }
+            list.add(d/level);
+        }
+        return list;
+    }
+                        
+}
