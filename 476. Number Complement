@@ -1,0 +1,11 @@
+//O(n) time and O(1) space
+class Solution {
+    public int findComplement(int num) {
+        int i=0,j=0;
+        while(i<num){
+            i+=Math.pow(2,j);
+            j++;
+        }
+        return i-num;
+    }
+}
