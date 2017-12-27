@@ -1,0 +1,21 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean checkRecord(String s) {
+        //Sanity check
+        if(s==null || s.length()==0) return true;
+        int l=0,a=0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='L'){ 
+                l++;
+                if(l==3) return false;
+            }
+            else if(s.charAt(i)=='A'){ 
+                a++;
+                if(a>1) return false;
+                l=0;
+            }
+            else l = 0;
+        }
+        return true;
+    }
+}
