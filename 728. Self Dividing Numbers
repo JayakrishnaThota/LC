@@ -1,0 +1,16 @@
+//O(nk) time and O(1) space
+class Solution {
+    public List<Integer> selfDividingNumbers(int left, int right) {
+        List<Integer> list = new ArrayList();
+        for(int i=left;i<=right;i++){
+            boolean flag = true;
+            String s = String.valueOf(i);
+            for(char c:s.toCharArray()){
+                int val = Character.getNumericValue(c);
+                if((val==0) || (i%val!=0)) flag = false;
+            }
+            if(flag) list.add(i);
+        }
+        return list;
+    }
+}
