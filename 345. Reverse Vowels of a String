@@ -1,0 +1,31 @@
+//O(n) time and O(1) space
+class Solution {
+    public String reverseVowels(String s) {
+        int low =0, high = s.length()-1;
+        char[] ch = s.toCharArray();
+        while(low<high){
+            if(!isVowel(ch[low])){
+                low++;
+            }
+            else if(!isVowel(ch[high])){
+                high--;
+            }
+            else if(low<high){
+                    swap(ch,low,high);
+                    low++;
+                    high--;
+            }
+            }
+        return String.valueOf(ch);
+        }
+    
+    public void swap(char[] ch, int i, int j){
+        char temp = ch[i];
+        ch[i] = ch[j];
+        ch[j] = temp;
+    }
+    
+    public boolean isVowel(char c){
+        return (c=='a' || c=='e' || c=='i' || c=='o' || c=='u' || c=='A' || c=='E' || c=='I' || c=='O' || c=='U');
+    }
+}
