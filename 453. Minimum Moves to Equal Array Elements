@@ -1,0 +1,16 @@
+//O(n) time and O(1) space
+class Solution {
+    public int minMoves(int[] nums) {
+        //Sanity check
+        if(nums==null || nums.length==0) return 0;
+        int min = nums[0];
+        for(int n:nums){
+            min = Math.min(min, n);
+        }
+        int sum = 0;
+        for(int n:nums){
+            sum += (n-min);
+        }
+        return sum;
+    }
+}
