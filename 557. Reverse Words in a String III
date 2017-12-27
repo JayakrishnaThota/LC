@@ -1,0 +1,27 @@
+//O(n) time and O(1) space
+class Solution {
+    public String reverseWords(String s) {
+        char[] ch = s.toCharArray();
+        int index = 0;
+        for(int i=0;i<s.length();i++){
+            if(ch[i]==' '){
+                System.out.println(i+""+index);
+                reverse(ch,index,i-1);
+                index = i+1;
+            }
+        }
+        //Reverse last word
+        reverse(ch,index,ch.length-1);
+        return String.valueOf(ch);
+    }
+    
+    public void reverse(char[] ch, int l, int h){
+        while(l<h){
+            char temp = ch[l];
+            ch[l] = ch[h];
+            ch[h] = temp;
+            l++;
+            h--;
+        }
+    }
+}
