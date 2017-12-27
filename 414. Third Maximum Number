@@ -1,0 +1,22 @@
+//O(n) and O(1)
+class Solution {
+    public int thirdMax(int[] nums) {
+        Integer n1=null, n2=null,n3=null;
+        for(Integer n:nums){
+            if (n.equals(n1) || n.equals(n2) || n.equals(n3)) continue;
+            if(n1==null || n>n1){
+                n3 = n2;
+                n2 = n1;
+                n1 = n;
+            }
+            else if(n2==null || n>n2){
+                n3 = n2;
+                n2 = n;
+            }
+            else if(n3==null || n>n3){
+                n3 = n;
+            }
+        }
+        return (n3==null)?n1:n3;
+    }
+}
