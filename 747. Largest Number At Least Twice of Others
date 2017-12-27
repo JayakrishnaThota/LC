@@ -1,0 +1,17 @@
+//O(n) and O(1) 
+class Solution {
+    public int dominantIndex(int[] nums) {
+        if(nums.length<2) return 0;
+        //Find the max index
+        int max = 0;
+        for(int i=0;i<nums.length;i++)
+            if(nums[i]>nums[max]) max = i;
+        //Find the second max
+        int secmax=-1;
+        for(int i=0;i<nums.length;i++){
+            if(i==max) continue;
+            if(secmax==-1 || nums[i]>nums[secmax]) secmax = i;
+        }
+        return (nums[max]>=2*nums[secmax])?max:-1;
+    }
+}
