@@ -1,0 +1,17 @@
+//O(n2) time and O(1) space
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int n = s.length();
+        for(int i=n/2;i>0;i--){
+            StringBuffer sb = new StringBuffer();
+            if(n%i==0){
+                String key = s.substring(0,i);
+                for(int j=0;j<(n/i);j++){
+                    sb.append(key)
+                }
+                if(sb.toString().equals(s)) return true;
+            }
+        }
+        return false;
+    }
+}
