@@ -1,0 +1,37 @@
+//O(n) time and space
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        List<Integer> list = max(nums);
+        if(list.size()==0) return 0;
+        Map<Integer, Integer[]> map2 = new HashMap();
+        Set<Integer> set = new HashSet(list);
+        for(int i=0;i<nums.length;i++){
+        if (map2.get(nums[i]) == null) map2.put(nums[i], new Integer[2]);
+        Integer[] numRange = map2.get(nums[i]);
+        if (numRange[0] == null) numRange[0] = i;
+        numRange[1] = i;
+        }
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i<nums.length;i++){
+            if(set.contains(nums[i])){
+                Integer[] result = map2.get(nums[i]);
+                min = Math.min(min, result[1]-result[0]+1);
+            }
+        }
+        return min;
+    }
+    public List<Integer> max(int[] nums){
+        List<Integer> list = new ArrayList();
+        Map<Integer, Integer> map = new HashMap();
+        for(int n:nums)
+            map.put(n,map.getOrDefault(n,0)+1);
+        int degree = 0;
+        for(int key:map.keySet())
+            degree = Math.max(degree, map.get(key));
+        for(int key:map.keySet()){
+            if(map.get(key)==degree)
+                list.add(key);
+        }
+        return list;
+        }
+}
