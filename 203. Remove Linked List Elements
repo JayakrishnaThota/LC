@@ -1,0 +1,20 @@
+//O(n) time and O(1)
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if(head==null) return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode iter = dummy;
+        while(iter!=null){
+            ListNode next = iter.next;
+            if(next==null) break;
+            if(next.val==val){
+                iter.next = next.next;
+            }
+            else{
+                iter = next;
+            }
+        }
+        return dummy.next;
+    }
+}
