@@ -1,0 +1,29 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean detectCapitalUse(String word) {
+        if(word==null || word.length()==0) return true;
+        if(Character.isLowerCase(word.charAt(0))){
+                if(alllower(word,1))
+                    return true;
+        }
+        else{
+            System.out.println(1);
+            if(alllower(word,1) || allupper(word)) return true;
+        }
+        return false;
+    }
+    
+    public boolean alllower(String word, int index){
+        for(int i=index;i<word.length();i++)
+            if(Character.isUpperCase(word.charAt(i))) return false;
+        return true;
+    }
+    
+    public boolean allupper(String word){
+        for(int i=1;i<word.length();i++)
+             if(Character.isLowerCase(word.charAt(i))) return false;
+        System.out.println(2);
+        return true;
+    }
+    
+}
