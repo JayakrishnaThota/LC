@@ -1,0 +1,14 @@
+//O(n) time and space
+class Solution {
+    public char findTheDifference(String s, String t) {
+        Map<Character, Integer> map = new HashMap();
+        for(char c:s.toCharArray()){
+            map.put(c,map.getOrDefault(c,0)+1);
+        }
+        for(char d:t.toCharArray()){
+            if(!map.containsKey(d) || map.get(d)<=0) return d;
+            map.put(d,map.get(d)-1);
+        }
+        return 'a';
+    }
+}
