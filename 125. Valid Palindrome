@@ -1,0 +1,27 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean isPalindrome(String s) {
+        if(s==null || s.length()==0) return true;
+        int low=0;
+        int high = s.length()-1;
+        while(low<=high){
+            char cs = s.charAt(low);
+            char ce = s.charAt(high);
+            if(!Character.isLetterOrDigit(cs)){
+                low++;
+            }
+            else if(!Character.isLetterOrDigit(ce)){
+                high--;
+            }
+            else if (Character.toLowerCase(cs) != Character.toLowerCase(ce)) {
+        			return false;
+        		}
+            else
+            {
+            low++;
+            high--;
+                }
+        }
+        return true;
+    }
+}
