@@ -1,0 +1,28 @@
+//O(mn) time and O(1) space
+class Solution { 
+    int[][] dirs = new int[][]{{0,1},{1,0},{1,1},{-1,0},{0,-1},{-1,-1},{-1,1},{1,-1}};
+    public int[][] imageSmoother(int[][] M) {
+        int[][] result = new int[M.length][M[0].length];
+        if(M==null || M.length==0) return M;
+        for(int i=0;i<M.length;i++){
+            for(int j=0;j<M[0].length;j++){
+                result[i][j] = helper(M,i,j);
+            }
+        }
+        return result;
+    }
+    
+    public int helper(int[][] M, int i, int j){
+         int count = 1;
+        int sum = M[i][j];
+        for(int[] dir:dirs){
+            int x = i+ dir[0];
+            int y = j+dir[1];
+            if(x<0 || x>=M.length || y<0 || y>=M[0].length) continue;
+            sum+=M[x][y];
+            count++;
+        }
+            return sum/count;
+    }
+        
+}
