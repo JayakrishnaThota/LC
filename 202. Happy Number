@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public boolean isHappy(int n) {
+        Set<Integer> set = new HashSet();
+        while(n!=1){
+            int sum = squaresum(n);
+            if(!set.add(sum)) return false;
+            n = sum;
+        }
+        return true;
+    }
+    public int squaresum(int n){
+        int sum = 0;
+        while(n>0){
+            int y = n%10;
+            sum+= y*y;
+            n/=10;
+        }
+        System.out.println(sum);
+        return sum;
+    }
+}
