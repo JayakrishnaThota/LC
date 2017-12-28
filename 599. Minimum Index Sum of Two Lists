@@ -1,0 +1,29 @@
+//O(n) time and space
+class Solution {
+    public String[] findRestaurant(String[] list1, String[] list2) {
+        Map<String, Integer> map1 = new HashMap();
+        Map<String, Integer> map2 = new HashMap();
+        Map<String, Integer> map3 = new HashMap();
+        for(int i=0;i<list1.length;i++)
+            map1.put(list1[i],i);
+        for(int j=0;j<list2.length;j++){
+            map2.put(list2[j],j);
+            if(map1.containsKey(list2[j])){
+                map3.put(list2[j],j+map1.get(list2[j]));
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for(String s:map3.keySet()){
+            min = Math.min(min, map3.get(s));
+        }
+        List<String> list = new ArrayList();
+        for(String s:map3.keySet()){
+            if(map3.get(s)==min)
+                list.add(s);
+        }
+        String[] result = new String[list.size()];
+        for(int i=0;i<list.size();i++)
+            result[i] = list.get(i);
+        return result;
+    }
+}
