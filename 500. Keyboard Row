@@ -1,0 +1,23 @@
+//O(n) time and space
+class Solution {
+    public String[] findWords(String[] words) {
+        String r1 = "qwertyuiopQWERTYUIOP";
+        String r2 = "asdfghjklASDFGHJKL";
+        String r3 = "zxcvbnmZXCVBNM";
+        List<String> list = new ArrayList();
+        for(String word:words){
+            int c1=0,c2=0,c3=0;
+            for(char c:word.toCharArray()){
+                if(r1.indexOf(c)>=0) c1++;
+                else if(r2.indexOf(c)>=0) c2++;
+                else c3++;
+            }
+            if(c1==word.length() || c2==word.length() || c3==word.length()) 
+                list.add(word);
+        }
+        String[] result = new String[list.size()];
+        for(int i=0;i<list.size();i++)
+            result[i] = list.get(i);
+        return result;
+    }
+}
