@@ -1,0 +1,42 @@
+//O(n) time and space
+class Solution {
+    public int[] findMode(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        Map<Integer, Integer> map = new HashMap();
+        for(Integer i:list)
+            map.put(i, map.getOrDefault(i,0)+1);
+        int max = 0;
+        for(Integer key:map.keySet())
+            max = Math.max(max, map.get(key));
+        List<Integer> l = new ArrayList();
+        for(Integer key:map.keySet())
+            if(map.get(key)==max) l.add(key);
+        int[] result = new int[l.size()];
+        for(int i=0;i<l.size();i++)
+            result[i] = l.get(i);
+        return result;
+    }
+      public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList();
+        if(root==null) return list;
+        Stack<TreeNode> stack = new Stack();
+        boolean done = false;
+        TreeNode cur = root;
+        while(!done){
+            if(cur!=null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            else{
+                if(stack.isEmpty())
+                    done = true;
+                else{
+                    cur = stack.pop();
+                    list.add(cur.val);
+                    cur = cur.right;
+                }
+            }
+        }
+        return list;
+    }
+}
