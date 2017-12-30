@@ -1,0 +1,23 @@
+//O(n) time and O(1) space
+class Solution {
+    public void rotate(int[][] matrix) {
+        //Step1: Find the transpose of the matrix
+        int r = matrix.length;
+        int c = matrix[0].length;
+        for(int i=0;i<r;i++){
+            for(int j=i+1;j<c;j++){
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        //Step 2: Swap it over the half
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c/2;j++){
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[i][c-j-1];
+                matrix[i][c-j-1] = temp;
+            }
+        }
+    }
+}
