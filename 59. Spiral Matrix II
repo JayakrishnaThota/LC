@@ -1,0 +1,52 @@
+//O(mn) time and O(1) space
+public class Solution 
+{
+    public int[][] generateMatrix(int n) 
+    {
+        int[][] matrix = new int[n][n];
+        if(n==0) return matrix;
+        int rowbegin = 0;
+        int colbegin = 0;
+        int rowend = n-1;
+        int columnend = n-1;
+        int k=1;
+        while(rowbegin<=rowend && colbegin<=columnend)
+        {
+        //Traverse left
+        for(int i=colbegin;i<=columnend;i++)
+        {
+            matrix[rowbegin][i] = k;
+            k++;
+        }
+        rowbegin++;
+        //Traverse down
+       for (int j = rowbegin; j <= rowend; j++) 
+            {
+                matrix[j][columnend] = k;
+                k++;
+            }
+            columnend--;
+            if(rowbegin<=rowend)
+            {
+        //Traverse right
+        for(int i=columnend;i>=colbegin;i--)
+        {
+            matrix[rowend][i] = k;
+            k++;
+        }
+        rowend--;
+            }
+            if(colbegin<=columnend)
+            {
+        //Traverseup
+        for(int j=rowend;j>=rowbegin;j--)
+        {
+            matrix[j][colbegin] = k;
+            k++;
+        }
+        colbegin++;
+            }
+        }
+        return matrix;
+    }
+}
