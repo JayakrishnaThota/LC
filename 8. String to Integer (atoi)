@@ -1,0 +1,31 @@
+//O(n) time and O(1) space
+class Solution {
+    public int myAtoi(String str) {
+        //Sanity check
+        if(str==null || str.length()==0) return 0;
+        //Spaces elimination
+        int i=0;
+        while(str.charAt(i)==' '){
+            i++;
+        } 
+        //Sign find
+        int sign = 1;
+        if(str.charAt(i)=='-' || str.charAt(i)=='+')
+        { 
+            sign = ((str.charAt(i++)=='-')?-1:1);
+        }
+        long result = 0; 
+        for(;i<str.length();i++){
+            int val = str.charAt(i)-'0';
+            System.out.println(str.charAt(i));
+            if(val<0 || val>9) break;
+            result = result*10 + val;
+            if(result>Integer.MAX_VALUE){
+                if(sign == 1) return Integer.MAX_VALUE;
+                else return Integer.MIN_VALUE;
+            }
+        }
+        int res = (int)result;
+        return res*sign;
+    }
+}
