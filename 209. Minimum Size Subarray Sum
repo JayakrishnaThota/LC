@@ -1,0 +1,16 @@
+//O(n) and O(1)
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int sum = 0;
+        int left = 0;
+        int min = nums.length+1;
+        for(int right=0;right<nums.length;right++){
+            sum+=nums[right];
+            while(sum>=s){
+                min = Math.min(right-left+1,min);
+                sum-=nums[left++];
+            }
+        }
+        return (min==nums.length+1)?0:min;
+    }
+}
