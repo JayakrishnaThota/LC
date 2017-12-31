@@ -1,0 +1,15 @@
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> list = new ArrayList();
+        helper(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+    public void helper(List<List<Integer>> list, List<Integer> sublist, int[] nums, int start){
+        list.add(new ArrayList<>(sublist));
+        for(int i=start;i<nums.length;i++){
+            sublist.add(nums[i]);
+            helper(list, sublist, nums, i+1);
+            sublist.remove(sublist.size()-1);
+        }
+    }
+}
