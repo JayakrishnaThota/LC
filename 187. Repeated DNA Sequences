@@ -1,0 +1,13 @@
+//O(n) time and space
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Set<String> list = new HashSet();
+        Set<String> set = new HashSet();
+        for(int i=0;i+10<=s.length();i++){
+            if(!set.add(s.substring(i,i+10)))
+                list.add(s.substring(i,i+10));
+        }
+        List<String> result = new ArrayList(list);
+        return result;
+    }
+}
