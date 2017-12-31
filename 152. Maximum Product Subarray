@@ -1,0 +1,15 @@
+//O(n) time and O(1) space solution
+public class Solution {
+    public int maxProduct(int[] nums) {
+        if(nums.length==0||nums==null) return 0;
+        int maxendinghere=nums[0], maxsofar = nums[0], minsofar = nums[0];
+        for(int i=1;i<nums.length;i++)
+        {
+            int temp=maxsofar;
+            maxsofar =Math.max(Math.max(maxsofar*nums[i],minsofar*nums[i]),nums[i]);
+            minsofar =Math.min(Math.min(temp*nums[i],minsofar*nums[i]),nums[i]);
+            maxendinghere = Math.max(maxsofar,maxendinghere);
+        }
+        return maxendinghere;
+    }
+}
