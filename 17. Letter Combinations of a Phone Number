@@ -1,0 +1,21 @@
+//O(n) time and space
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> list = new LinkedList();
+        //Sanity check
+        if(digits==null || digits.length()==0) return list;
+        String[] mapping = new String[]{"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        list.add("");
+        for(int i=0;i<digits.length();i++){
+                int val = digits.charAt(i)-'0';
+                while(list.peek().length()==i){
+                    String t = list.poll();
+                    for(char c: mapping[val].toCharArray()){
+                        System.out.println(c);
+                        list.add(t+c);
+                    }
+                }
+            }
+        return list;
+    }
+}
