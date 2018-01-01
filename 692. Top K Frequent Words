@@ -1,0 +1,30 @@
+//O(n) time and space solution
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> result = new ArrayList();
+        //Buckets from 0 to nums.length so that each stores that frequent element
+        List<String>[] buckets = new List[words.length+1];
+        Map<String, Integer> map = new TreeMap();
+        for(String word:words){
+            map.put(word,map.getOrDefault(word,0)+1);
+        }
+        for(String key:map.keySet()){
+            int freq = map.get(key);
+            if(buckets[freq]==null){
+                buckets[freq] = new ArrayList();
+            }
+            buckets[freq].add(key);
+        }
+        for(int i = buckets.length-1;i>=0;i--){
+            if(buckets[i]!=null)
+                {
+                for(String s:buckets[i]){
+                    result.add(s);
+                    if(result.size()==k)
+                        return result;
+                }
+            }
+        }
+        return result; 
+    }
+}
