@@ -1,0 +1,28 @@
+//O(nlogn) and O(1)
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        //Sanity check
+        if(points==null || points.length==0) return 0;
+        Arrays.sort(points, new Comparator<int[]>(){
+           public int compare(int[] p1, int[] p2){
+               if(p1[1]!=p2[1])
+                   return p1[1]-p2[1];
+               else
+                   return p2[0]-p2[0];
+           } 
+        });
+        int start = points[0][0];
+        int end = points[0][1];
+        int arrow = 1;
+        for(int[] p:points){
+            if(end<p[0]){
+                arrow++;
+                end = p[1];
+            }
+            else{
+                end = Math.min(end, p[1]);
+            }
+        }
+        return arrow;
+    }
+}
