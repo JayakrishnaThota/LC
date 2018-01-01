@@ -1,0 +1,22 @@
+//O(nk) time and space where n is the number of rows and k is the max number of bricks in all rows
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+        //Sanity Check
+        if(wall.size()==0) return 0;
+        int result = 0;
+        Map<Integer, Integer> map = new HashMap();
+        for(List<Integer> row:wall){
+            int sum = 0;
+            for(int i=0;i<row.size()-1;i++){
+                sum+=row.get(i);
+                map.put(sum,map.getOrDefault(sum,0)+1);
+            }
+        }
+        //Report the most frequently occuring element
+        for(Integer key:map.keySet()){
+            System.out.println(key+""+map.get(key));
+            result = Math.max(result, map.get(key));
+        }
+        return wall.size()-result;
+    }
+}
