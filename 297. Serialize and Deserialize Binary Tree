@@ -1,0 +1,42 @@
+//Level order traversal based encoding
+public class Codec {
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList();
+        if(root==null) return "";
+        q.offer(root);
+        StringBuffer sb = new StringBuffer();
+        while(!q.isEmpty()){
+            TreeNode temp = q.poll();
+            if(temp==null) { sb.append("null,"); continue; }
+            sb.append(temp.val+",");
+            q.offer(temp.left);
+            q.offer(temp.right);
+        }
+        return sb.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        //Sanity check
+        if(data=="") return null;
+        Queue<TreeNode> q = new LinkedList();
+        String[] leaves = data.split(",");
+        TreeNode root = new TreeNode(Integer.parseInt(leaves[0]));
+        q.offer(root);
+        for(int i=1;i<leaves.length;i++){
+            TreeNode parent = q.poll();
+            if(!leaves[i].equals("null")){
+                TreeNode left = new TreeNode(Integer.parseInt(leaves[i])); 
+                parent.left = left;
+                q.add(left);
+            }
+            if(!leaves[++i].equals("null")){
+                 TreeNode right = new TreeNode(Integer.parseInt(leaves[i])); 
+                 parent.right = right;
+                 q.add(right);
+            }
+        }
+        return root;
+    }
+}
