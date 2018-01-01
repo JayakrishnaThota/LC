@@ -1,0 +1,23 @@
+//O(n) time and space
+class Solution {
+    public int sumNumbers(TreeNode root) {
+        if(root==null) return 0;
+        List<String> list = new ArrayList();
+        helper(root,list,"");
+        int sum = 0;
+        for(String s:list){
+            System.out.println(s);
+            sum+=Integer.parseInt(s);
+        }
+        return sum;
+    }
+     public void helper(TreeNode root, List<String> list, String s){
+        if(root.left==null && root.right==null){
+            list.add(s+root.val+"");
+            return;
+        }
+        s+=root.val+"";
+        if(root.left != null) helper(root.left,list,s);
+        if(root.right!=null) helper(root.right,list,s);
+    } 
+}
