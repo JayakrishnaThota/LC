@@ -1,0 +1,22 @@
+//O(n) time and space
+public class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode list = new ListNode(0);
+        Stack<Integer> s1 = new Stack();
+        Stack<Integer> s2 = new Stack();
+        ListNode a = l1,b=l2;
+        while(a!=null) { s1.push(a.val); a = a.next; }
+        while(b!=null) { s2.push(b.val); b = b.next; }
+        int sum = 0;
+        while(!s1.isEmpty()||!s2.isEmpty()){
+            if (!s1.empty()) sum += s1.pop();
+            if (!s2.empty()) sum += s2.pop();
+            list.val = sum%10;
+            ListNode head = new ListNode(sum/10);
+            head.next = list;
+            list = head;
+            sum/=10;
+        }
+        return list.val==0?list.next:list;
+    }
+}
