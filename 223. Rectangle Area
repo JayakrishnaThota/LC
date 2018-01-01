@@ -1,0 +1,15 @@
+//O(1) time and space
+class Solution {
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int overlap=0, area1 = 0, area2 = 0;
+        area1 = (G-E)*(H-F);
+        area2 = (C-A)*(D-B);
+        int left  = Math.max(A,E);
+        int right = Math.min(C,G);
+        int down = Math.max(B,F);
+        int up = Math.min(D,H);
+        if((right>left) && (up>down))
+            overlap = (right-left)*(up-down);
+        return area1+area2-overlap;
+    }
+}
