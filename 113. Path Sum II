@@ -1,0 +1,20 @@
+//O(n2) time and space
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> list = new ArrayList();
+        helper(list, new ArrayList<>(), sum, root);
+        return list;
+    }
+    public void helper(List<List<Integer>> list, List<Integer> sublist, int rem, TreeNode root){
+        if(root==null) return;
+        sublist.add(root.val);
+        if(rem==root.val && root.left==null && root.right==null){
+            list.add(new ArrayList(sublist));
+        } 
+        else{
+        helper(list,sublist,rem-root.val,root.left);
+        helper(list, sublist, rem-root.val, root.right);
+        }
+        sublist.remove(sublist.size()-1);
+    }
+}
