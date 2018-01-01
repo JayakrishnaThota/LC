@@ -1,0 +1,38 @@
+//O(n) and O(1)
+class Solution {
+    public void reorderList(ListNode head) {
+        if(head==null || head.next==null) return;
+        ListNode slow = head, fast = head, prev = null;
+        while(fast!=null && fast.next!=null){
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode l1 = head;
+        ListNode l2 = reverse(slow);
+        prev.next = l2;
+        ListNode h2 = l2;
+        while(l2 != null && !l1.next.equals(h2)){
+            ListNode fnext = l1.next;
+            ListNode snext = l2.next;
+            l1.next = l2;
+            l2.next = fnext;
+            l1 = fnext;
+            l2 = snext;
+        }
+        l1.next = l2;
+        return;
+    }
+    public ListNode reverse(ListNode head){
+        if(head==null || head.next==null) return head;
+        ListNode cur = head;
+        ListNode prev = null;
+        while(cur!=null){
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+}
