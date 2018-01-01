@@ -1,0 +1,43 @@
+//O(n2) time and O(n) space solution
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        //Sanity check
+        if(matrix==null || matrix.length==0) return 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[] array = new int[n];
+        for(int i=0;i<n;i++)
+            if(matrix[0][i] == '1')
+                array[i] = 1;
+        int max = largestRectangleArea(array);
+        for(int i=1;i<m;i++){
+            initialise(matrix, array, m, n, i);
+            max = Math.max(max, largestRectangleArea(array));
+        }
+        return max;
+    }
+    public void initialise(char[][] matrix, int[] array, int m, int n, int i){
+        for(int j=0;j<n;j++){
+            if(matrix[i][j]=='1')
+                array[j]+=1;
+            else
+                array[j]=0;
+        }
+    }
+    public int largestRectangleArea(int[] height) {
+        int len = height.length;
+        Stack<Integer> s = new Stack<Integer>();
+        int maxArea = 0;
+        for(int i = 0; i <= len; i++){
+            int h = (i == len ? 0 : height[i]);
+            if(s.isEmpty() || h >= height[s.peek()]){
+                s.push(i);
+            }else{
+                int tp = s.pop();
+                maxArea = Math.max(maxArea, height[tp] * (s.isEmpty() ? i : i - 1 - s.peek()));
+                i--;
+            }
+        }
+        return maxArea;
+    }
+}
