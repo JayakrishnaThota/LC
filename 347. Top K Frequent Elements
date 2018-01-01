@@ -1,0 +1,22 @@
+//O(n) time and space solution
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> result = new ArrayList();
+        if(nums==null || nums.length==0 || k<0) return result;
+        List<Integer>[] buckets = new ArrayList[nums.length+1];
+        Map<Integer, Integer> map = new HashMap();
+        for(int n:nums)
+            map.put(n, map.getOrDefault(n,0)+1);
+        for(int key:map.keySet()){
+            int value = map.get(key);
+            if(buckets[value]==null)
+                buckets[value] = new ArrayList();
+            buckets[value].add(key);
+        }
+        for(int i=nums.length;(i>=0&&result.size()<k);i--){
+            if(buckets[i]!=null)
+                result.addAll(buckets[i]);
+        }
+        return result;
+    }
+}
