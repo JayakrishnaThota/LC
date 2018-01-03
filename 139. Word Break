@@ -1,0 +1,20 @@
+//O(n2) time and O(n) space
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        //Sanity check
+        if(s==null || s.length()==0) return true;
+        int n = s.length();
+        boolean[] dp = new boolean[n+1];
+        dp[0] = true;
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<i;j++){
+                String key = s.substring(j,i);
+                if(wordDict.contains(key) && dp[j]){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+}
