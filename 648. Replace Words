@@ -1,0 +1,55 @@
+public class Solution {
+     public class TrieNode
+{
+    public char ch;
+    public boolean isWord;
+    public TrieNode[] children = new TrieNode[26];
+    public TrieNode(){}
+    public TrieNode(char c){
+        TrieNode node = new TrieNode();
+        node.ch = c;
+    }
+     }
+    public String replaceWords(List<String> dict, String sentence) {
+        String[] words = sentence.split(" ");
+        TrieNode root = buildTrie(dict);
+        return helper(root,words);
+    }
+    public String helper(TrieNode trie, String[] words){
+        StringBuffer sb = new StringBuffer();
+        for(String word: words){
+                sb.append(lookTrie(trie,word));
+            sb.append(" ");
+        }
+        return sb.substring(0,sb.length()-1);
+    }
+    public String lookTrie(TrieNode trie, String word){
+        StringBuffer sb = new StringBuffer();
+        TrieNode temp = trie;
+        for(char c:word.toCharArray()){
+            sb.append(c);
+            if(temp.children[c-'a']!=null){
+                if(temp.children[c-'a'].isWord)
+                    return sb.toString();
+                    temp = temp.children[c-'a'];
+            }
+            else
+                return word;
+        }
+        return word;
+    }
+    public TrieNode buildTrie(List<String> dict){
+        TrieNode root = new TrieNode(' ');
+        for(String word:dict){
+             TrieNode temp = root;
+            for(char c:word.toCharArray()){
+                if(temp.children[c-'a']==null){
+                    temp.children[c-'a'] = new TrieNode(c);
+                }
+                temp = temp.children[c-'a'];
+            }
+            temp.isWord = true;
+        }
+        return root;
+    }
+}
