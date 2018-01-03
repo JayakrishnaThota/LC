@@ -1,0 +1,29 @@
+//O(mn) time and space
+class Solution {
+    int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    public int longestIncreasingPath(int[][] matrix) {
+        //Sanity check
+        if(matrix==null || matrix.length==0) return 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int max = 0;
+        int[][] dp = new int[m][n];
+        for(int i=0;i<matrix.length;i++){
+            for(int j=0;j<matrix[0].length;j++){
+                int longest = helper(matrix,i,j,m,n,dp);
+                max = Math.max(max, longest);
+            }
+        }
+        return max;
+    }
+    public int helper(int[][] matrix, int i, int j, int m, int n, int[][] dp){
+        if(dp[i][j]!=0) return dp[i][j];
+        for(int[] dir:dirs){
+            int x = i+dir[0];
+            int y = j+dir[1];
+            if(x>=0 && x<m && y>=0 && y<n && matrix[i][j]<matrix[x][y]) 
+                dp[i][j] = Math.max(dp[i][j],helper(matrix,x,y,m,n,dp));
+        }
+        return ++dp[i][j];
+    }
+}
