@@ -1,0 +1,13 @@
+//O(n2) and O(1) space
+class Solution {
+    public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        int index = 0;
+        while(index<intervals.size() && intervals.get(index).end<newInterval.start) index++;
+        while(index<intervals.size() && intervals.get(index).start<=newInterval.end){
+            newInterval = new Interval(Math.min(intervals.get(index).start, newInterval.start), Math.max(intervals.get(index).end, newInterval.end));
+            intervals.remove(index);
+        } 
+        intervals.add(index, newInterval);
+        return intervals;
+    }
+}
