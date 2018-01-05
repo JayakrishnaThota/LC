@@ -1,0 +1,26 @@
+//O(n) and O(1)
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        //Sanity check
+        if(s1.length()>s2.length()) return false;
+        int m = s1.length();
+        int n = s2.length();
+        int[] map = new int[26];
+        for(int i=0;i<m;i++){
+            map[s1.charAt(i)-'a']++;
+            map[s2.charAt(i)-'a']--;
+        }
+        if(helper(map)) return true;
+        for(int i=m;i<n;i++){
+            map[s2.charAt(i)-'a']--;
+            map[s2.charAt(i-m)-'a']++;
+            if(helper(map)) return true;
+        }
+        return false;
+    }
+    public boolean helper(int[] map){
+        for(int i=0;i<map.length;i++)
+            if(map[i]!=0) return false;
+        return true;
+    }
+}
