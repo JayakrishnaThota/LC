@@ -1,0 +1,22 @@
+//O(n2) and O(n)
+class Solution {
+    public int maxProduct(String[] words) {
+        //Sanity check
+        if(words==null || words.length==0) return 0;
+        int max = 0;
+        int[] value = new int[words.length];
+        for(int i=0;i<words.length;i++){
+            String key = words[i];
+            for(int j=0;j<key.length();j++){
+                value[i] = value[i] | (1<<(key.charAt(j)-'a'));
+            }
+        }
+        for(int i=0;i<words.length;i++){
+            for(int j=i+1;j<words.length;j++){
+                if((value[i]&value[j])==0)
+                    max = Math.max(max, words[i].length()*words[j].length());
+            }
+        }
+        return max;
+    }
+}
