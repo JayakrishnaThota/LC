@@ -1,0 +1,18 @@
+//O(logn) and O(1)
+class Solution {
+    public int lastRemaining(int n) {
+        boolean left = true;
+        int rem = n;
+        int start = 1;
+        int step = 1;
+        while(rem>1){
+            if(left || rem%2==1){
+                start = start + step;    
+            }
+            rem/=2;
+            step = step*2;
+            left = !left;
+        }
+        return start;
+    }
+}
