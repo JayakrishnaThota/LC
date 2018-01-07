@@ -1,0 +1,28 @@
+//O(log(n2)) time and O(n) space
+class Solution {
+    public int countNodes(TreeNode root) {
+        if(root==null) return 0;
+        int l = leftheight(root);
+        int r = rightheight(root);
+        if(l==r)
+            return (1<<l)-1;
+        else 
+            return 1+countNodes(root.left)+countNodes(root.right);
+    }
+    public int leftheight(TreeNode node){
+        int ret = 0;
+        while(node!=null){
+            node = node.left;
+            ret++;
+        }
+        return ret;
+    }
+    public int rightheight(TreeNode node){
+        int ret = 0;
+        while(node!=null){
+            node = node.right;
+            ret++;
+        }
+        return ret;
+    }
+}
