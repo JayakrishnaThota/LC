@@ -1,0 +1,17 @@
+//O(n2) time and O(1) space
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        //Sanity Check
+        if(nums==null || nums.length<3) return false;
+        int n = nums.length;
+        int min = Integer.MAX_VALUE;
+        for(int j = 0;j<n;j++){
+            min = Math.min(nums[j],min);
+            if(min==nums[j]) continue;
+            for(int k = n-1;k>j;k--){
+                if(min<nums[k]&&nums[k]<nums[j]) return true;
+            }
+        }
+        return false;
+    }
+}
