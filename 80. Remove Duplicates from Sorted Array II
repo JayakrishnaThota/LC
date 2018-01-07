@@ -1,0 +1,13 @@
+//O(n) and O(1)
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        //Sanity check
+        if(nums==null || nums.length<3) return nums.length;
+        int index = 0;
+        for(int n:nums){
+            if(index<2 || n>nums[index-2])
+                nums[index++] = n;
+        }
+        return index;
+    }
+}
