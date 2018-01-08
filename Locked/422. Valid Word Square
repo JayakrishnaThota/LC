@@ -1,0 +1,29 @@
+//O(mn) time and O(1) space
+//m is the list size and n is the max length of the word in the given list
+class Solution {
+    public boolean validWordSquare(List<String> words) {
+        int n =0;
+        for(String w:words)
+            n = Math.max(n,w.length());
+        n = Math.max(n,words.size());
+        System.out.println(n);
+        char[][] matrix = new char[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i<words.size()){
+                int s = words.get(i).length();
+                if(j<s)
+                    matrix[i][j] = words.get(i).charAt(j);
+                }
+                else
+                matrix[i][j] = '.';
+            }
+        }
+        for(int i=0;i<matrix.length;i++){
+            for(int j=0;j<matrix[0].length;j++){
+                if(matrix[i][j]!=matrix[j][i]) return false;
+            }
+        }
+        return true;
+    }
+}
