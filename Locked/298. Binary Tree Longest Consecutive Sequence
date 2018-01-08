@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    int max = 0;
+    public int longestConsecutive(TreeNode root) {
+        if(root==null) return 0;
+        helper(root,null,0);
+        return max;
+    }
+    public void helper(TreeNode node, TreeNode parent, int length){
+        if(node==null) return;
+        length = (parent!=null &&parent.val==node.val-1)?length+1:1;
+        max = Math.max(max, length);
+        helper(node.left, node, length);
+        helper(node.right, node, length);
+    }
+}
