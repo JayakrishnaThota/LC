@@ -1,0 +1,20 @@
+class Solution {
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        Set<List<Integer>> set = new HashSet();
+        helper(set, new ArrayList<>(),0,nums);
+        List list = new ArrayList(set);
+        return list;
+    }
+    public void helper(Set<List<Integer>> list, List<Integer> sublist, int start, int[] nums){
+        if(sublist.size()>=2){
+            list.add(new ArrayList<>(sublist));
+        }
+        for(int i=start;i<nums.length;i++){
+            if(sublist.size()==0 || sublist.get(sublist.size()-1)<=nums[i]){
+                sublist.add(nums[i]);
+                helper(list, sublist, i+1, nums);
+                sublist.remove(sublist.size()-1);       
+            }
+        }
+    }
+}
