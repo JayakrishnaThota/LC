@@ -1,0 +1,27 @@
+//O(nlogk) and O(n)
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        PriorityQueue<Tuple> pq = new PriorityQueue();
+        for(int i=0;i<col;i++)
+            pq.offer(new Tuple(0,i,matrix[0][i]));
+        for(int i=0;i<k-1;i++){
+            Tuple t = pq.poll();
+            if(t.row==row-1) continue;
+            pq.offer(new Tuple(t.row+1,t.col,matrix[t.row+1][t.col]));
+        }
+        return pq.poll().val;
+    }
+}
+class Tuple implements Comparable<Tuple>{
+        int row,col,val;
+        public Tuple(int row, int col, int val){
+            this.row = row;
+            this.col = col;
+            this.val = val;
+        }
+        public int compareTo(Tuple that){
+            return this.val-that.val;
+        }
+}
