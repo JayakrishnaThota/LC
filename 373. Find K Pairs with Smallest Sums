@@ -1,0 +1,32 @@
+//O(mnlogk) and O(mn)
+class Solution {
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<int[]> list = new ArrayList();
+        PriorityQueue<Tuple> pq = new PriorityQueue();
+        int m = nums1.length;
+        int n = nums2.length;
+        //Sanity check
+        if(nums1==null || m==0 || nums2==null || n==0 || k<=0) return list;
+        for(int i=0;i<n;i++)
+            pq.offer(new Tuple(0,i,nums1[0]+nums2[i]));
+        for(int i=0;i<Math.min(k,m*n);i++){
+            Tuple t = pq.poll();
+            list.add(new int[]{nums1[t.row],nums2[t.col]});
+            if(t.row==m-1) continue;
+            pq.offer(new Tuple(t.row+1, t.col, nums1[t.row+1]+nums2[t.col]));
+            
+        }
+        return list;
+    }
+}
+class Tuple implements Comparable<Tuple>{
+        int row,col,val;
+        public Tuple(int row, int col, int val){
+            this.row = row;
+            this.col = col;
+            this.val = val;
+        }
+        public int compareTo(Tuple that){
+            return this.val-that.val;
+        }
+}
