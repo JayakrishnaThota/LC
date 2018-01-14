@@ -1,0 +1,6 @@
+//O(1) and O(1)
+class Solution {
+    public int bulbSwitch(int n) {
+        return (int)(Math.sqrt(n));
+    }
+}
