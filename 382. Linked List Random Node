@@ -1,0 +1,20 @@
+
+class Solution {
+    ListNode he;
+    Random rand;
+    public Solution(ListNode head) {
+        he = head;
+        rand = new Random();
+    }
+ 
+    public int getRandom() {
+        ListNode h = he;
+        int ret = h.val;
+        for(int i=1;h.next!=null;i++){
+            h = h.next;
+            if(i==rand.nextInt(i+1))
+                ret = h.val;
+        }
+        return ret;
+    }
+}
