@@ -1,0 +1,28 @@
+//O(n) time and space
+class Solution {
+    public String removeKdigits(String num, int k) {
+        //Edge cases and sanity checks
+        int n = num.length();
+        if(k==n) return "0";
+        Stack<Character> stack = new Stack();
+        for(int i=0;i<num.length();i++){
+            while(!stack.isEmpty()&&k>0&&stack.peek()>num.charAt(i)){
+                k--;
+                stack.pop();
+            }    
+            stack.push(num.charAt(i));
+        }
+        while(k>0){
+            stack.pop();
+            k--;
+        }
+        StringBuffer sb = new StringBuffer();
+        while(!stack.isEmpty())
+            sb.append(stack.pop()+"");
+        //Remove zeroes at the start
+        sb.reverse();
+        while(sb.length()>1&&sb.charAt(0)=='0')
+            sb.deleteCharAt(0);
+        return sb.toString();
+    }
+}
