@@ -1,0 +1,30 @@
+class Solution {
+    public int numDistinctIslands(int[][] grid) {
+        //Sanity check
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        Set<String> set = new HashSet();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    StringBuffer sb = new StringBuffer();
+                    dfs(grid,i,j,sb,"O");
+                    grid[i][j]=0;
+                    set.add(sb.toString());
+                }
+            }
+        }
+        return set.size();
+    }
+    public void dfs(int[][] grid, int i, int j, StringBuffer sb, String s){
+        if(i<0 || i>=grid.length || j<0 || j>=grid[0].length || grid[i][j]==0) return;
+        sb.append(s);
+        grid[i][j]=0;
+        dfs(grid,i+1,j,sb,"R");
+        dfs(grid,i-1,j,sb,"L");
+        dfs(grid,i,j-1,sb,"U");
+        dfs(grid,i,j+1,sb,"D");
+        sb.append("B");
+    }
+}
