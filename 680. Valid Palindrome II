@@ -1,0 +1,24 @@
+//O(n) and O(1)
+class Solution {
+    public boolean validPalindrome(String s) {
+        //Sanity check
+        if(s.length()==0 || s==null) return true;
+        int low=-1, high = s.length();
+        while(++low<--high){
+            if(s.charAt(low)!=s.charAt(high)){
+                return (helper(s,low+1,high)||helper(s,low,high-1));    
+            }
+        }
+        return true;
+    }
+    public boolean helper(String s, int low, int high){
+        while(low<high){
+            if(s.charAt(low)==s.charAt(high)){
+                low++;
+                high--;
+            }
+            else return false;
+        }
+        return true;
+    }
+}
