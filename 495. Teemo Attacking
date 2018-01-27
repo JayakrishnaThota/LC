@@ -1,0 +1,19 @@
+//O(n) and O(1)
+class Solution {
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        //Sanity check
+        if(timeSeries==null || timeSeries.length==0) return 0;
+        int initialtime = timeSeries[0];
+        int result = 0;
+        for(int i=0;i<timeSeries.length;i++){
+            if(timeSeries[i] < duration+initialtime ){
+                result+= (timeSeries[i]-initialtime);   
+            }
+            else{
+                result += duration; 
+            }
+            initialtime = timeSeries[i];
+        }
+        return result+duration;
+    }
+}
