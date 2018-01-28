@@ -1,0 +1,31 @@
+//O(n) time and O(1) space
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        boolean[] buckets = new boolean[24*60];
+        for(String t:timePoints){
+            String[] tokens = t.split(":");
+            int h = Integer.parseInt(tokens[0]);
+            int m = Integer.parseInt(tokens[1]);
+            if(buckets[h*60+m]==true) return 0;
+            buckets[h*60+m] = true;
+        }
+        int first = Integer.MIN_VALUE;
+        int second = Integer.MAX_VALUE;
+        int prev = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for(int i=0;i<60*24;i++){
+            if(buckets[i]){
+                if(first==Integer.MIN_VALUE){
+                    prev = i;
+                    first = i;
+                }
+                else{
+                    min = Math.min(min,i-prev);
+                    prev = i;
+                    second = i;
+                }
+            }
+        }
+        return Math.min(min,24*60-(second-first));
+    }
+}
