@@ -1,0 +1,20 @@
+//O(length of N which is constant) = O(1) time and space
+class Solution {
+    public int monotoneIncreasingDigits(int N) {
+        //Sanity check
+        if(N<10) return N;
+        char[] ch = String.valueOf(N).toCharArray();
+        int i = 0;
+        while(i<ch.length-1){
+            if(ch[i]>ch[i+1]){
+                 for(int j=i+1;j<ch.length;j++)
+                 ch[j] = '9';
+                 ch[i]--;
+                 if(i>0) i--;
+            }
+            else
+                i++;
+        }
+        return Integer.parseInt(String.valueOf(ch));
+    }
+}
