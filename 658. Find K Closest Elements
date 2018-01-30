@@ -1,0 +1,23 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        List<Integer> list = new ArrayList<Integer>();
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>(){
+            public int compare(int[] i1, int[] i2){
+                if(i1[0]!=i2[0])
+                    return i1[0]-i2[0];
+                else
+                    return i1[1]-i2[1];
+            }
+        });
+        for(int i=0;i<arr.length;i++){
+            pq.offer(new int[]{Math.abs(arr[i]-x), arr[i]});
+        }
+        while(list.size()<k){
+            int[] temp = pq.poll();
+            list.add(temp[1]);
+        }
+        Collections.sort(list);
+        return list;
+    }
+}
