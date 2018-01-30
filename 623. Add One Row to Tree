@@ -1,0 +1,28 @@
+class Solution {
+    public TreeNode addOneRow(TreeNode root, int v, int d) {
+        //Sanity check
+        if(root==null) return root;
+        if(d==0){
+            TreeNode newRoot = new TreeNode(v);
+            newRoot.left = root;
+            return newRoot;
+        }
+        helper(root,v,d,1);
+        return root;
+    }
+    public void helper(TreeNode root, int v, int d, int curdepth){
+        if(root==null)
+            return;
+        if(curdepth==d-1){
+            TreeNode left = root.left;
+            root.left = new TreeNode(v);
+            root.left.left = left;
+            TreeNode right = root.right;
+            root.right = new TreeNode(v);
+            root.right.right = right;
+            return;
+        }
+        helper(root.left,v,d,curdepth+1);
+        helper(root.right,v,d,curdepth+1);
+    }
+}
