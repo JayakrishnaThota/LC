@@ -1,0 +1,25 @@
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        //Sanity check
+        if(nums==null || nums.length<4) return false;
+        int sum = 0;
+        for(int n:nums) sum+=n;
+        if(sum%k!=0) return false;
+        Arrays.sort(nums);
+        return helper(nums,k,new boolean[nums.length],0,0,sum/k);
+    }
+    public boolean helper(int[] nums, int k, boolean[] visited, int start, int cursum ,int target){
+        if(k==1) return true;
+        if(cursum == target){
+            return helper(nums, k-1, visited, 0, 0, target);
+        }
+        for(int i = start;i<nums.length;i++){
+            if(visited[i]) continue;
+            if(cursum+nums[i]>target) break;
+            visited[i] = true;
+            if(helper(nums,k,visited,i+1,cursum+nums[i],target)) return true;
+            visited[i] = false;
+        }
+        return false;
+    }
+}
