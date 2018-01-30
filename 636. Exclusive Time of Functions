@@ -1,0 +1,24 @@
+//O(n) time and space
+class Solution {
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] result = new int[n];
+        Stack<Integer> stack = new Stack();
+        int prev = 0;
+        for(String log:logs){
+            String[] words = log.split(":");
+            int id = Integer.parseInt(words[0]);
+            int time = Integer.parseInt(words[2]);
+            if(!stack.isEmpty()){
+                result[stack.peek()] += time - prev;
+            }
+            prev = time;
+            if(words[1].equals("start"))
+                stack.push(id);
+            else{
+                result[stack.pop()]++;
+                prev++;
+            }
+        }
+        return result;
+    }
+}
