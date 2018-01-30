@@ -1,0 +1,14 @@
+//O(n) time and O(1) space
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        //Sanity check
+        if(nums==null || nums.length==0 || k<=1) return 0;
+        int left = 0, product = 1,result = 0;
+        for(int right=0;right<nums.length;right++){
+            product*=nums[right];
+            while(product>=k && left<nums.length) product/=nums[left++];
+            result+=(right-left+1);
+        }
+        return result;
+    }
+}
