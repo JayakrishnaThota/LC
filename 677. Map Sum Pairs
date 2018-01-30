@@ -1,0 +1,22 @@
+class MapSum {
+    Map<String, Integer> map;
+    Map<String, Integer> score;
+    public MapSum() {
+        map = new HashMap();
+        score = new HashMap();
+    }
+    //O(k2) where k is the length of the key
+    public void insert(String key, int val) {
+        int dif = val-map.getOrDefault(key,0);
+        map.put(key,val);
+        String prefix = "";
+        for(char c:key.toCharArray()){
+            prefix += c;
+            score.put(prefix, score.getOrDefault(prefix,0)+dif);
+        }
+    }
+    //O(1)
+    public int sum(String prefix) {
+        return score.getOrDefault(prefix,0);
+    }
+}
