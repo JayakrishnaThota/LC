@@ -1,0 +1,36 @@
+class Solution {
+    public List<String> removeComments(String[] source) {
+        List<String> list = new ArrayList();
+        StringBuffer sb = new StringBuffer();
+        boolean flag = false;
+        //Sanity check
+        if(source==null || source.length==0) return list;
+        for(String line:source){
+            if(!flag) sb = new StringBuffer();
+            for(int i=0;i<line.length();i++){
+                if(flag)//If we are currently in the scope of a multiline comment
+                {
+                    if(line.charAt(i)=='*'&& (i+1<line.length()) && (line.charAt(i+1))=='/'){
+                            i++;
+                            flag = false;
+                    }
+                }
+                else
+                {
+                    if(line.charAt(i)=='/'&& (i+1<line.length()) && (line.charAt(i+1))=='*'){
+                        flag = true;
+                        i++;
+                    }
+                    else if(line.charAt(i)=='/'&& (i+1<line.length()) && (line.charAt(i+1))=='/'){
+                         break;
+                    }
+                    else
+                        sb.append(line.charAt(i));
+                }
+            }
+            if(!flag && sb.length()>0)
+                    list.add(sb.toString());
+        }
+        return list;
+    }
+}
