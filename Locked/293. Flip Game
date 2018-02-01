@@ -1,0 +1,20 @@
+//O(n) time and space
+class Solution {
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> list = new ArrayList();
+        //Sanity check
+        if(s==null || s.length()<2) return list;
+        char[] ch = s.toCharArray();
+        for(int i=1;i<s.length();i++){
+            if(s.charAt(i)=='+'){
+                if(s.charAt(i-1)=='+'){
+                     ch[i] = '-';
+                     ch[i-1] = '-';
+                     list.add(String.valueOf(ch));
+                     ch = s.toCharArray();
+                }
+            }
+        }
+        return list;
+    }
+}
