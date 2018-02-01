@@ -1,0 +1,23 @@
+class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> list = new ArrayList();
+        helper(list, new ArrayList(), n, 2);
+        return list;
+    }
+    
+    public void helper(List<List<Integer>> list, List<Integer> sublist, int n, int start){
+        if(n<=1){
+            if(sublist.size()>1){
+                list.add(new ArrayList(sublist));
+            }
+            return;
+        }
+        for(int i=start;i<=n;i++){
+            if(n%i==0){
+                sublist.add(i);
+                helper(list, sublist, n/i, i);
+                sublist.remove(sublist.size()-1);
+            }
+        }
+    }
+}
