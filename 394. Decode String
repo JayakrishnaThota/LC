@@ -1,0 +1,31 @@
+//O(n) time and space
+class Solution {
+    public String decodeString(String s) {
+        //Sanity check
+        if(s==null || s.length()==0) return s;
+        Stack<StringBuffer> stringstack = new Stack();
+        Stack<Integer> intstack = new Stack();
+        StringBuffer sb = new StringBuffer();
+        int sum = 0;
+        for(int i=0;i<s.length();i++){
+            if(Character.isDigit(s.charAt(i))){
+                sum = sum*10 +(s.charAt(i)-'0');
+            }
+            else if(s.charAt(i)=='['){
+                stringstack.push(sb);
+                sb = new StringBuffer();
+                intstack.push(sum);
+                sum = 0;
+            }
+            else if(s.charAt(i)==']'){
+                StringBuffer tmp = sb;
+                sb = stringstack.pop();
+                for (int k = intstack.pop(); k > 0; --k) sb.append(tmp);
+            }
+            else{
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+}
