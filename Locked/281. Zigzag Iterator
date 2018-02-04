@@ -1,0 +1,20 @@
+public class ZigzagIterator {
+    Iterator<Integer> iter;
+    public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
+        List<Integer> list = new ArrayList();
+        int index1 = 0, index2 = 0;
+        while(index1<v1.size() || index2<v2.size()){
+            if(index1<v1.size()) list.add(v1.get(index1++));
+            if(index2<v2.size()) list.add(v2.get(index2++));
+        }
+        iter = list.iterator();
+    }
+
+    public int next() {
+        return iter.next();
+    }
+
+    public boolean hasNext() {
+        return iter.hasNext();
+    }
+}
