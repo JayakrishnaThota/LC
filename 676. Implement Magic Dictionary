@@ -1,0 +1,44 @@
+class MagicDictionary {
+    Set<String> dictionary;
+    Map<String, Integer> frequency;
+    /** Initialize your data structure here. */
+    public MagicDictionary() {
+        dictionary = new HashSet();
+        frequency = new HashMap();
+    }
+    
+    public List<String> neighbors(String s){
+        List<String> list = new ArrayList();
+        char[] ch = s.toCharArray();
+        for(int i=0;i<s.length();i++){
+            char c = ch[i];
+            ch[i] = '*';
+            String key = String.valueOf(ch);
+            list.add(key);
+            ch[i] = c;
+        }
+        return list;
+    }
+    //O(sum of W2) time and space
+    /** Build a dictionary through a list of words */
+    public void buildDict(String[] dict) {
+        for(String word:dict){
+            dictionary.add(word);
+            for(String s:neighbors(word)){
+                frequency.put(s, frequency.getOrDefault(s,0)+1);
+            }
+        }
+    }
+    
+    //O(K2) time and space 
+    /** Returns if there is any word in the trie that equals to the given word after modifying exactly one character */
+    public boolean search(String word) {
+        for(String s:neighbors(word)){
+            if(frequency.containsKey(s)){
+                int f = frequency.get(s);
+                if(f>1 || ((f==1) &&(!dictionary.contains(word)))) return true;
+            }
+        }
+        return false;
+    }
+}
