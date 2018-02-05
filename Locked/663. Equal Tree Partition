@@ -1,0 +1,20 @@
+//O(n) time and space
+class Solution {
+    Stack<Integer> stack;
+    public boolean checkEqualTree(TreeNode root) {
+        stack = new Stack();
+        int sum = helper(root);
+        stack.pop();
+        if(sum%2==0){
+            for(int s:stack){
+                if(s==sum/2) return true;
+            }
+        }
+        return false;
+    }
+    public int helper(TreeNode root){
+        if(root==null) return 0;
+        stack.push(root.val + helper(root.left) + helper(root.right));
+        return stack.peek();
+    }
+}
