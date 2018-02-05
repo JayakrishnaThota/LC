@@ -1,0 +1,20 @@
+//O(n) time and O(1) space
+class Solution {
+    public ListNode plusOne(ListNode head) {
+        if(head==null) return new ListNode(1);
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode iter = head,lastnot9=dummy;
+        while(iter!=null){
+            if(iter.val!=9) lastnot9 = iter;
+            iter = iter.next;
+        }
+        lastnot9.val++;
+        iter = lastnot9.next;
+        while(iter!=null){
+            iter.val = 0;
+            iter = iter.next;
+        }
+        return (dummy.val==1)?dummy:dummy.next;
+    }
+}
