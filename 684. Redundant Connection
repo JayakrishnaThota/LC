@@ -1,0 +1,27 @@
+//O(n2) time and O(n) space
+class Solution {
+    Set<Integer> set = new HashSet();
+    public int[] findRedundantConnection(int[][] edges) {
+        List<Integer>[] adjlist = new ArrayList[1001];
+        for(int i=0;i<adjlist.length;i++)
+            adjlist[i] = new ArrayList();
+        for(int[] edge:edges){
+            set.clear();
+            if(dfs(adjlist, edge[0],edge[1]))
+                return edge;
+            adjlist[edge[0]].add(edge[1]);
+            adjlist[edge[1]].add(edge[0]);
+        }
+        return new int[0];
+    }
+    public boolean dfs(List<Integer>[] adjlist, int s, int d){
+        if(!set.contains(s)){
+            set.add(s);
+            if(s==d) return true;
+            for(int neighbors: adjlist[s]){
+                if(dfs(adjlist, neighbors, d)) return true;
+            }
+        }
+        return false;
+    }
+}
