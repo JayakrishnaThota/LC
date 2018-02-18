@@ -1,0 +1,33 @@
+import java.util.*;
+/*
+There is a fence with n posts, each post can be painted with one of the k colors. You have to paint 
+all the posts such that no more than two adjacent fence posts have the same color. 
+Return the total number of ways you can paint the fence.
+*/
+public class PaintFence {
+    //O(n) and O(1)
+    private int paintfence(int n, int k) throws IllegalArgumentException{
+        if(n<0 || k<0) throw new IllegalArgumentException("Negative arguments are not accepted");
+        //Base cases
+        if(n==0 || k==0) return 0;
+        if(n==1) return k;
+        if(n==2) return k*k;
+        int b = k, c = k*k, result = 0;
+        for(int i=3;i<=n;i++){
+            result = (k-1)*(b+c);
+            b=c;
+            c = result;
+        }
+        return result;
+    }
+
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        PaintFence s = new PaintFence();
+        System.out.println("Plaese enter n and k");
+        int n = in.nextInt();
+        int k = in.nextInt();
+        System.out.println("The no of ways to paint are "+s.paintfence(n,k));
+        in.close();
+    }
+}
