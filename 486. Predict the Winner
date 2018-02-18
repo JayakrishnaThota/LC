@@ -1,0 +1,23 @@
+//O(n2) time and space
+class Solution {
+    public boolean PredictTheWinner(int[] nums) {
+        if(nums==null || nums.length==0) return true;
+        int maxScore = optimalStrategy(nums);
+        int sum = 0;
+        for(int n:nums) sum+=n;
+        return (maxScore>=(sum-maxScore));
+    }
+    public int optimalStrategy(int[] nums){
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+        for(int k=0;k<n;k++){
+            for(int i=0,j=k;j<n;i++,j++){
+                int a = (i+2<=j)?dp[i+2][j]:0;
+                int b = (i+1<=j-1)?dp[i+1][j-1]:0;
+                int c = (i<=j-2)?dp[i][j-2]:0;
+                dp[i][j] = Math.max(nums[i]+Math.min(a,b), nums[j]+Math.min(b,c));
+            }
+        }
+        return dp[0][n-1];
+    }
+}
