@@ -1,0 +1,22 @@
+//O(n) time and O(1) space
+class Solution {
+    public String reverseStr(String s, int k) {
+        int n =s.length();
+        char[] ch = s.toCharArray();
+        int i=0;
+        for(;i+k<=n;i+=2*k){
+            reverse(ch,i,i+k-1);
+        }
+        reverse(ch,i,n-1);
+        return String.valueOf(ch);
+    }
+    public void reverse(char[] ch, int i, int j){
+        while(i<j){
+            char temp = ch[i];
+            ch[i] = ch[j];
+            ch[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
