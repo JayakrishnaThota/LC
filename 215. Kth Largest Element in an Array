@@ -1,13 +1,44 @@
-//O(nlogk) and O(k)
+//O(n) and O(1)
 class Solution {
+    
     public int findKthLargest(int[] nums, int k) {
+        shuffle(nums);
         int n = nums.length;
-        PriorityQueue<Integer> pq = new PriorityQueue();
-        for(int i=0;i<n;i++){
-            pq.offer(nums[i]);
-            if(pq.size()>k)
-                pq.poll();
+        k = n-k;
+        int low = 0, high = n-1;
+        while(low<high){
+            int pivot = partition(nums,low,high);
+            if(pivot==k) break;
+            else if(pivot<k) low = pivot+1; 
+            else high = pivot-1;
         }
-        return pq.poll();
+        return nums[k];
     }
+    
+    public int partition(int[] nums, int low, int high){
+        int pivot = nums[high];
+        int i=low-1;
+        for(int j=low;j<high;j++){
+            if(nums[j]<=pivot){
+                swap(nums,++i,j);
+            }
+        }
+        swap(nums,i+1,high);
+        return i+1;
+    }
+    
+    
+    public void swap(int[] nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    
+    public void shuffle(int[] nums){
+        Random rand = new Random();
+        for(int i=1;i<nums.length;i++){
+            swap(nums, i, rand.nextInt(i+1));
+        }
+    }
+    
 }
