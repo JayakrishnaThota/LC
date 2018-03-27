@@ -1,34 +1,33 @@
-//O(n) and O(1)
+//O(n) time and O(1) space
 class Solution {
     public List<String> summaryRanges(int[] nums) {
         List<String> list = new ArrayList();
-        //Sanity check
-        if(nums==null || nums.length==0) return list;
-        int start = nums[0];
-        StringBuffer sb = new StringBuffer();
-        sb.append(start+"");
-        int count = 1;
-        for(int i=1;i<=nums.length;i++){
-            if(i!=nums.length && nums[i]-1==start){
-                start = nums[i];
-                count++;
+        int n = nums.length;
+        if(nums==null || n==0) return list;
+        boolean flag = false;int start = Integer.MAX_VALUE;
+        for(int i=0;i<n;i++){
+            int num = nums[i];
+            if(!flag){
+                System.out.println("In first condition");
+                start = num;
+                flag = true;
+                if(i==n-1 || num+1!=nums[i+1]){
+                    list.add(start+"");
+                    start = Integer.MAX_VALUE;
+                    flag = false;
+                }
             }
             else{
-                if(count==1){
-                    list.add(sb.toString());
-                }
-                else{
-                    sb.append("->"+start);
-                    list.add(sb.toString());
-                }
-                if(i!=nums.length){
-                    sb = new StringBuffer();
-                    start = nums[i];
-                    sb.append(start+"");
-                    count = 1;
+                if(nums[i]!=nums[i-1]+1){
+                    System.out.println("In second condition");
+                    list.add(start+"->"+nums[i-1]);
+                    start = Integer.MAX_VALUE;
+                    flag = false;
+                    i--;
                 }
             }
         }
+        if(flag) list.add(start+"->"+nums[n-1]);
         return list;
     }
 }
