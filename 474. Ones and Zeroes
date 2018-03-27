@@ -1,0 +1,22 @@
+//O(kl + kmn), where k is the length of input string array and l is the average length of a string within the array.
+class Solution {
+    public int findMaxForm(String[] strs, int m, int n) {
+        if(strs==null || strs.length==0) return 0;
+        int[][] dp = new int[m+1][n+1];
+        for(String str:strs){
+            int[] count = count(str);
+            for (int i=m;i>=count[0];i--) 
+            for (int j=n;j>=count[1];j--) 
+                dp[i][j] = Math.max(1 + dp[i-count[0]][j-count[1]], dp[i][j]);
+        }
+        return dp[m][n];
+    }
+    
+    public int[] count(String s){
+        int[] result = new int[2];
+        for(char c:s.toCharArray()){
+            result[c-'0']++;
+        }
+        return result;
+    }
+}
