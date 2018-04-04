@@ -1,4 +1,4 @@
-//Recursive O(nlogn) Time and O(n) space solution
+//Recursive O(nlogn) Time and O(logn) space solution
 class Solution {
     public TreeNode sortedListToBST(ListNode head) {
         if(head==null) return null;
@@ -14,6 +14,36 @@ class Solution {
         TreeNode root = new TreeNode(slow.val);
         root.left = helper(head,slow);
         root.right = helper(slow.next,tail);
+        return root;
+    }
+}
+
+//O(n) and O(logn)
+//The idea is to construct from leaves to the root by counting the size of the list and call helper
+//This helper recursively constructs the left subtree
+//Then link this with the root and construct the right subtree recursively
+//Link right with root
+class Solution {
+    private ListNode node;
+    public TreeNode sortedListToBST(ListNode head) {
+        int size = 0;
+        ListNode iter = head;
+        node = head;
+        while(iter!=null){
+            iter = iter.next;
+            size++;
+        }
+        return helper(0,size-1);
+    }
+    public TreeNode helper(int low, int high){
+        if(low>high) return null;
+        int mid = low + (high-low)/2;
+        TreeNode left = helper(low,mid-1);
+        TreeNode root = new TreeNode(node.val);
+        root.left = left;
+        node=node.next;
+        TreeNode right = helper(mid+1,high);
+        root.right = right;
         return root;
     }
 }
