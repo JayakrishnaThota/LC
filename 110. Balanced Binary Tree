@@ -1,4 +1,5 @@
-//O(n) time and space
+//O(nh) time and O(h) space
+//In case of balanced trees h = logn whereas in case of skewed tree h = n
 class Solution {
     public boolean isBalanced(TreeNode root) {
         return helper(root);
@@ -13,5 +14,22 @@ class Solution {
     public int height(TreeNode node){
         if(node==null) return 0;
         return 1+Math.max(height(node.left), height(node.right));
+    }
+}
+
+//O(n) time and space
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null) return true;
+        return (helper(root)==-1)?false:true;
+    }
+    public int helper(TreeNode root){
+        if(root==null) return 0;
+        int left = helper(root.left);
+        if(left==-1) return -1;
+        int right = helper(root.right);
+        if(right==-1) return -1;
+        if(Math.abs(left-right)>1) return -1;
+        return 1 + Math.max(left,right);
     }
 }
