@@ -1,4 +1,4 @@
-//O(n) time and space
+//O(n) time and O(k) space
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
         //Sanity check
