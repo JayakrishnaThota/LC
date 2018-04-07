@@ -27,3 +27,27 @@ class Solution {
         return dummy.next;
     }
 }
+
+//O(n) and O(1)
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        ListNode iter = dummy;
+        ListNode cur = head;
+        while(cur!=null){
+            ListNode temp = cur;
+            int count = 1;
+            ListNode next = temp.next;
+            while(next!=null && temp.val==next.val) { count++; next = next.next; }
+            if(count==1){
+                iter.next = new ListNode(cur.val);
+                iter = iter.next;
+                cur = next;
+            }
+            else{
+                cur = next;
+            }
+        }
+        return dummy.next;
+    }
+}
