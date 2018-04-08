@@ -12,3 +12,16 @@ class Solution {
         return prev;
     }
 }
+
+//O(n) time O(n) space
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        return helper(head,null);
+    }
+    public ListNode helper(ListNode cur, ListNode prev){
+        if(cur==null) return prev;
+        ListNode next = cur.next;
+        cur.next = prev;
+        return helper(next,cur);
+    }
+}
