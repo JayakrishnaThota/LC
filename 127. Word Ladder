@@ -1,3 +1,6 @@
+// n - no of words in the word list
+// k - Length of each word
+// O(n * 26^k) Time complexity and O(n) Space Complexity
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Set<String> dict = new HashSet(wordList);
