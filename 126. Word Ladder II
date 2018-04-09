@@ -1,3 +1,6 @@
+// k = length of each word
+// n = number of words in the dictionary
+// O(n*26^l) Time complexity and space complexity
 public class Solution {
     List<List<String>> result;
     List<String> list;
