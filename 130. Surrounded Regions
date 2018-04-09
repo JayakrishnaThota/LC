@@ -1,5 +1,6 @@
-class Solution {
-    
+//Exponential time and space complexity
+//O(4^n) TC and SC
+class Solution {   
     public void solve(char[][] board) {
         if(board==null || board.length==0) return;
         int m = board.length;
