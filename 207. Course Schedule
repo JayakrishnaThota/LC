@@ -1,3 +1,4 @@
+//O(v+e) time and space
 class Solution {
     ArrayList<Integer>[] vertexlist;
     public boolean canFinish(int numCourses, int[][] prerequisites) {
