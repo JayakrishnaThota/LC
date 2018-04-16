@@ -1,36 +1,31 @@
-public class Solution {
-    public int minMutation(String start, String end, String[] bank) {
-        if(start.equals(end)) return 0;
-        
-        Set<String> bankSet = new HashSet<>();
-        for(String b: bank) bankSet.add(b);
-        
-        char[] charSet = new char[]{'A', 'C', 'G', 'T'};
-        
-        int level = 0;
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
-        queue.offer(start);
-        visited.add(start);
-        
-        while(!queue.isEmpty()) {
-            int size = queue.size();
-            while(size-- > 0) {
-                String curr = queue.poll();
-                if(curr.equals(end)) return level;
-                
-                char[] currArray = curr.toCharArray();
-                for(int i = 0; i < currArray.length; i++) {
-                    char old = currArray[i];
-                    for(char c: charSet) {
-                        currArray[i] = c;
-                        String next = new String(currArray);
-                        if(!visited.contains(next) && bankSet.contains(next)) {
-                            visited.add(next);
-                            queue.offer(next);
+//O(n*4^k) time and O(n) space
+class Solution {
+    public int minMutation(String beginWord, String endWord, String[] bank) {
+        if(beginWord.equals(endWord)) return 0;
+        int level = 1;
+        Set<String> set = new HashSet();
+        for(String b:bank) set.add(b);
+        set.remove(beginWord);
+        char[] charset = new char[]{'A','C','G','T'};
+        Queue<String> q = new LinkedList();
+        q.offer(beginWord);
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int j=0;j<size;j++){
+                String word = q.poll();
+                char[] ch = word.toCharArray();
+                for(int i=0;i<ch.length;i++){
+                    char original = ch[i];
+                    for(char c:charset){
+                        ch[i] = c;
+                        String key = String.valueOf(ch);
+                        if(set.contains(key)){
+                            if(endWord.equals(key)) return level;
+                            set.remove(key);
+                            q.offer(key);
                         }
                     }
-                    currArray[i] = old;
+                    ch[i] = original;
                 }
             }
             level++;
