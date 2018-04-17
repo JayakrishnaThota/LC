@@ -1,25 +1,34 @@
-//O(n) time and O(1) space
+//O(n2) time and O(1) space
 class Solution {
     public String findLongestWord(String s, List<String> d) {
         String result = "";
-        for(String c:d){
-            if(issubsequence(c,s)){
-                if(isbetter(c,result))
-                    result = c;
+        for(String word:d){
+            if(isBigger(word,result)){
+                if(isSubSequence(s,word)){
+                    result = word;
+                }
             }
         }
         return result;
     }
-    public boolean issubsequence(String a, String b){
-        int i=0,j=0;
-        while(i<b.length()){
-              if(b.charAt(i)==a.charAt(j)) j++;
-              if(j==a.length()) return true;
-              i++;
+    
+    //O(max(m,n)) time and O(1) space
+    //Returns true if s is a subsequence of t
+    public boolean isSubSequence(String s, String t){
+        int i = 0, j = 0;
+        for(;i<s.length();i++){
+            if(s.charAt(i)==t.charAt(j)) { j++; if(j==t.length()) return true; } 
         }
         return false;
     }
-    public boolean isbetter(String a, String b) {
-        return a.length() > b.length() || a.length() == b.length() && a.compareTo(b) < 0;
+    
+    //O(1) time and space
+    //Returns true if s is bigger than t
+    public boolean isBigger(String s, String t){
+        if(s.length()>t.length()) return true;
+        if(s.length()==t.length()){
+            if(s.compareTo(t)<0) return true;
+        }
+        return false;
     }
 }
