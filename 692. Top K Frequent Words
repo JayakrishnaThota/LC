@@ -1,4 +1,4 @@
-//O(n) time and space solution
+//O(nlogn) time and space solution
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
         List<String> result = new ArrayList();
