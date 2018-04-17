@@ -1,4 +1,4 @@
-//O(n2) time and O(n) space solution
+//O(mn2) time and O(n) space solution
 class Solution {
     public int maximalRectangle(char[][] matrix) {
         //Sanity check
