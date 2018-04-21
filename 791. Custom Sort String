@@ -1,0 +1,29 @@
+//O(max(m,n)) time and O(1) space 
+class Solution {
+    public String customSortString(String S, String T) {
+        int[] map = new int[26];
+        StringBuffer sb = new StringBuffer();
+        int m = S.length();
+        int n = T.length();
+        for(char t:T.toCharArray()){
+            map[t-'a']++;
+        }
+        for(char s:S.toCharArray()){
+            if(map[s-'a']>0){
+                while(map[s-'a']!=0){
+                    sb.append(s);
+                    map[s-'a']--;
+                }
+            }
+        }
+        for(char t:T.toCharArray()){
+            if(map[t-'a']>0){
+                while(map[t-'a']!=0){
+                    sb.append(t);
+                    map[t-'a']--;
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
