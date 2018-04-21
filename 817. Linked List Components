@@ -1,0 +1,22 @@
+//O(n) time and O(k) space 
+class Solution {
+    public int numComponents(ListNode head, int[] G) {
+        Set<Integer> set = new HashSet();
+        for(int g:G) set.add(g);
+        if(set.size()==0) return 0;
+        int count = 0;
+        ListNode iter = head;
+        while(iter!=null){
+            while(iter!=null && !set.contains(iter.val)){
+                iter = iter.next;
+            }
+            if(iter==null) return count;
+            count++;
+            while(iter.next!=null && set.contains(iter.next.val)){
+                iter = iter.next;
+            }
+            iter = iter.next;
+        }
+        return count;
+    }
+}
