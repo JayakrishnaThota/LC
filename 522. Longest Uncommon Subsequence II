@@ -1,3 +1,4 @@
+//O(n2) time and O(n) space
 class Solution {
      public int findLUSlength(String[] strs) {
         Arrays.sort(strs, new Comparator<String>() {
