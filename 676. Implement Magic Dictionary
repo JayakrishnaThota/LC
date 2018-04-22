@@ -1,10 +1,19 @@
 class MagicDictionary {
-    Set<String> dictionary;
-    Map<String, Integer> frequency;
-    /** Initialize your data structure here. */
+    Map<String, Integer> map;
+    Set<String> set;
     public MagicDictionary() {
-        dictionary = new HashSet();
-        frequency = new HashMap();
+        map = new HashMap();
+        set = new HashSet();
+    }
+    
+    //O(nw) time and space where n is the number of words in dictionary and w is the max length of a word in the dictionary
+    public void buildDict(String[] dict) {
+        for(String d:dict){
+            set.add(d);
+            for(String n:neighbors(d)){
+                map.put(n,map.getOrDefault(n,0)+1);
+            }
+        }
     }
     
     public List<String> neighbors(String s){
@@ -19,25 +28,12 @@ class MagicDictionary {
         }
         return list;
     }
-    //O(sum of W2) time and space
-    /** Build a dictionary through a list of words */
-    public void buildDict(String[] dict) {
-        for(String word:dict){
-            dictionary.add(word);
-            for(String s:neighbors(word)){
-                frequency.put(s, frequency.getOrDefault(s,0)+1);
-            }
-        }
-    }
     
-    //O(K2) time and space 
-    /** Returns if there is any word in the trie that equals to the given word after modifying exactly one character */
+    //O(w) time and O(1) space where w is the length of the word
     public boolean search(String word) {
-        for(String s:neighbors(word)){
-            if(frequency.containsKey(s)){
-                int f = frequency.get(s);
-                if(f>1 || ((f==1) &&(!dictionary.contains(word)))) return true;
-            }
+        for(String w:neighbors(word)){
+            int val = map.getOrDefault(w,0);
+            if(val>1 || (val==1)&&(!set.contains(word))) return true;
         }
         return false;
     }
