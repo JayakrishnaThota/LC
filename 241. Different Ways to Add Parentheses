@@ -1,7 +1,6 @@
+//O(3^n) time and space
 public class Solution {
-    
-    Map<String, List<Integer>> map = new HashMap<>();
-    
+    Map<String, List<Integer>> map = new HashMap<>();    
     public List<Integer> diffWaysToCompute(String input) {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < input.length(); i++) {
