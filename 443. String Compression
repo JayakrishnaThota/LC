@@ -1,25 +1,35 @@
-//O(n) time and O(1) space
+//O(n) and O(1)
 class Solution {
     public int compress(char[] chars) {
-        //Sanity check
         if(chars==null || chars.length==0) return 0;
-        int index = 0,count=1;
-        for(int i=0;i<chars.length;i++){
-            if(i==chars.length-1 || chars[i]!=chars[i+1]){
-                if(count==1){
-                    chars[index++] = chars[i];
-                }
-                else{
-                    chars[index++] = chars[i];
+        int n = chars.length;
+        int index = 0;
+        char prev = chars[0];
+        int count = 1;
+        for(int i=1;i<n;i++){
+            if(chars[i]==prev){
+                count++;
+            }
+            else{
+                chars[index++] = prev;
+                if(count>1){
                     String key = String.valueOf(count);
-                    for(char c:key.toCharArray()){
-                        chars[index++] = c;
+                    char[] ch = key.toCharArray();
+                    for(int j=0;j<ch.length;j++){
+                        chars[index++] = ch[j];
                     }
                 }
+                prev = chars[i];
                 count = 1;
             }
-            else
-                count++;
+        }
+        chars[index++] = prev;
+        if(count>1){
+                String key = String.valueOf(count);
+                char[] ch = key.toCharArray();
+                for(int j=0;j<ch.length;j++){
+                chars[index++] = ch[j];
+            }
         }
         return index;
     }
