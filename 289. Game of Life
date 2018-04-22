@@ -36,3 +36,44 @@ public int liveNeighbors(int[][] board, int m, int n, int i, int j) {
     return lives;
 }
 }
+
+
+//O(mn) time and space
+class Solution {
+    public void gameOfLife(int[][] board) {
+        if(board==null || board.length==0) return;
+        int m = board.length;
+        int n = board[0].length;
+        int[][] finalboard = new int[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                int lives = getLives(board,i,j,m,n);
+                System.out.println(lives);
+                if(board[i][j]==1){
+                    if(lives==2 || lives==3) finalboard[i][j] = 1;
+                }
+                else{
+                    if(lives==3) finalboard[i][j] = 1;
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                board[i][j] = finalboard[i][j];
+            }
+        }
+    }
+    
+    public int getLives(int[][] board, int i, int j, int m, int n){
+        int lives = 0;
+        lives+=(dfs(board,i+1,j+1,m,n) + dfs(board,i-1,j-1,m,n) + dfs(board,i-1,j+1,m,n) + dfs(board,i+1,j-1,m,n));
+        lives+=(dfs(board,i+1,j,m,n) + dfs(board,i-1,j,m,n) + dfs(board,i,j+1,m,n) + dfs(board,i,j-1,m,n));
+        return lives;
+    }
+    
+    public int dfs(int[][] board, int i, int j, int m, int n){
+        if(i<0 || j<0 || i>=m || j>=n || board[i][j]==0) return 0;
+        return 1;
+    }
+    
+}
