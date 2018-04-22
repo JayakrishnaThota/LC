@@ -1,0 +1,20 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] numberOfLines(int[] widths, String S) {
+        int[] result = new int[2];
+        int line = 1, width = 0;
+        for(int i=0;i<S.length();i++){
+            char c = S.charAt(i);
+            int val = c-'a';
+            if(width+widths[val]<=100) width+=widths[val];
+            else{
+                line++;
+                width = 0;
+                i--;
+            }
+        }
+        result[0] = line;
+        result[1] = width;
+        return result;
+    }
+}
