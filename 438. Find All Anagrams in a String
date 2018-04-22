@@ -16,3 +16,41 @@ class Solution {
     return list;
 }
 }
+
+
+//O(mn) time and O(n) space 
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> list = new ArrayList();
+        int m = s.length();
+        int n = p.length();
+        if(m<n) return list;
+        Map<Character, Integer> map = new HashMap();
+        for(char c:p.toCharArray()){
+            map.put(c,map.getOrDefault(c,0)+1);
+        }
+        Map<Character, Integer> temp = new HashMap(map);
+        for(int i=0;i<=m-n;i++){
+            temp = new HashMap(map);
+            int j = i;
+            while(true){
+                if(temp.containsKey(s.charAt(j))){
+                    temp.put(s.charAt(j),temp.get(s.charAt(j))-1);
+                    if(temp.get(s.charAt(j))==0) temp.remove(s.charAt(j));
+                    if(temp.size()==0){
+                        list.add(i);
+                        temp = new HashMap(map);
+                        break;
+                    }
+                    else{
+                        j++;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+}
