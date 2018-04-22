@@ -1,4 +1,4 @@
-//O(n) time and O(n) space
+//O(nlogn) time and O(n) space
 public class Solution {
     public String[] findRelativeRanks(int[] nums) {
         int[] ranks = nums.clone(); 
