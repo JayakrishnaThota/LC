@@ -1,30 +1,38 @@
-public class Solution {
+//O(nk) time and O(m) space
+class Solution {
     public List<Integer> findSubstring(String s, String[] words) {
-        List<Integer> result = new ArrayList();
-        //1
-        Map<String, Integer> map = new HashMap<>();
-        for(String word:words)
-        {
-            if(map.containsKey(word)) map.put(word,map.get(word)+1);
-            else map.put(word,1);
+        List<Integer> list = new ArrayList();
+        if(s==null || s.length()==0) return list;
+        int n = s.length();
+        Map<String, Integer> map = new HashMap();
+        int m = words.length;
+        int k = words[0].length();
+        for(String word:words){
+            map.put(word, map.getOrDefault(word,0)+1);
         }
-        //2
-        int m =words[0].length();
-        int n=words.length;
-        //3
-        for(int i=0;i<=s.length()-n*m;i++)
-        {
-            Map<String, Integer> copy = new HashMap(map);
-            int j=i,k=n;
-            while(k>0)
-            {
-                String str = s.substring(j, j+m);
-               if (!copy.containsKey(str) || copy.get(str) < 1) break;
-        		copy.put(str, copy.get(str)-1);
-                k--;j+=m;
+        Map<String, Integer> copy = new HashMap(map);
+        for(int i=0;i<=(n-m*k);i++){
+            map = new HashMap(copy);
+            int j = i;
+            while(true){
+                String key = s.substring(j,j+k);
+                if(map.containsKey(key) && map.get(key)>0){
+                    map.put(key,map.get(key)-1);
+                    if(map.get(key)==0) map.remove(key);
+                    if(map.size()==0){
+                        list.add(i);
+                        map = new HashMap(copy);
+                        break;
+                    }
+                    else{
+                        j+=k;
+                    }
+                }
+                else{
+                    break;
+                }
             }
-            if (k == 0) result.add(i);
         }
-return result;
+        return list;
     }
 }
