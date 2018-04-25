@@ -1,23 +1,32 @@
 class MedianFinder {
-    //Default pq in java is a min pq
-    PriorityQueue<Integer> min;
-    PriorityQueue<Integer> max;
+
+    PriorityQueue<Integer> minheap;
+    PriorityQueue<Integer> maxheap;
     public MedianFinder() {
-        min = new PriorityQueue();
-        max = new PriorityQueue();
+        minheap = new PriorityQueue();
+        maxheap = new PriorityQueue<Integer>(new Comparator<Integer>(){
+            public int compare(Integer a, Integer b){
+                return b-a;
+            }
+        });
     }
-    //O(logn)
+    
+    //O(logn) and O(n)
     public void addNum(int num) {
-        max.offer(-num);
-        min.offer(-max.poll());
-        if(max.size()<min.size()-1)
-            max.offer(-min.poll());
+        maxheap.offer(num);
+        minheap.offer(maxheap.poll());
+        if(maxheap.size()<minheap.size()-1){
+            maxheap.offer(minheap.poll());
+        }
     }
-    //O(1)
+    
+    //O(1) and O(n)
     public double findMedian() {
-        if(min.size()==max.size())
-            return ((min.peek()-max.peek())/2.0);
-        else 
-            return min.peek();
+        if(minheap.size()==maxheap.size()){
+            return (minheap.peek()+maxheap.peek())/2.0;
+        }
+        else{
+            return (double)minheap.peek();
+        }
     }
 }
