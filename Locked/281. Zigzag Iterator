@@ -1,3 +1,4 @@
+//O(m+n) extra space
 public class ZigzagIterator {
     Iterator<Integer> iter;
     public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
@@ -10,10 +11,12 @@ public class ZigzagIterator {
         iter = list.iterator();
     }
 
+    //O(1) time and O(m+n) extra space
     public int next() {
         return iter.next();
     }
 
+    //O(1) time and O(m+n) extra space
     public boolean hasNext() {
         return iter.hasNext();
     }
