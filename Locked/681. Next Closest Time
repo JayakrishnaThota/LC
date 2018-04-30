@@ -1,0 +1,65 @@
+//O(1) time and O(1) space
+class Solution {
+    boolean[] buckets;
+    int sum;
+    int min;
+    public String nextClosestTime(String time) {
+        buckets = new boolean[10];
+        for(char c:time.toCharArray()){
+            if(c==':') continue;
+            buckets[c-'0'] = true;
+        }
+        String[] tokens = time.split(":");
+        int hours = Integer.parseInt(tokens[0]);
+        int minutes = Integer.parseInt(tokens[1]);
+        sum = 60*hours + minutes;
+        min = Integer.MAX_VALUE;
+        String result = "";
+        for(int h=0;h<24;h++){
+            for(int m=0;m<60;m++){
+                String temp = ((h<10)?"0"+h:h+"")+":"+((m<10)?"0"+m:m+"");
+                if(isValid(temp)){
+                    if(isBetter(temp,result)){
+                        System.out.println(temp);
+                        result = temp;
+                    }
+                }
+            }
+        }
+        return (result.length()==0)?time:result;
+    }
+    public boolean isValid(String s){
+        for(char c:s.toCharArray()){
+            if(c==':') continue;
+            if(buckets[c-'0']==false) return false;
+        }
+        return true;
+    }
+    public boolean isBetter(String s, String result){
+        String[] tokens = s.split(":");
+        int hours = Integer.parseInt(tokens[0]);
+        int minutes = Integer.parseInt(tokens[1]);
+        int cursum = hours*60 + minutes;
+        if(cursum==sum) return false;
+        if(result.length()==0){
+            min = cursum;
+            return true;
+        }
+        if(sum-cursum>0){
+            if(sum-min<0) return false;
+            else{
+                if((sum-cursum)>(sum-min)){
+                    min = cursum;
+                    return true;
+                }
+            }
+        }
+        else{
+            if(sum-min>0 || (cursum-sum)<(min-sum)){
+                min = cursum;
+                return true;
+            }   
+        }
+        return false;
+    }
+}
