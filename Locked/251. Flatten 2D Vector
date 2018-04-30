@@ -1,0 +1,24 @@
+public class Vector2D implements Iterator<Integer> {
+
+    List<Integer> list;
+    Iterator<Integer> iter;
+    public Vector2D(List<List<Integer>> vec2d) {
+        list = new ArrayList();
+        for(List<Integer> vec:vec2d){
+            for(Integer v:vec){
+                list.add(v);
+            }
+        }
+        iter = list.iterator();
+    }
+
+    @Override
+    public Integer next() {
+        return iter.next();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return iter.hasNext();
+    }
+}
