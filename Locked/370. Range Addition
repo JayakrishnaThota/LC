@@ -1,18 +1,20 @@
+//O(nk) time and O(n) space
+//where n = length
+//and k is the length of the updates array
 class Solution {
-    int[] result;
     public int[] getModifiedArray(int length, int[][] updates) {
-        result = new int[length];
+        int[] result = new int[length];
         for(int[] update:updates){
             int start = update[0];
             int end = update[1];
-            int inc = update[2];
-            helper(result, start, end, inc);
+            int val = update[2];
+            helper(result,start,end,val);
         }
         return result;
     }
-    public void helper(int[] result, int start, int end, int inc){
+    public void helper(int[] result, int start, int end, int val){
         for(int i=start;i<=end;i++){
-            result[i]+=inc;
+            result[i]+=val;
         }
     }
 }
