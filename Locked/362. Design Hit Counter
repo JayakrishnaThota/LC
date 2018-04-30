@@ -1,24 +1,21 @@
+//O(n) space for storing all the timestamps
 class HitCounter {
     Map<Integer, Integer> map;
-    /** Initialize your data structure here. */
     public HitCounter() {
         map = new HashMap();
     }
     
-    /** Record a hit.
-        @param timestamp - The current timestamp (in seconds granularity). */
+    //O(1) time and O(1) space
     public void hit(int timestamp) {
-        map.put(timestamp, map.getOrDefault(timestamp,0)+1);
+        map.put(timestamp,map.getOrDefault(timestamp,0)+1);
     }
     
-    /** Return the number of hits in the past 5 minutes.
-        @param timestamp - The current timestamp (in seconds granularity). */
+    //O(1) time and O(1) space
     public int getHits(int timestamp) {
-        int count = 0;
+        int ret = 0;
         for(int i=timestamp-299;i<=timestamp;i++){
-            if(map.containsKey(i))
-                count+=map.get(i);
+            ret+=map.getOrDefault(i,0);
         }
-        return count;
+        return ret;
     }
 }
