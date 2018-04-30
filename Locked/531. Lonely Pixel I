@@ -1,24 +1,24 @@
 //O(mn) time and O(m+n) space
 class Solution {
     public int findLonelyPixel(char[][] picture) {
-        //Sanity check
-        if(picture==null && picture.length==0) return 0;
         int m = picture.length;
         int n = picture[0].length;
-        int[] r = new int[m];
-        int[] c = new int[n];
+        int[] row = new int[m];
+        int[] col = new int[n];
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
                 if(picture[i][j]=='B'){
-                    r[i]++;
-                    c[j]++;
-                }        
+                    row[i] = row[i]+1;
+                    col[j] = col[j]+1;
+                }
             }
         }
-        int count = 0;
+        int count  = 0;
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
-                if(picture[i][j]=='B' && r[i]==1 && c[j]==1) count++;
+                if(picture[i][j]=='B'){
+                    if(row[i]==1 && col[j]==1) count++;
+                }
             }
         }
         return count;
