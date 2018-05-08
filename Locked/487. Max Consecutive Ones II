@@ -1,0 +1,22 @@
+//O(n) and O(k) for k flips
+//This is O(n) and O(1) since k is fixed in this case
+class Solution {
+     public int findMaxConsecutiveOnes(int[] nums) {  
+         if(nums==null || nums.length==0) return 0;
+         int n = nums.length;
+         int max = 0;
+         int left = 0, right = 0;
+         int k = 1;//K=1 for this question
+         Queue<Integer> queue = new LinkedList();//This queue stores the indices of the zero elements in the array
+         for(;right<n;right++){
+             if(nums[right]==0){
+                 queue.offer(right);
+             }
+             if(queue.size()>k){
+                 left = queue.poll()+1;
+             }
+             max = Math.max(max, right-left+1);
+         }
+         return max;
+    }
+}
