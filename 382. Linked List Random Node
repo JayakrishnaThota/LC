@@ -1,4 +1,5 @@
-
+//Reservoir sampling
+//O(n) time and O(1) space
 class Solution {
     ListNode he;
     Random rand;
@@ -6,15 +7,17 @@ class Solution {
         he = head;
         rand = new Random();
     }
- 
     public int getRandom() {
-        ListNode h = he;
-        int ret = h.val;
-        for(int i=1;h.next!=null;i++){
-            h = h.next;
-            if(i==rand.nextInt(i+1))
-                ret = h.val;
+        int ret = he.val;
+        ListNode iter = he;
+        int i = 0;
+        while(iter.next!=null){
+            i++;
+            iter = iter.next;
+            if(i==rand.nextInt(i+1)){
+                ret = iter.val;
+            }
         }
         return ret;
-    }
+    }   
 }
