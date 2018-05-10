@@ -1,3 +1,5 @@
+//O(n) time and space shuffle function
+//Extra space is for the reset function which restores the original array
 class Solution {
     private int[] array;
     private int[] original;
