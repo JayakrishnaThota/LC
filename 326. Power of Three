@@ -1,6 +1,17 @@
 //O(1) time and space
 class Solution {
     public boolean isPowerOfThree(int n) {
-         return ( n>0 &&  1162261467%n==0);
+        if(n<1) return false;
+        int largestThree = getLargest();
+        return ((largestThree%n)==0);
     }
+    
+    public int getLargest(){
+        long a = 1;
+        while(a*3<=Integer.MAX_VALUE){
+            a = a*3;
+        }
+        return (int)a;
+    }
+    
 }
