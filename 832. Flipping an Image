@@ -1,0 +1,29 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int[][] flipAndInvertImage(int[][] A) {
+        //Sanity check
+        if(A==null || A.length==0) return A;
+        int m = A.length;
+        int n = A[0].length;
+        for(int i=0;i<m;i++){
+            reverse(A,i,n);
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(A[i][j]==1) A[i][j] = 0;
+                else A[i][j] = 1;
+            }
+        }
+        return A;
+    }
+    public void reverse(int[][] A, int i, int n){
+        int low = 0, high = n-1;
+        while(low<high){
+            int temp = A[i][low];
+            A[i][low] = A[i][high];
+            A[i][high] = temp;
+            low++;
+            high--;
+        }
+    }
+}
