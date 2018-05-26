@@ -19,3 +19,22 @@ class Solution {
         return list;
     }
 }
+
+//O(n) time and space recursive solution
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> list = new ArrayList();
+        helper(list,root,0);
+        return list;
+    }
+    
+    public void helper(List<List<Integer>> list, TreeNode root, int start){
+        if(root==null) return;
+        if(list.size()<=start){
+            list.add(new ArrayList());
+        }
+        list.get(start).add(root.val);
+        helper(list,root.left,start+1);
+        helper(list,root.right,start+1);
+    }
+}
