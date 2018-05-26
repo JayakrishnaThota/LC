@@ -1,55 +1,59 @@
-//O(n) and O(n) solution
+//O(n) time and space
 class Solution {
+    
     public void recoverTree(TreeNode root) {
         if(root==null) return;
-        List<Integer> list = inorderTraversal(root);
-        boolean flag= true;
-        int temp1=0, temp2=0;
-        for(int i=0;i<list.size();i++)
-            System.out.println(list.get(i));
-        for(int i=0;i<list.size();i++){
-            if(i==0 || list.get(i-1) < list.get(i)) continue;
-            if(flag) { temp1 = list.get(i-1); temp2 = list.get(i); flag = false; }
-            else { temp2 = list.get(i); break; }
-        }
-        System.out.println(temp1+""+temp2);
-        if(!flag) swap(root, temp1, temp2);
-    }
-    public void swap(TreeNode root, int temp1, int temp2){
-        System.out.println("In swap");
-        if(root==null) return;
-        Queue<TreeNode> q = new LinkedList();
-        q.offer(root);
-        while(!q.isEmpty()){
-            int level = q.size();
-            for(int i=0;i<level;i++){
-                TreeNode temp = q.poll();
-                if(temp.val == temp1){
-                    temp.val = temp2;
+        List<Integer> list = inorder(root);
+        boolean adj = false;
+        int first = 0, second = 0;
+        for(int i=0;i<list.size()-1;i++){
+            if(list.get(i)<list.get(i+1)) continue;
+            else{
+                if(adj){
+                    second = list.get(i+1);
+                    break;
                 }
-                else if(temp.val == temp2){
-                    temp.val = temp1;
+                else{
+                    first = list.get(i);
+                    second = list.get(i+1);
+                    adj = true;
                 }
-                if(temp.left!=null) q.offer(temp.left);
-                if(temp.right!=null) q.offer(temp.right);
             }
         }
-        return;
+        swap(root, first, second);
     }
-    public List<Integer> inorderTraversal(TreeNode root) {
+    
+    public void swap(TreeNode root, int first, int second){
+        if(root==null) return;
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int level = queue.size();
+            for(int i=0;i<level;i++){
+                TreeNode temp = queue.poll();
+                if(temp.val==first) temp.val = second;
+                else if(temp.val==second) temp.val = first;
+                if(temp.left!=null) queue.offer(temp.left);
+                if(temp.right!=null) queue.offer(temp.right);
+            }
+        }
+    }
+    
+    public List<Integer> inorder(TreeNode root){
         List<Integer> list = new ArrayList();
         if(root==null) return list;
         Stack<TreeNode> stack = new Stack();
-        boolean done = false;
         TreeNode cur = root;
+        boolean done = false;
         while(!done){
             if(cur!=null){
                 stack.push(cur);
                 cur = cur.left;
             }
             else{
-                if(stack.isEmpty())
+                if(stack.isEmpty()){
                     done = true;
+                }
                 else{
                     cur = stack.pop();
                     list.add(cur.val);
@@ -59,4 +63,5 @@ class Solution {
         }
         return list;
     }
+    
 }
