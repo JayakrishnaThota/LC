@@ -1,14 +1,15 @@
-//O(n) time and O(1) space
+//O(logn) and O(1)
 class Solution {
     public boolean isPalindrome(int x) {
         if(x<0) return false;
-        int y = x;
+        int original = x;
         long result = 0;
-        while(y!=0){
-            result = result*10 + y%10;
-            y/=10;
+        while(x!=0){
+            int y = x%10;
+            result = result*10 + y;
+            if(result>Integer.MAX_VALUE) return false;
+            x/=10;
         }
-        if(result<Integer.MIN_VALUE || result>Integer.MAX_VALUE) return false;
-        return ((int)result == x);
+        return (((int)result)==original);
     }
 }
