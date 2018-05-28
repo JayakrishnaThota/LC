@@ -1,18 +1,19 @@
-//O(n) time and O(1) space
+//Time Complexity: Every time we are dividing the number by 10 so O(log to the base 10 (number)) 
+//Space Complexity: O(1)
 class Solution {
     public int reverse(int x) {
-        int sign = 1;
-        if(x<0){ 
-            sign = -1;
-            x = -x;
-        }
-        int y = x;
         long result = 0;
+        int sign = 1;
+        if(x<0){
+            x = Math.abs(x);
+            sign = -1;
+        }
         while(x!=0){
-            result = result*10 + x%10;
+            int y = x%10;
+            result = result*10 + y;
+            if(result>Integer.MAX_VALUE || result<Integer.MIN_VALUE) return 0;
             x/=10;
         }
-        if(result>Integer.MAX_VALUE || result<Integer.MIN_VALUE) return 0;
         return sign*(int)result;
     }
 }
