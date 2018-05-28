@@ -1,37 +1,52 @@
-//O(mn) time and O(1) space
+//O(mn) time and O(1)
 class Solution {
     public void setZeroes(int[][] matrix) {
-        //Sanity check
-        if(matrix==null || matrix.length==0) return;
-        int row = matrix.length;
-        int col = matrix[0].length;
-        boolean rf = false;
-        boolean cf = false;
-        for(int i=0;i<row;i++)
-            if(matrix[i][0]==0) cf = true;
-        for(int j=0;j<col;j++)
-            if(matrix[0][j]==0) rf = true;
-        for(int i=1;i<row;i++){
-            for(int j=1;j<col;j++){
+        //Sanity Check
+        if(matrix==null || matrix.length==0) return; 
+        int m = matrix.length, n = matrix[0].length;
+        boolean fr = false, fc = false;
+        //Check if the first row has a zero and if there is, set the fr to true
+        for(int i=0;i<n;i++){
+            if(matrix[0][i]==0){
+                fr = true;
+                break;
+            }
+        }
+        //Check if the first column has a zero and if there is, set the fc to true
+        for(int i=0;i<m;i++){
+            if(matrix[i][0]==0){
+                fc = true;
+                break;
+            }
+        }
+        //Now if a particular element is zero, then set the first row and column to zero
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
                 if(matrix[i][j]==0){
-                    matrix[i][0]=0;
-                    matrix[0][j]=0;
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
                 }
             }
         }
-        for(int i=1;i<row;i++){
-            for(int j=1;j<col;j++){
-                if(matrix[i][0]==0 || matrix[0][j]==0)
+        //Now if the first element in a row or column is zero, then set that element to zero
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                if(matrix[i][0]==0 || matrix[0][j]==0){
                     matrix[i][j] = 0;
+                }
             }
         }
-        if(rf){
-            for(int i=0;i<col;i++)
+        //Check whether to set the first row to zero
+        if(fr){
+            for(int i=0;i<n;i++){
                 matrix[0][i] = 0;
+            }
         }
-        if(cf){
-            for(int i=0;i<row;i++)
+        //Check whether to set the first column to zero
+        if(fc){
+            for(int i=0;i<m;i++){
                 matrix[i][0] = 0;
+            }
         }
     }
 }
