@@ -1,16 +1,16 @@
 //O(nlogk) time and O(k) space
+//Where n is the total number of nodes and k is the length of the lists
+//i.e. the number of heads in lists
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        //Sanity check
         if(lists==null || lists.length==0) return null;
-         PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>(lists.length, new Comparator<ListNode>(){
-           public int compare(ListNode l1, ListNode l2) {
-               return l1.val-l2.val;
-           }
-       });
-        for(ListNode l: lists){
-            if(l!=null)
-            { 
+        PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>(lists.length, new Comparator<ListNode>(){
+            public int compare(ListNode l1, ListNode l2){
+                return l1.val - l2.val;
+            }
+        });
+        for(ListNode l:lists){
+            if(l!=null){
                 pq.offer(l);
             }
         }
