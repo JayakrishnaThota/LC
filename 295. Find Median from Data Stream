@@ -1,32 +1,25 @@
 class MedianFinder {
-
     PriorityQueue<Integer> minheap;
     PriorityQueue<Integer> maxheap;
     public MedianFinder() {
         minheap = new PriorityQueue();
-        maxheap = new PriorityQueue<Integer>(new Comparator<Integer>(){
-            public int compare(Integer a, Integer b){
-                return b-a;
-            }
-        });
+        maxheap = new PriorityQueue<Integer>((a,b)->(b-a));
     }
     
-    //O(logn) and O(n)
+    //O(logn) time and O(n) space
     public void addNum(int num) {
-        maxheap.offer(num);
-        minheap.offer(maxheap.poll());
-        if(maxheap.size()<minheap.size()-1){
-            maxheap.offer(minheap.poll());
+        maxheap.add(num);
+        minheap.add(maxheap.poll());
+        if(minheap.size()-1>maxheap.size()){
+            maxheap.add(minheap.poll());
         }
     }
     
-    //O(1) and O(n)
+    //O(1) time and O(n) space
     public double findMedian() {
         if(minheap.size()==maxheap.size()){
-            return (minheap.peek()+maxheap.peek())/2.0;
+            return (maxheap.peek()+minheap.peek())/2.0;
         }
-        else{
-            return (double)minheap.peek();
-        }
+        return minheap.peek();
     }
 }
