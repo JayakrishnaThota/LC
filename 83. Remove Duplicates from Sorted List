@@ -1,17 +1,14 @@
-//O(n) time and O(1) space
+//O(n) time and O(1)
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         ListNode iter = head;
         while(iter!=null){
             ListNode next = iter.next;
-            if(next==null) break;
-            if(iter.val==next.val){
+            while(next!=null && iter.val==next.val){
                 iter.next = next.next;
+                next = next.next;
             }
-            else{
-            iter.next = next;
             iter = next;
-            }
         }
         return head;
     }
