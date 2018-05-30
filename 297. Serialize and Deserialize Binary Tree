@@ -1,40 +1,44 @@
-//Level order traversal based encoding
 public class Codec {
-    // Encodes a tree to a single string.
+    
+    //O(n) time and space
     public String serialize(TreeNode root) {
-        Queue<TreeNode> q = new LinkedList();
+        //Sanity Check
         if(root==null) return "";
-        q.offer(root);
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
         StringBuffer sb = new StringBuffer();
-        while(!q.isEmpty()){
-            TreeNode temp = q.poll();
-            if(temp==null) { sb.append("null,"); continue; }
+        while(!queue.isEmpty()){
+            TreeNode temp = queue.poll();
+            if(temp==null){
+                sb.append("null,");
+                continue;
+            }
             sb.append(temp.val+",");
-            q.offer(temp.left);
-            q.offer(temp.right);
+            queue.offer(temp.left);
+            queue.offer(temp.right);
         }
         return sb.toString();
     }
 
-    // Decodes your encoded data to tree.
+    //O(n) time and O(1) space
     public TreeNode deserialize(String data) {
-        //Sanity check
-        if(data=="") return null;
-        Queue<TreeNode> q = new LinkedList();
-        String[] leaves = data.split(",");
-        TreeNode root = new TreeNode(Integer.parseInt(leaves[0]));
-        q.offer(root);
-        for(int i=1;i<leaves.length;i++){
-            TreeNode parent = q.poll();
-            if(!leaves[i].equals("null")){
-                TreeNode left = new TreeNode(Integer.parseInt(leaves[i])); 
+        if(data.equals("")) return null;
+        String[] nodes = data.split(",");
+        System.out.println(nodes[0]);
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        for(int i=1;i<nodes.length;i++){
+            TreeNode parent = queue.poll();
+            if(!nodes[i].equals("null")){
+                TreeNode left = new TreeNode(Integer.parseInt(nodes[i]));
                 parent.left = left;
-                q.add(left);
+                queue.offer(left);
             }
-            if(!leaves[++i].equals("null")){
-                 TreeNode right = new TreeNode(Integer.parseInt(leaves[i])); 
-                 parent.right = right;
-                 q.add(right);
+            if(!nodes[++i].equals("null")){
+                TreeNode right = new TreeNode(Integer.parseInt(nodes[i]));
+                parent.right = right;
+                queue.offer(right);
             }
         }
         return root;
