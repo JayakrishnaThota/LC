@@ -9,3 +9,11 @@ class Solution {
         return true;
     }
 }
+
+
+//O(1) time and space
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        return (n>0 && (n&(n-1))==0);
+    }
+}
