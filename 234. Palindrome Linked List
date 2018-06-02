@@ -1,36 +1,39 @@
-//O(n) and O(1) 
-public class Solution {
+//O(n) time and O(n) space
+class Solution {
+    
     public boolean isPalindrome(ListNode head) {
-        if(head==null || head.next == null) return true;
-        ListNode fast = head, slow = head;
-        while(fast!=null && fast.next!=null)
-        {
+        //Sanity Check
+        if(head==null || head.next==null) return true;
+        ListNode slow = head, fast = head, prev = null;
+        while(fast!=null && fast.next!=null){
+            prev = slow;
             slow = slow.next;
             fast = fast.next.next;
         }
-        if(fast!=null) slow = slow.next;
-        
-        slow = reverse(slow);
-        fast = head;
-        while(slow!=null)
-        {
-            if(slow.val!=fast.val) return false;
-            slow=slow.next;
-            fast = fast.next;
+        if(fast!=null){
+            slow = slow.next;
+        }
+        prev.next = null;
+        ListNode h1 = head;
+        ListNode h2 = reverse(slow);
+        while(h1!=null && h2!=null){
+            if(h1.val!=h2.val) return false;
+            h1 = h1.next;
+            h2 = h2.next;
         }
         return true;
     }
-    public ListNode reverse(ListNode head)
-    {
-        ListNode curr = head;
-        ListNode prev = null;
-        while(curr!=null)
-        {
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
+    
+    public ListNode reverse(ListNode node){
+        if(node==null || node.next==null) return node;
+        ListNode cur = node, prev = null;
+        while(cur!=null){
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
         }
         return prev;
     }
+    
 }
