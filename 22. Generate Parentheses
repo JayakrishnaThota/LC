@@ -1,18 +1,20 @@
-//Exponential time and space solution O(4pown)
+//O(2^n) time and O(n) space
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> list = new ArrayList();
-        helper(list, "", n, 0, 0);
+        helper(list, "", 0, 0, n);
         return list;
     }
-    public void helper(List<String> list, String s, int n, int l, int h){
-        if(s.length()==n*2){
+    public void helper(List<String> list, String s, int open, int close, int n){
+        if(s.length()==2*n){
             list.add(s);
             return;
         }
-        if(l<n)
-            helper(list,s+"(",n,l+1,h);
-        if(h<l)
-            helper(list,s+")",n,l,h+1);
+        if(open<n){
+            helper(list, s+"(", open+1, close, n);
+        }
+        if(close<open){
+            helper(list, s+")", open, close+1, n);
+        }
     }
 }
