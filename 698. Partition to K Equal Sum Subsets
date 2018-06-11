@@ -1,10 +1,10 @@
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
         //Sanity check
-        if(nums==null || nums.length<4) return false;
+        if(nums==null || nums.length==0) return false;
         int sum = 0;
         for(int n:nums) sum+=n;
-        if(sum%k!=0) return false;
+        if(k<=0 || sum%k!=0) return false;
         Arrays.sort(nums);
         return helper(nums,k,new boolean[nums.length],0,0,sum/k);
     }
