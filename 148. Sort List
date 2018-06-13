@@ -1,4 +1,4 @@
-//O(nlogn) and O(1)
+//O(nlogn) time and O(logn) space
 class Solution {
     public ListNode sortList(ListNode head) {
         //Sanity check
@@ -14,20 +14,21 @@ class Solution {
         ListNode l2 = sortList(slow);
         return merge(l1,l2);
     }
+    
+    //O(m+n) time and O(1) space
     public ListNode merge(ListNode l1, ListNode l2){
         ListNode dummy = new ListNode(0);
         ListNode iter = dummy;
         while(l1!=null && l2!=null){
-            if(l1.val<l2.val){
+            if(l1.val<=l2.val){
                 iter.next = l1;
                 l1 = l1.next;
-                iter = iter.next;
             }
             else{
                 iter.next = l2;
                 l2 = l2.next;
-                iter = iter.next;
             }
+            iter = iter.next;
         }
         while(l1!=null){
             iter.next = l1;
@@ -41,4 +42,5 @@ class Solution {
         }
         return dummy.next;
     }
+    
 }
