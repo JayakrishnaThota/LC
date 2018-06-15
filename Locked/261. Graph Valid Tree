@@ -1,0 +1,63 @@
+/*
+
+Given n nodes labeled from 0 to n-1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree.
+
+Example 1:
+
+Input: n = 5, and edges = [[0,1], [0,2], [0,3], [1,4]]
+Output: true
+
+Example 2:
+
+Input: n = 5, and edges = [[0,1], [1,2], [2,3], [1,3], [1,4]]
+Output: false
+
+Note: you can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0,1] is the same as [1,0] and thus will not appear together in edges.
+
+
+*/
+
+//Cycle detection algorithm using DFS
+//There is a cycle, if for a vertex 'v', there is an adjacent vertex 'u' such that it is already visited and 'u' is not the
+//parent of 'v'
+//O(V+E) time and space
+class Solution {
+    List<List<Integer>> adjlist;
+    boolean[] visited;
+    public boolean validTree(int n, int[][] edges) {
+        initialiseGraph(n, edges);
+        //It is not a tree if there is a cycle
+        if(cycle(0,-1)) return false;
+        //Check if all the components are visited
+        for(int i=0;i<visited.length;i++){
+            if(!visited[i]) return false;
+        }
+        return true;
+    }
+    
+    public void initialiseGraph(int n, int[][] edges){
+        adjlist = new ArrayList(n);
+        for(int i=0;i<n;i++){
+            adjlist.add(i, new ArrayList());
+        }
+        visited = new boolean[n];
+        for(int[] edge:edges){
+            int u = edge[0];
+            int v = edge[1];
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(u);
+        }
+    }
+    
+    //Perform dfs in this method and look for the above mentioned condition
+    public boolean cycle(int u, int parent){
+        visited[u] = true;
+        for (int i = 0; i < adjlist.get(u).size(); i++) {
+            int v = adjlist.get(u).get(i);
+            if ((visited[v] && parent != v) || (!visited[v] && cycle(v,u)))
+                return true;
+        }
+        return false;
+    }
+    
+}
