@@ -1,19 +1,26 @@
-//O(n) and O(1)
+//O(n) time and O(1) space
 class Solution {
     public int lengthOfLastWord(String s) {
+        //Sanity Check
         if(s==null || s.length()==0) return 0;
         int n = s.length();
-        int count = s.charAt(0)==' '?0:1;
-        for(int i=1;i<n;i++){
-            if(s.charAt(i)!=' '){
-                if(s.charAt(i-1)==' '){
-                    count = 1;
+        int length = 0;
+        boolean start = true;
+        for(int i=0;i<n;i++){
+            char c = s.charAt(i);
+            if(c==' '){
+                start = true;
+            }
+            else{
+                if(start){
+                    length = 1;
+                    start = false;
                 }
                 else{
-                    count++;
+                    length++;
                 }
             }
         }
-        return count;
+        return length;
     }
 }
