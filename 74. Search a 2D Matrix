@@ -1,14 +1,21 @@
-//O(m+n) time and O(1) space
+//O(log(m*n)) time and O(1) space
 class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
+        //Sanity Check
         if(matrix==null || matrix.length==0) return false;
-        int r = matrix.length;
-        int c = matrix[0].length;
-        int rs = 0, cs = c-1;
-        while(rs<r && cs>=0){
-            if(matrix[rs][cs]==target) return true;
-            else if(matrix[rs][cs]>target) cs--;
-            else rs++;
+        return binarySearch(matrix, target);
+    }
+    
+    public boolean binarySearch(int[][] matrix, int target){
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int low = 0, high = m*n-1;
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            int cur = matrix[mid/n][mid%n];
+            if(cur==target) return true;
+            else if(cur>target) high = mid-1;
+            else low = mid+1;
         }
         return false;
     }
