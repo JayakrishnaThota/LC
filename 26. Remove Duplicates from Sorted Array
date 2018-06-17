@@ -1,16 +1,3 @@
-//O(n) and O(1)
-class Solution {
-    public int removeDuplicates(int[] nums) {
-        int index = 0;
-        for(int n:nums){
-            if(index<1 || n>nums[index-1]){
-                nums[index++] = n;
-            }
-        }
-        return index;
-    }
-}
-
 //O(n) and O(n)
 class Solution {
     public int removeDuplicates(int[] nums) {
@@ -33,5 +20,25 @@ class Solution {
             nums[i] = aux[i];
         }
         return ap;
+    }
+}
+
+//O(n) and O(1)
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        //Sanity Check
+        if(nums==null || nums.length==0) return 0;
+        int index = 0;
+        int i = 1;
+        while(i<nums.length){
+            if(nums[i]==nums[index]){
+                i++;
+            }
+            else{
+                nums[++index] = nums[i++];
+            }
+        }
+        index++;
+        return index;
     }
 }
