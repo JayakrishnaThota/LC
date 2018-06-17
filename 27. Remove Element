@@ -10,3 +10,25 @@ class Solution {
         return index;
     }
 }
+
+//O(n) and O(n)
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        //Sanity Check
+        if(nums==null || nums.length==0) return 0;
+        int[] aux = new int[nums.length];
+        int ap = 0, np = 0;
+        while(np<nums.length){
+            if(val==nums[np]){
+                np++;
+            }
+            else{
+                aux[ap++] = nums[np++];
+            }
+        }
+        for(int i=0;i<ap;i++){
+            nums[i] = aux[i];
+        }
+        return ap;
+    }
+}
