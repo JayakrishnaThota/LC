@@ -1,23 +1,28 @@
-//O(n) time and space
+//O(n2) time and space complexity
 class Solution {
     public int sumNumbers(TreeNode root) {
         if(root==null) return 0;
         List<String> list = new ArrayList();
-        helper(root,list,"");
-        int sum = 0;
-        for(String s:list){
-            System.out.println(s);
-            sum+=Integer.parseInt(s);
-        }
-        return sum;
+        backtrack(list, "", root);
+        int result = 0;
+        for(String l:list){
+            result+=Integer.parseInt(l);
+        } 
+        return result;
     }
-     public void helper(TreeNode root, List<String> list, String s){
-        if(root.left==null && root.right==null){
-            list.add(s+root.val+"");
+    
+    public void backtrack(List<String> list, String s, TreeNode root){
+        if(root==null) return;
+        if((root.left==null)&&(root.right==null)){
+            s+=root.val;
+            list.add(s);
             return;
         }
-        s+=root.val+"";
-        if(root.left != null) helper(root.left,list,s);
-        if(root.right!=null) helper(root.right,list,s);
-    } 
+        else{
+            s+=root.val;
+            backtrack(list, s, root.left);
+            backtrack(list, s, root.right);
+        }
+    }
+    
 }
