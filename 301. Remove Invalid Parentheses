@@ -1,0 +1,43 @@
+//O(n*2^n-1) time and O(n) space
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> result = new ArrayList();
+        if(s==null) return result;
+        int n = s.length();
+        boolean done = false;
+        Queue<String> queue = new LinkedList();
+        Set<String> visited = new HashSet();
+        queue.offer(s);
+        visited.add(s);
+        while(!queue.isEmpty()){
+            s = queue.poll();
+            if(isValid(s)){
+                result.add(s);
+                done = true;
+            }
+            if(done) continue;
+            for(int i=0;i<s.length();i++){
+                if(s.charAt(i)!='(' && s.charAt(i)!=')') continue;
+                String t = s.substring(0,i) + s.substring(i+1);
+                if(!visited.contains(t)){
+                    queue.offer(t);
+                    visited.add(t);
+                }
+            }
+        }
+        return result;
+    }
+    
+  //O(n) time and O(1) space  
+  public boolean isValid(String s){
+    int count = 0;
+    for(char c:s.toCharArray()){
+      if(c=='(') count++;
+      else if(c==')'){
+        if(count<=0) return false;
+        count--;
+      }
+    }
+    return (count==0);
+  }
+}
