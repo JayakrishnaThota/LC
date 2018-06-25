@@ -20,7 +20,7 @@ public class Codec {
         return sb.toString();
     }
 
-    //O(n) time and O(1) space
+    //O(n) time and O(n) space
     public TreeNode deserialize(String data) {
         if(data.equals("")) return null;
         String[] nodes = data.split(",");
