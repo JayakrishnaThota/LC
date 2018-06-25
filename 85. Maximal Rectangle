@@ -1,40 +1,45 @@
-//O(mn2) time and O(n) space solution
+//O(mn) time and O(n) space
 class Solution {
     public int maximalRectangle(char[][] matrix) {
         //Sanity check
         if(matrix==null || matrix.length==0) return 0;
-        int m = matrix.length;
-        int n = matrix[0].length;
+        int m = matrix.length, n = matrix[0].length;
         int[] array = new int[n];
-        for(int i=0;i<n;i++)
-            if(matrix[0][i] == '1')
-                array[i] = 1;
-        int max = largestRectangleArea(array);
-        for(int i=1;i<m;i++){
-            initialise(matrix, array, m, n, i);
+        int max = 0;
+        for(int i=0;i<m;i++){
+            initialise(matrix,array,i,m,n);
             max = Math.max(max, largestRectangleArea(array));
         }
         return max;
     }
-    public void initialise(char[][] matrix, int[] array, int m, int n, int i){
+    
+    //O(n) time and space
+    public void initialise(char[][] matrix, int[] array, int i, int m, int n){
         for(int j=0;j<n;j++){
-            if(matrix[i][j]=='1')
-                array[j]+=1;
-            else
-                array[j]=0;
+            if(matrix[i][j]=='1'){
+                array[j]++;
+            }
+            else{
+                array[j] = 0;
+            }
         }
     }
-    public int largestRectangleArea(int[] height) {
-        int len = height.length;
-        Stack<Integer> s = new Stack<Integer>();
+    
+    //O(n) time and space
+    public int largestRectangleArea(int[] heights) {
+        //Sanity check
+        if(heights==null || heights.length==0) return 0;
+        int n = heights.length;
+        Stack<Integer> stack = new Stack();
         int maxArea = 0;
-        for(int i = 0; i <= len; i++){
-            int h = (i == len ? 0 : height[i]);
-            if(s.isEmpty() || h >= height[s.peek()]){
-                s.push(i);
-            }else{
-                int tp = s.pop();
-                maxArea = Math.max(maxArea, height[tp] * (s.isEmpty() ? i : i - 1 - s.peek()));
+        for(int i=0;i<=n;i++){
+            int h = (i==n)?0:heights[i];
+            if(stack.isEmpty() || h>=heights[stack.peek()]){
+                stack.push(i);
+            }
+            else{
+                int tp = stack.pop();
+                maxArea = Math.max(maxArea, heights[tp]*(stack.isEmpty()?i:i-1-stack.peek()));
                 i--;
             }
         }
