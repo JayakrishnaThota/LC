@@ -1,0 +1,24 @@
+//O(n) time and space
+class Solution {
+    public boolean buddyStrings(String A, String B) {
+        //Sanity check
+        if(A==null && B==null) return true;
+        if(A==null || B==null) return false;
+        int m = A.length(), n = B.length();
+        if(m!=n) return false;
+        if(A.equals(B)){
+            Set<Character> set = new HashSet();
+            for(char c:A.toCharArray()) set.add(c);
+            return set.size()<A.length();
+        }
+        else{
+            List<Integer> list = new ArrayList();
+            for(int i=0;i<m;i++){
+                char a = A.charAt(i), b = B.charAt(i);
+                if(a==b) continue;
+                list.add(i); 
+            }
+            return ((list.size()==2)&&(A.charAt(list.get(0))==B.charAt(list.get(1)))&&(A.charAt(list.get(1))==B.charAt(list.get(0))));
+        }
+    }
+}
