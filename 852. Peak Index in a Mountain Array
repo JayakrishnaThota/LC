@@ -1,0 +1,11 @@
+//O(n) time and space
+class Solution {
+    public int peakIndexInMountainArray(int[] A) {
+        Stack<Integer> stack = new Stack();
+        for(int i=0;i<A.length;i++){
+            if(stack.isEmpty() || A[i]>A[stack.peek()])
+                stack.push(i);
+        }
+        return stack.peek();
+    }
+}
