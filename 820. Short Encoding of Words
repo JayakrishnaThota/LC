@@ -1,0 +1,64 @@
+//O(max(nlogn,nk)) time and O(nk) space
+//where n is the total number of words and k is the max length of word in all words
+public class Solution {
+    public int minimumLengthEncoding(String[] words) {
+        int count = 0;
+        Arrays.sort(words, (a, b)->Integer.compare(b.length(), a.length()));
+        for(int i=0;i<words.length;i++){
+            StringBuffer sb = new StringBuffer(words[i]);
+            String word = sb.reverse().toString();
+            System.out.println(word);
+            if(!startsWith(word)){
+                insert(word);
+                count+=(word.length()+1);
+            }
+        }
+        return count;
+    }
+    public class TrieNode{
+        boolean isEnd;
+        TrieNode[] children = new TrieNode[26];
+        public TrieNode(){
+            
+        }
+        public TrieNode(char ch){
+            TrieNode node = new TrieNode();
+        }
+    }
+    TrieNode root = new TrieNode();
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+     TrieNode temp = root;
+     for(int i=0;i<word.length();i++){
+         char c = word.charAt(i);
+         if(temp.children[c-'a']==null)
+             temp.children[c-'a'] = new TrieNode(c);
+         temp = temp.children[c-'a'];
+     }
+        temp.isEnd = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+       TrieNode temp = root;
+     for(int i=0;i<word.length();i++){
+         char c = word.charAt(i);
+         if(temp.children[c-'a']==null)
+             return false;
+         temp = temp.children[c-'a'];
+     }
+       return temp.isEnd;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String word) {
+         TrieNode temp = root;
+     for(int i=0;i<word.length();i++){
+         char c = word.charAt(i);
+         if(temp.children[c-'a']==null)
+             return false;
+         temp = temp.children[c-'a'];
+     }
+       return true;
+    }
+}
