@@ -1,0 +1,33 @@
+//O(n) time and O(n) space
+//where n is the total number of cells
+class Solution {
+    public int[][] updateMatrix(int[][] matrix) {
+        //Sanity Check
+        if(matrix==null || matrix.length==0) return new int[0][0];
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+        Queue<int[]> queue = new LinkedList();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    queue.offer(new int[]{i,j});
+                }
+                else{
+                    matrix[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        while(!queue.isEmpty()){
+            int[] cell = queue.poll();
+            for(int[] dir:dirs){
+                int r = dir[0] + cell[0];
+                int c = dir[1] + cell[1];
+                if(r<0 || c<0 || (r>=m) || (c>=n) || matrix[r][c]<=matrix[cell[0]][cell[1]]+1) continue;
+                queue.offer(new int[]{r,c});
+                matrix[r][c] = matrix[cell[0]][cell[1]]+1;
+            }
+        }
+        return matrix;
+    }
+}
