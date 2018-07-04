@@ -1,0 +1,28 @@
+//O(n^2) time and O(n) space
+class Solution {
+    public boolean canCross(int[] stones) {
+        //Sanity check
+        if(stones==null || stones.length==0) return true;
+        //mapping between current step location and all possible jumps
+        Map<Integer, Set<Integer>> map = new HashMap();
+        for(int i=0;i<stones.length;i++){
+            map.put(stones[i], new HashSet());
+        }
+        map.get(stones[0]).add(1);
+        for(int i=0;i<stones.length-1;i++){
+            int curstep = stones[i];
+            for(int jumps:map.get(curstep)){
+                int nextstep = curstep + jumps;
+                if(nextstep==stones[stones.length-1]) return true;
+                if(map.get(nextstep)!=null){
+                    map.get(nextstep).add(jumps);
+                    map.get(nextstep).add(jumps+1);
+                    if(jumps-1>0){
+                        map.get(nextstep).add(jumps-1);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
