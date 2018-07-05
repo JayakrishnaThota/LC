@@ -1,37 +1,46 @@
 public class Codec {
+
+    //O(n) time and space
     public String serialize(TreeNode root) {
         if(root==null) return "";
-        Queue<TreeNode> q = new LinkedList();
-        StringBuffer sb = new StringBuffer();
-        q.offer(root);
-        while(!q.isEmpty()){
-            TreeNode temp = q.poll();
-            if(temp==null) { sb.append("null,"); continue; }
-            sb.append(temp.val+",");
-            q.offer(temp.left);
-            q.offer(temp.right);
-            
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        String result = "";
+        while(!queue.isEmpty()){
+            int level = queue.size();
+            for(int i=0;i<level;i++){
+                TreeNode node = queue.poll();
+                if(node==null){
+                    result = result + "null,";
+                    continue;
+                }
+                result = result + node.val + ",";
+                queue.offer(node.left);
+                queue.offer(node.right);
+            }
         }
-        return sb.toString();
+        return result;
     }
+
+    //O(n) time and space
     public TreeNode deserialize(String data) {
-        if(data=="") return null;
-        Queue<TreeNode> q = new LinkedList();
+        if(data=="" || data.length()==0) return null;
         String[] leaves = data.split(",");
         TreeNode root = new TreeNode(Integer.parseInt(leaves[0]));
-        q.offer(root);
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
         for(int i=1;i<leaves.length;i++){
-            TreeNode parent = q.poll();
+            TreeNode parent = queue.poll();
             if(!leaves[i].equals("null")){
                 TreeNode left = new TreeNode(Integer.parseInt(leaves[i]));
                 parent.left = left;
-                q.offer(left);
+                queue.offer(left);
             }
             if(!leaves[++i].equals("null")){
                 TreeNode right = new TreeNode(Integer.parseInt(leaves[i]));
                 parent.right = right;
-                q.offer(right);
-            }            
+                queue.offer(right);
+            }
         }
         return root;
     }
