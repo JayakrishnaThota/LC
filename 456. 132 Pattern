@@ -17,20 +17,20 @@ class Solution {
 }
 
 
-//O(n) time and O(n) space
+//O(n) time and space
 class Solution {
     public boolean find132pattern(int[] nums) {
-        //Sanity Check
+        //Sanity check
         if(nums==null || nums.length<3) return false;
         Stack<Integer> stack = new Stack();
-        int n = nums.length;
-        int s3 = Integer.MIN_VALUE;
-        for(int i=n-1;i>=0;i--){
-            if(nums[i]<s3) return true;
-            while(!stack.isEmpty() && nums[i]>stack.peek()){
+        Integer s3 = null;
+        for(int i=nums.length-1;i>=0;i--){
+            int num = nums[i];
+            if(s3!=null && (num<s3)) return true;
+            while(!stack.isEmpty() && num>stack.peek()){
                 s3 = stack.pop();
             }
-            stack.push(nums[i]);
+            stack.push(num);
         }
         return false;
     }
