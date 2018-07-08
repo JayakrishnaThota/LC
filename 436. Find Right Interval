@@ -1,15 +1,23 @@
-//O(nlogn) and O(n)
-public class Solution {
+//O(nlogn) time and O(n) space
+class Solution {
     public int[] findRightInterval(Interval[] intervals) {
-        TreeMap<Integer, Integer> starts = new TreeMap<>();
-        int res[] = new int[intervals.length];
+        if(intervals==null || intervals.length==0) return new int[0];
+        int n = intervals.length;
+        int[] result = new int[n];
+        //Mapping between interval start point and the index
+        TreeMap<Integer, Integer> map = new TreeMap();
         for (int i = 0; i < intervals.length; i++) {
-            starts.put(intervals[i].start, i);
+            map.put(intervals[i].start, i);
         }
         for (int i = 0; i < intervals.length; i++) {
-            Map.Entry<Integer, Integer> pos = starts.ceilingEntry(intervals[i].end);
-            res[i] = pos == null ? -1 : pos.getValue();
+            if(map.ceilingKey(intervals[i].end)==null){
+                result[i] = -1;
+            }
+            else{
+                Integer key = map.ceilingKey(intervals[i].end);
+                result[i] = map.get(key);
+            }
         }
-        return res;
+        return result;
     }
 }
