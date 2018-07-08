@@ -1,23 +1,31 @@
-//O(n) time and space
+//O(n2) time and O(n) space 
 class Solution {
     public String[] findWords(String[] words) {
-        String r1 = "qwertyuiopQWERTYUIOP";
-        String r2 = "asdfghjklASDFGHJKL";
-        String r3 = "zxcvbnmZXCVBNM";
+        //Sanity check
+        if(words==null || words.length==0) return new String[0];
         List<String> list = new ArrayList();
+        String r1 = "zxcvbnmZXCVBNM";
+        String r2 = "asdfghjklASDFGHJKL";
+        String r3 = "qwertyuiopQWERTYUIOP";
         for(String word:words){
-            int c1=0,c2=0,c3=0;
+            int a=0,b=0,d=0;
             for(char c:word.toCharArray()){
-                if(r1.indexOf(c)>=0) c1++;
-                else if(r2.indexOf(c)>=0) c2++;
-                else c3++;
+                if(r1.indexOf(c)>=0) a++;
+                else if(r2.indexOf(c)>=0) b++;
+                else d++;
             }
-            if(c1==word.length() || c2==word.length() || c3==word.length()) 
+            if((a==word.length()) || (b==word.length()) || (d==word.length())){
                 list.add(word);
+            }
         }
+        return toArray(list);
+    }
+    public String[] toArray(List<String> list){
         String[] result = new String[list.size()];
-        for(int i=0;i<list.size();i++)
-            result[i] = list.get(i);
+        for(int i=0;i<list.size();i++){
+            String word = list.get(i);
+            result[i] = word;
+        }
         return result;
     }
 }
