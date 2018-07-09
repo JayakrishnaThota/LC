@@ -1,4 +1,4 @@
-//O(kl + kmn), where k is the length of input string array and l is the average length of a string within the array.
+//O(kmn+kl) time and O(mn+l) space
 class Solution {
     public int findMaxForm(String[] strs, int m, int n) {
         if(strs==null || strs.length==0) return 0;
@@ -12,11 +12,27 @@ class Solution {
         return dp[m][n];
     }
     
-    public int[] count(String s){
+    public int helper(String[] strs, int m, int n, int index){
+        //Base case: When we run out of numbers
+        if(0>m || 0>n) return 0;
+        //Base case: When we run out of the string
+        if(index>=strs.length) return 0;
+        int[] count = count(strs[index]);
+        //Recursive case: Just include and exclude the current string and return the max
+        //Include case
+        if((m-count[0]>=0) && (n-count[1])>=0)
+            return Math.max(1+helper(strs,m-count[0],n-count[1],index+1), helper(strs,m,n,index+1));
+        else
+            return helper(strs,m,n,index+1);
+    }
+    
+    public int[] count(String str){
         int[] result = new int[2];
-        for(char c:s.toCharArray()){
-            result[c-'0']++;
+        for(char c:str.toCharArray()){
+            if(c=='0') result[0]++;
+            else if(c=='1') result[1]++;
         }
         return result;
     }
+    
 }
