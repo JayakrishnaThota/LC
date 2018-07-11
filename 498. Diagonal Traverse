@@ -1,4 +1,4 @@
-//O(mn) time and space
+//O(mn) time and O(1) space
 class Solution {
     public int[] findDiagonalOrder(int[][] matrix) {
         if(matrix==null || matrix.length==0) return new int[0];
