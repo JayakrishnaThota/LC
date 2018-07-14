@@ -1,16 +1,19 @@
-public class Solution {
+//If n is the no of nodes in s and m is no of nodes in t
+//O(nm) time and space
+class Solution {
+    
     public boolean isSubtree(TreeNode s, TreeNode t) {
-        if (s == null) return false;
-        if (isSame(s, t)) return true;
-        return isSubtree(s.left, t) || isSubtree(s.right, t);
+        if(s==null) return false;
+        if(isSame(s,t)) return true;
+        return (isSubtree(s.left, t) || isSubtree(s.right, t));
     }
     
-    private boolean isSame(TreeNode s, TreeNode t) {
-        if (s == null && t == null) return true;
-        if (s == null || t == null) return false;
-        
-        if (s.val != t.val) return false;
-        
+    //O(m) time and space
+    public boolean isSame(TreeNode s, TreeNode t){
+        if(s==null && t==null) return true;
+        if(s==null || t==null) return false;
+        if(s.val!=t.val) return false;
         return isSame(s.left, t.left) && isSame(s.right, t.right);
     }
+    
 }
