@@ -1,0 +1,50 @@
+//O(mn) time and space
+class Solution {
+    int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if(board==null || board.length==0) return board;
+        int m = board.length;
+        int n = board[0].length;
+        Queue<int[]> queue = new LinkedList();
+        queue.offer(click);
+        while(!queue.isEmpty()){
+            int[] cell = queue.poll();
+            int x = cell[0], y = cell[1];
+            if(board[x][y]=='M'){
+                board[x][y] = 'X';
+            }
+            else{
+                int mines = getMines(board, x, y, m, n);
+                if(mines>0){
+                    board[x][y] = (char)(mines+'0');
+                }
+                else{
+                    board[x][y] = 'B';
+                    for(int[] dir:dirs)
+                    {
+                        int i = x + dir[0];
+                        int j = y + dir[1];
+                        if(i<0 || j<0 || (i>=m) || (j>=n)) continue;
+                        if(board[i][j]=='E'){
+                            queue.offer(new int[]{i,j});
+                            board[i][j] = 'B';
+                        }
+                    }
+                }    
+            }
+        }
+        return board;
+    }
+    
+    public int getMines(char[][] board, int x, int y, int m, int n){
+        int sum = 0;
+        for(int[] dir:dirs){
+            int i = x + dir[0];
+            int j = y + dir[1];
+            if(i<0 || j<0 || (i>=m) || (j>=n)) continue;
+            if(board[i][j]=='M' || board[i][j]=='X') sum++;
+        }
+        return sum;
+    }
+    
+}
