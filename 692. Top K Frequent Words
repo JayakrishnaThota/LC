@@ -1,30 +1,31 @@
-//O(nlogn) time and space solution
+//O(nlogk) time and O(n) space
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
         List<String> result = new ArrayList();
-        //Buckets from 0 to nums.length so that each stores that frequent element
-        List<String>[] buckets = new List[words.length+1];
-        Map<String, Integer> map = new TreeMap();
+        if(words==null || words.length==0) return result;
+        int n = words.length;
+        List<String>[] buckets = new List[n+1];
+        Map<String, Integer> map = new HashMap();
         for(String word:words){
-            map.put(word,map.getOrDefault(word,0)+1);
+            map.put(word, map.getOrDefault(word,0)+1);
         }
         for(String key:map.keySet()){
-            int freq = map.get(key);
-            if(buckets[freq]==null){
-                buckets[freq] = new ArrayList();
-            }
-            buckets[freq].add(key);
+            int value = map.get(key);
+            if(buckets[value]==null) buckets[value] = new ArrayList();
+            buckets[value].add(key);
         }
-        for(int i = buckets.length-1;i>=0;i--){
-            if(buckets[i]!=null)
-                {
+        for(int i=0;i<buckets.length;i++){
+            if(buckets[i]==null) continue;
+            Collections.sort(buckets[i]);
+        }
+        for(int i=n;i>=0;i--){
+            if(buckets[i]!=null){
                 for(String s:buckets[i]){
                     result.add(s);
-                    if(result.size()==k)
-                        return result;
+                    if(result.size()==k) return result;
                 }
             }
         }
-        return result; 
+        return result;
     }
 }
