@@ -1,26 +1,31 @@
 //O(1) time and space
 class Solution {
     public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
-    long[] lengths = {length(p1, p2), length(p2, p3), length(p3, p4),
-            length(p4, p1), length(p1, p3),length(p2, p4)}; // all 6 sides
-
-    long max = 0, nonMax = 0;
-    for(long len : lengths) {
-        max = Math.max(max, len);
+        Map<Integer, Integer> map = new HashMap();
+        int d1 = distance(p1,p2);
+        int d2 = distance(p1,p3);
+        int d3 = distance(p1,p4);
+        int d4 = distance(p2,p3);
+        int d5 = distance(p2,p4);
+        int d6 = distance(p3,p4);
+        map.put(d1, map.getOrDefault(d1,0)+1);
+        map.put(d2, map.getOrDefault(d2,0)+1);
+        map.put(d3, map.getOrDefault(d3,0)+1);
+        map.put(d4, map.getOrDefault(d4,0)+1);
+        map.put(d5, map.getOrDefault(d5,0)+1);
+        map.put(d6, map.getOrDefault(d6,0)+1);
+        //Exactly 4 distances must be equal and 2 distances must be equal
+        //And the diagonal distance must be greater than the actual distance
+        if(map.size()!=2) return false;
+        int normal = 0, diagonal = 0;
+        for(int key:map.keySet()){
+            if(map.get(key)==2) diagonal = key;
+            else if(map.get(key)==4) normal = key;
+            else return false;
+        }
+        return (diagonal>normal);
     }
-    int count = 0;
-    for(int i = 0; i < lengths.length; i++) {
-        if(lengths[i] == max) count++;
-        else nonMax = lengths[i]; // non diagonal side.
+    public int distance(int[] p1, int[] p2){
+        return (p2[0]-p1[0])*(p2[0]-p1[0]) + (p2[1]-p1[1])*(p2[1]-p1[1]);
     }
-    if(count != 2) return false; // diagonals lenghts have to be same.
-
-    for(long len : lengths) {
-        if(len != max && len != nonMax) return false; // sides have to be same length
-    }
-    return true;
-}
-private long length(int[] p1, int[] p2) {
-    return (long)Math.pow(p1[0]-p2[0],2) + (long)Math.pow(p1[1]-p2[1], 2);
-}
 }
