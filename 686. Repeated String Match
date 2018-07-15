@@ -1,14 +1,20 @@
 //O(n) time and space
+//Where n is the length of the second string
 class Solution {
     public int repeatedStringMatch(String A, String B) {
-    int count = 0;
-    StringBuilder sb = new StringBuilder();
-    while (sb.length() < B.length()) {
+        if(A==null || B==null) return -1;
+        if(A.contains(B)) return 1;
+        int m = A.length(), n = B.length();
+        int count = 1;
+        StringBuffer sb = new StringBuffer();
         sb.append(A);
-        count++;
+        while(sb.length()<=n){
+            sb.append(A);
+            System.out.println(sb.toString());
+            count++;
+            if(sb.toString().contains(B)) return count;
+        }
+        sb.append(A); count++;
+        return (sb.toString().contains(B))?count:-1;
     }
-    if(sb.toString().contains(B)) return count;
-    if(sb.append(A).toString().contains(B)) return ++count;
-    return -1;
-}
 }
