@@ -1,12 +1,12 @@
-//O(n) time and O(1) space
+//O(sqrt(n)) time and O(1) space
 class Solution {
     public boolean judgeSquareSum(int c) {
-        int a=0,b=(int)Math.sqrt(c);
-        while(a<=b){
-            int sum = a*a + b*b;
+        int low = 0, high = (int)Math.sqrt(c);
+        while(low<=high){
+            int sum = low*low + high*high;
             if(sum==c) return true;
-            else if(sum>c) b--;
-            else a++;
+            else if(sum<c) low++;
+            else high--;
         }
         return false;
     }
