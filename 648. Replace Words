@@ -1,3 +1,6 @@
+//n is the number of words in dictionary
+//k is the number of words in sentence
+//O(kn) time and O(k) spacea 
 public class Solution {
      public class TrieNode
 {
