@@ -1,4 +1,4 @@
-//O(nlogk) and O(n)
+//O(klogn) and O(n)
 class Solution {
     public int kthSmallest(int[][] matrix, int k) {
         int row = matrix.length;
