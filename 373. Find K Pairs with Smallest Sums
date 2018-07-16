@@ -1,14 +1,16 @@
-//O(mnlogk) time and O(k) space
+//O(klogn) time and O(n) space
 class Solution {
     public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
         List<int[]> result = new ArrayList();
+        if(nums1==null || nums2==null) return result;
         int m = nums1.length;
         int n = nums2.length;
+        if(m==0 || n==0) return result;
         PriorityQueue<Tuple> pq = new PriorityQueue();
         for(int i=0;i<n;i++){
             pq.offer(new Tuple(0,i,nums1[0]+nums2[i]));
         }
-        for(int j=0;j<k;j++){
+        for(int j=0;j<Math.min(k,m*n);j++){
             Tuple temp = pq.poll();
             int[] res = new int[]{nums1[temp.x],nums2[temp.y]};
             result.add(res);
