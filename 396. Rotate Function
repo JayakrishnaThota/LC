@@ -1,0 +1,21 @@
+//O(n) and O(1)
+class Solution {
+    public int maxRotateFunction(int[] A) {
+        if(A==null || A.length==0) return 0;
+        int n = A.length;
+        int sum = 0;
+        for(int a:A) sum+=a;
+        int max = 0;
+        for(int i=0;i<n;i++){
+            max = max + (i*A[i]);
+        }
+        int total = max;
+        System.out.println(total);
+        for(int i=1;i<n;i++){
+            total = total + sum - n*A[n-i];
+            System.out.println(total+","+max);
+            max = Math.max(max,total);
+        }
+        return max;
+    }
+}
