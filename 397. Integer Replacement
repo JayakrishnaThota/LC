@@ -17,3 +17,26 @@ class Solution {
         return count;
     }
 }
+
+//O(n) time and space
+class Solution {
+    public int integerReplacement(int n) {
+        if(n<2) return 0;
+        int[] dp = new int[n+1];
+        for(int i=2;i<=n;i++){
+            if(i%2==0){
+                dp[i] = 1 + dp[i/2];
+            }
+            else{
+                dp[i] = Math.min(1+dp[i-1],2+dp[i/2 + 1]);
+            }
+            
+        }
+        return dp[n];
+    }
+    public int recursive(int n){
+        if(n<2) return 0;
+        if(n%2==0) return 1+recursive(n/2);
+        else return 1+Math.min(recursive(n-1),recursive(n+1));
+    }
+}
