@@ -1,20 +1,22 @@
-//O(n) time and O(1) space
+//O(1) time and space
 class Solution {
     public boolean hasAlternatingBits(int n) {
-        String binary = getBinary(n);
-        for(int i=0;i<binary.length()-1;i++){
-            if(binary.charAt(i+1)==binary.charAt(i)) return false;
+        int leftMostStartBit = lms(n);
+        if(leftMostStartBit==-1) return false;
+        if(leftMostStartBit==0) return true;
+        System.out.println(leftMostStartBit);
+        for(int i=leftMostStartBit;i>0;i--){
+            int a = (n>>i)&1;
+            int b = (n>>(i-1))&1;
+            if((a^b)!=1) return false;
         }
         return true;
     }
-    
-    public String getBinary(int n){
-        String result = "";
-        while(n>0){
-            int val = n%2;
-            n/=2;
-            result = val + result;
+    public int lms(int n){
+        for(int i=31;i>=0;i--){
+            if(((n>>i)&1)==1)
+                return i;
         }
-        return result;
+        return -1;
     }
 }
