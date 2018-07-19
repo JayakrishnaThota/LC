@@ -1,0 +1,22 @@
+class Solution {
+    int[][] dirs = new int[][]{{2,1},{2,-1},{-2,1},{-2,-1},{1,2},{1,-2},{-1,2},{-1,-2}};
+    public double knightProbability(int N, int K, int r, int c) {
+        double inBoard = dfs(N,K,r,c);
+        System.out.println(inBoard);
+        double totalMovesPossible = Math.pow(8,K);
+        return inBoard/totalMovesPossible;
+    }
+    //Recursive Version
+    //O(8^n) time and O(n) space
+    public double dfs(int N, int K, int r, int c){
+        if(r<0 || (r>=N) || (c<0) || (c>=N)) return 0;
+        if(K==0) return 1;
+        double sum = 0;
+        for(int[] dir:dirs){
+            int x = r+dir[0];
+            int y = c+dir[1];
+            sum+=dfs(N,K-1,x,y);
+        }
+        return sum;
+    }
+}
