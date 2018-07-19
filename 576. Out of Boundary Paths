@@ -1,20 +1,37 @@
-//O(mnN) time and space
 class Solution {
-    int M=1000000007;
-    public int findPaths(int m, int n, int N, int i, int j) {
-        int[][][] dp = new int[m][n][N+1];
-        for(int[][] d:dp){
-            for(int[] p:d){
-                Arrays.fill(p,-1);
+    int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+    int M = 1000000007;
+    public int findPaths(int m, int n, int N, int x, int y) {
+        int[][][] memo = new int[m][n][N+1];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                for(int k=0;k<=N;k++){
+                    memo[i][j][k] = -1;
+                }
             }
         }
-        return helper(m,n,N,i,j,dp);
+        return topDown(m,n,N,x,y,memo);
     }
-    public int helper(int m, int n, int N, int i, int j, int[][][] dp){
-        if(i==m || j==n || i<0 || j<0) return 1;
-        if(N==0) return 0;
-        if(dp[i][j][N]!=-1) return dp[i][j][N];
-        dp[i][j][N] = ((helper(m,n,N-1,i-1,j,dp)+helper(m,n,N-1,i+1,j,dp))%M+(helper(m,n,N-1,i,j-1,dp)+helper(m,n,N-1,i,j+1,dp))%M)%M;
-        return dp[i][j][N];
+    
+    //O(mnN) time and space
+    public int topDown(int m, int n, int N, int i, int j, int[][][] memo){
+        if(i<0 || j<0 || (i>=m) || (j>=n)) return 1;
+        if(N<=0) return 0;
+        if(memo[i][j][N]>=0) return memo[i][j][N];
+        memo[i][j][N]=((topDown(m,n,N-1,i-1,j,memo)+topDown(m,n,N-1,i+1,j,memo))%M+(topDown(m,n,N-1,i,j-1,memo)+topDown(m,n,N-1,i,j+1,memo))%M)%M;
+        return memo[i][j][N]%M;
+    }
+    
+    //O(4^n) time and O(n) space
+    public int recursive(int m, int n, int N, int i, int j){
+        if(i<0 || j<0 || (i>=m) || (j>=n)) return 1;
+        if(N<=0) return 0;
+        int sum = 0;
+        for(int[] dir:dirs){
+            int x = i + dir[0];
+            int y = j + dir[1];
+            sum+=recursive(m,n,N-1,x,y);
+        }
+        return sum;
     }
 }
