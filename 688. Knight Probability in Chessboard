@@ -17,6 +17,27 @@ class Solution {
             int y = c+dir[1];
             sum+=dfs(N,K-1,x,y);
         }
-        return sum;
+        return sum; 
+    }
+}
+
+class Solution {
+    int[][] dirs = new int[][]{{2,1},{2,-1},{-2,1},{-2,-1},{1,2},{1,-2},{-1,2},{-1,-2}};
+    public double knightProbability(int N, int K, int r, int c) {
+        double[][][] memo = new double[K+1][N][N];
+        return bottomUp(N,K,r,c,memo);
+    }
+    
+    //O(N^2*K) time and space
+    public double bottomUp(int N, int K, int r, int c, double[][][] memo){
+        if(r<0 || (r>=N) || (c<0) || (c>=N)) return 0;
+        if(K==0) return 1;
+        if(memo[K][r][c]!=0) return memo[K][r][c];
+        for(int[] dir:dirs){
+            int x = r+dir[0];
+            int y = c+dir[1];
+            memo[K][r][c]+=(0.125*bottomUp(N,K-1,x,y, memo));
+        }
+        return memo[K][r][c];
     }
 }
