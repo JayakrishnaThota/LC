@@ -1,0 +1,26 @@
+//O(n) time and space
+class Solution {
+    public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+        StringBuffer sb = new StringBuffer();
+        int n = S.length();
+        int[] map = new int[n];
+        Arrays.fill(map,-1);
+        for(int i=0;i<indexes.length;i++){
+            int index = indexes[i];
+            String source = sources[i];
+            String target = targets[i];
+            if(S.substring(index,index+source.length()).equals(source)) map[index] = i;
+        }
+        for(int i=0;i<n;){
+            if(map[i]!=-1){
+                sb.append(targets[map[i]]);
+                i+=sources[map[i]].length();
+            }
+            else{
+                sb.append(S.charAt(i));
+                i++;
+            }
+        }
+        return sb.toString();
+    }
+}
