@@ -1,0 +1,18 @@
+//O(V+E) time and O(V) space
+class Solution {
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        Set<Integer> visited = new HashSet();
+        Stack<Integer> stack = new Stack();
+        stack.push(0);
+        visited.add(0);
+        while(!stack.isEmpty()){
+            int temp = stack.pop();
+            for(Integer neighbor:rooms.get(temp)){
+                if(visited.contains(neighbor)) continue;
+                visited.add(neighbor);
+                stack.push(neighbor);
+            }
+        }
+        return (visited.size()==rooms.size());
+    }
+}
