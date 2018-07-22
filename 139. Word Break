@@ -1,4 +1,4 @@
-//O(n2) time and O(n) space
+//O(n3) time and O(n) space
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         //Sanity check
