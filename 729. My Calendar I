@@ -1,0 +1,18 @@
+class MyCalendar {
+    TreeMap<Integer, Integer> map;
+    public MyCalendar() {
+        map = new TreeMap<Integer, Integer>();
+    }
+    
+    //O(logn) time and O(n) space
+    public boolean book(int start, int end) {
+        //This returns the smallest number greater than or equal to start
+        Integer ceilingKey = map.ceilingKey(start);
+        if(ceilingKey!=null && ceilingKey<end) return false;
+        //This returns the greatest number which is smaller than or equal to start
+        Integer floorKey = map.floorKey(start);
+        if(floorKey!=null && map.get(floorKey)>start) return false;
+        map.put(start, end);
+        return true;
+    }
+}
