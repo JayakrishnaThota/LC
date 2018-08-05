@@ -1,0 +1,61 @@
+class MyCircularQueue {
+    List<Integer> cq;
+    int size;
+    /** Initialize your data structure here. Set the size of the queue to be k. */
+    public MyCircularQueue(int k) {
+        size = k;
+        cq = new ArrayList();
+    }
+    
+    /** Insert an element into the circular queue. Return true if the operation is successful. */
+    public boolean enQueue(int value) {
+        if(cq.size()<size){
+            cq.add(value);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    /** Delete an element from the circular queue. Return true if the operation is successful. */
+    public boolean deQueue() {
+        if(cq.size()>0){
+            cq.remove(0);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    /** Get the front item from the queue. */
+    public int Front() {
+        if(cq.size()>0){
+            return cq.get(0);
+        }
+        else{
+            return -1;
+        }
+    }
+    
+    /** Get the last item from the queue. */
+    public int Rear() {
+        if(cq.size()>0){
+            return cq.get(cq.size()-1);
+        }
+        else{
+            return -1;
+        }
+    }
+    
+    /** Checks whether the circular queue is empty or not. */
+    public boolean isEmpty() {
+        return (cq.size()==0);
+    }
+    
+    /** Checks whether the circular queue is full or not. */
+    public boolean isFull() {
+        return (cq.size()==size);
+    }
+}
