@@ -1,15 +1,16 @@
-class Solution {
+//O(n) time and space
+class Solution { 
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    List<TreeNode> res = new LinkedList<>();
-    postorder(root, new HashMap<>(), res);
-    return res;
-}
-
-public String postorder(TreeNode cur, Map<String, Integer> map, List<TreeNode> res) {
-    if (cur == null) return "#";  
-    String serial = cur.val + "," + postorder(cur.left, map, res) + "," + postorder(cur.right, map, res);
-    if (map.getOrDefault(serial, 0) == 1) res.add(cur);
-    map.put(serial, map.getOrDefault(serial, 0) + 1);
-    return serial;
-}
+        List<TreeNode> result = new ArrayList();
+        Map<String, Integer> map = new HashMap();
+        postOrder(root, result, map);
+        return result;
+    } 
+    public String postOrder(TreeNode root, List<TreeNode> result, Map<String, Integer> map){
+        if(root==null) return "null";
+        String path = root.val+","+postOrder(root.left,result,map)+","+postOrder(root.right,result,map);
+        if(map.getOrDefault(path,0)==1) result.add(root);
+        map.put(path, map.getOrDefault(path,0)+1);
+        return path;
+    }
 }
