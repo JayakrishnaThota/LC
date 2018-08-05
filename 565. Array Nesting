@@ -1,19 +1,43 @@
-//O(n) and O(1)
-public class Solution {
+//O(n^2) time and O(n) space
+class Solution {
     public int arrayNesting(int[] nums) {
-        int res = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != Integer.MAX_VALUE) {
-                int start = nums[i], count = 0;
-                while (nums[start] != Integer.MAX_VALUE) {
-                    int temp = start;
-                    start = nums[start];
+        if(nums==null) return 0;
+        if(nums.length<2) return nums.length;
+        int n = nums.length;
+        Set<Integer> set = new HashSet();
+        int max = 0;
+        for(int i=0;i<n;i++){
+            set.clear();
+            int index = i;
+            while(true){
+                if(!set.add(nums[index])) break;
+                index = nums[index];
+                max = Math.max(max, set.size());
+            }
+        }
+        return max;
+    }
+}
+
+//O(n) time and O(1) space
+class Solution {
+    public int arrayNesting(int[] nums) {
+        if(nums==null) return 0;
+        if(nums.length<2) return nums.length;
+        int n = nums.length;
+        int max = 0;
+        for(int i=0;i<n;i++){
+            if(nums[i]!=Integer.MAX_VALUE){
+                int index = i, count = 0;
+                while(nums[index]!=Integer.MAX_VALUE){
+                    int temp = index;
+                    index = nums[index];
                     count++;
                     nums[temp] = Integer.MAX_VALUE;
                 }
-                res = Math.max(res, count);
+                max = Math.max(max, count);
             }
         }
-        return res;
+        return max;
     }
 }
