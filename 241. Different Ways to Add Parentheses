@@ -1,27 +1,37 @@
+//O(3^n) time and space 
 class Solution {
     Map<String, List<Integer>> map = new HashMap();
     public List<Integer> diffWaysToCompute(String input) {
-        List<Integer> list = new ArrayList();
+        if(map.containsKey(input)) return map.get(input);
+        List<Integer> result = new ArrayList();
         for(int i=0;i<input.length();i++){
             char c = input.charAt(i);
-            if(c=='+' || c=='-' || c=='*'){
-                String left = input.substring(0,i);
-                String right = input.substring(i+1);
-                List<Integer> leftlist = map.getOrDefault(left, diffWaysToCompute(left));
-                List<Integer> rightlist = map.getOrDefault(right, diffWaysToCompute(right));
-                for(Integer l:leftlist){
-                    for(Integer r:rightlist){
-                        if(c=='+') list.add(l+r);
-                        else if(c=='-') list.add(l-r);
-                        else list.add(l*r);
+            if((c=='+')||(c=='-')||(c=='*')){
+                String l = input.substring(0,i);
+                String r = input.substring(i+1);
+                List<Integer> left = map.containsKey(l)?map.get(l):diffWaysToCompute(l);
+                List<Integer> right = map.containsKey(r)?map.get(r):diffWaysToCompute(r);
+                for(Integer il:left){
+                    for(Integer ir:right){
+                        int res = 0;
+                        if(c=='+'){
+                            res = il+ir;
+                        }
+                        else if(c=='-'){
+                            res = il-ir;
+                        }
+                        else if(c=='*'){
+                            res = il*ir;
+                        }
+                        result.add(res);
                     }
                 }
             }
         }
-        if(list.size()==0){
-            list.add(Integer.parseInt(input));
+        if(result.size()==0){
+            result.add(Integer.parseInt(input));
         }
-        map.put(input, list);
-        return list;
+        map.put(input, result);
+        return result;
     }
 }
