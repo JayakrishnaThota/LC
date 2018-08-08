@@ -1,19 +1,17 @@
-//O(n) time and O(1) space
+//O(1) time and space
 class Solution {
     public int findNthDigit(int n) {
-        int count = 1;
-        long cur = 9;
-        int result = 1;
-        while(n>cur*count){
-            n-=(cur*count);
-            result = result*10;
-            cur = (cur*10); 
-            count++;
+        if(n<1) return -1;
+        int length = 1, start = 1;
+        long count = 9;
+        while(n>length*count){
+            n-=length*count;
+            length++;
+            count*=10;
+            start*=10;
         }
-        System.out.println(result);
-        System.out.println(n);
-        result+=(n-1)/count;
-        String s = Integer.toString(result);
-		return Character.getNumericValue(s.charAt((n - 1) % count));
+        start+=((n-1)/length);
+        String s = String.valueOf(start);
+        return Character.getNumericValue(s.charAt((n-1)%length));
     }
 }
