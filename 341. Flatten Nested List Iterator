@@ -19,35 +19,31 @@ public class NestedIterator implements Iterator<Integer> {
     List<Integer> list;
     public NestedIterator(List<NestedInteger> nestedList) {
         list = new ArrayList();
-        helper(nestedList);
+        for(NestedInteger n:nestedList){
+            flatten(n);
+        }
     }
     
-    public void helper(List<NestedInteger> nestedList){
-        for(NestedInteger n:nestedList){
-            if(n.isInteger()){
-                list.add(n.getInteger());
-            }
-            else{
-                helper(n.getList());    
+    public void flatten(NestedInteger n){
+        if(n.isInteger()){
+            list.add(n.getInteger());
+        }
+        else{
+            for(NestedInteger ni:n.getList()){
+                flatten(ni);
             }
         }
     }
 
     @Override
     public Integer next() {
-        int ret =  list.get(0);
+        int ret = list.get(0);
         list.remove(0);
         return ret;
     }
 
     @Override
     public boolean hasNext() {
-        return (list.size()>0);
+        return (list.size()!=0);
     }
 }
-
-/**
- * Your NestedIterator object will be instantiated and called as such:
- * NestedIterator i = new NestedIterator(nestedList);
- * while (i.hasNext()) v[f()] = i.next();
- */
