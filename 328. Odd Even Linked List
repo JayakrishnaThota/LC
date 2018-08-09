@@ -1,37 +1,37 @@
-//O(n) time and O(1) space iterative solution
+//O(n) time and O(1) space
 class Solution {
     public ListNode oddEvenList(ListNode head) {
         if(head==null || head.next==null) return head;
-        ListNode evenstart=null,evenend=null;
-        ListNode oddstart=null,oddend=null;
-        ListNode iter = head;
+        ListNode os = null, oe = null, es = null, ee = null, iter = head;
         int count = 1;
         while(iter!=null){
-            if(count%2!=0){
-                if(oddstart==null){
-                    oddstart = iter;
-                    oddend = oddstart;
+            ListNode next = iter.next;
+            iter.next = null;
+            if((count%2)==1){
+                if(os==null){
+                    os = iter;
+                    oe = os;
                 }
                 else{
-                    oddend.next = iter;
-                    oddend = oddend.next;
+                    oe.next = iter;
+                    oe = oe.next;
                 }
             }
             else{
-                if(evenstart==null){
-                    evenstart=iter;
-                    evenend= evenstart;
+                if(es==null){
+                    es = iter;
+                    ee = es;
                 }
                 else{
-                    evenend.next = iter;
-                    evenend = evenend.next;
+                    ee.next = iter;
+                    ee = ee.next;
                 }
             }
-            iter = iter.next;
+            iter = next;
             count++;
         }
-        oddend.next = evenstart;
-        if(evenend!=null) evenend.next = null;
-        return oddstart;
+        if(os==null || es==null) return head;
+        oe.next = es;
+        return os;
     }
 }
