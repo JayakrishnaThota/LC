@@ -1,31 +1,27 @@
-//O(n) time and O(1) space
 class Solution {
+    
+    //O(n) time and space
     public String reverseVowels(String s) {
-        int low =0, high = s.length()-1;
+        if(s==null || s.length()==0) return s;
         char[] ch = s.toCharArray();
+        int n = s.length();
+        int low = 0, high = n-1;
         while(low<high){
-            if(!isVowel(ch[low])){
+            while((low<high)&&(!isVowel(s.charAt(low)))) low++;
+            while((low<high)&&(!isVowel(s.charAt(high)))) high--;
+            if(low<high){
+                char temp = ch[low];
+                ch[low] = ch[high];
+                ch[high] = temp;
                 low++;
-            }
-            else if(!isVowel(ch[high])){
                 high--;
             }
-            else if(low<high){
-                    swap(ch,low,high);
-                    low++;
-                    high--;
-            }
-            }
-        return String.valueOf(ch);
         }
-    
-    public void swap(char[] ch, int i, int j){
-        char temp = ch[i];
-        ch[i] = ch[j];
-        ch[j] = temp;
+        return new String(ch);
     }
     
+    //O(1) time and space
     public boolean isVowel(char c){
-        return (c=='a' || c=='e' || c=='i' || c=='o' || c=='u' || c=='A' || c=='E' || c=='I' || c=='O' || c=='U');
+        return ((c=='a')||(c=='e')||(c=='i')||(c=='o')||(c=='u')||(c=='A')||(c=='E')||(c=='I')||(c=='O')||(c=='U'));
     }
 }
