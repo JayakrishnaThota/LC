@@ -1,13 +1,36 @@
 //O(1) time and space
-public class Solution {
-    public String complexNumberMultiply(String a, String b) {
-        String x[] = a.split("\\+|i");
-        String y[] = b.split("\\+|i");
-        int a_real = Integer.parseInt(x[0]);
-        int a_img = Integer.parseInt(x[1]);
-        int b_real = Integer.parseInt(y[0]);
-        int b_img = Integer.parseInt(y[1]);
-        return (a_real * b_real - a_img * b_img) + "+" + (a_real * b_img + a_img * b_real) + "i";
-
+class Solution {
+    public String complexNumberMultiply(String s, String t) {
+        int[] first = helper(s);
+        int[] second = helper(t);
+        int a = first[0], b = first[1], c = second[0], d = second[1];
+        int sign = 1;
+        return (a*c-b*d) + "+"+(a*d+b*c)+"i";
+    }
+    
+    public int[] helper(String s){
+        int index = 0, sign = 1;
+        if(s.charAt(index)=='-'){
+            sign = -1;
+            index++;
+        }
+        int a = 0;
+        while(Character.isDigit(s.charAt(index))){
+            a = a*10 + s.charAt(index++)-'0';
+        }
+        a = sign*a;
+        sign = 1;
+        int b = 0;
+        while(!Character.isDigit(s.charAt(index))){
+            if(s.charAt(index)=='-'){
+                sign = -1;
+            }
+            index++;
+        }
+        while((index<s.length()) && (Character.isDigit(s.charAt(index)))){
+            b = b*10 + s.charAt(index++)-'0';
+        }
+        b = b*sign;
+        return new int[]{a,b};
     }
 }
