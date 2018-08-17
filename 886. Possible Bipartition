@@ -1,0 +1,33 @@
+//O(V+E) time and space
+// V = N and E = No of dislikes
+class Solution {
+    List<Integer>[] adjlist;
+    public boolean possibleBipartition(int N, int[][] dislikes) {
+        initialise(dislikes, N);
+        int[] map = new int[N+1];
+        for(int i=1;i<=N;i++){
+            if((map[i]==0)&&!dfs(map, i, 1)) return false;
+        }
+        return true;
+    }
+    public void initialise(int[][] dis, int n){
+        adjlist = new List[n+1];
+        for(int i=0;i<=n;i++){
+            adjlist[i] = new ArrayList();
+        }
+        for(int[] d:dis){
+            int a = d[0];
+            int b = d[1];
+            adjlist[a].add(b);
+            adjlist[b].add(a);
+        }
+    }
+    public boolean dfs(int[] map, int person, int group){
+        map[person] = group;
+        for(Integer nei:adjlist[person]){
+            if(map[nei]==group) return false;
+            if((map[nei]==0)&&!dfs(map, nei, -group)) return false;
+        }
+        return true;
+    }
+}
