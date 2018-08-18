@@ -1,0 +1,55 @@
+//O(nlogn) time and O(n) space
+//Where n is the length of all accounts
+class Solution {
+    Map<String, String> map;    //Mapping from email to name
+    Map<String, List<String>> adjlist;  //Mapping from root of each email account to all the other account emails
+    
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        initialise(accounts);
+        return dfs();
+    }
+    
+    public void initialise(List<List<String>> accounts){
+        map = new HashMap();
+        adjlist = new HashMap();
+        for (List<String> account: accounts) {
+            String name = "";
+            for (String email: account) {
+                if (name == "") {
+                    name = email;
+                    continue;
+                }
+                adjlist.computeIfAbsent(email, x-> new ArrayList<String>()).add(account.get(1));
+                adjlist.computeIfAbsent(account.get(1), x-> new ArrayList<String>()).add(email);
+                map.put(email, name);
+            }
+        }
+    }
+    
+    public List<List<String>> dfs(){
+        Set<String> seen = new HashSet();
+        List<List<String>> ans = new ArrayList();
+        for (String email: adjlist.keySet()) {
+            if (!seen.contains(email)) {
+                seen.add(email);
+                Stack<String> stack = new Stack();
+                stack.push(email);
+                List<String> component = new ArrayList();
+                while (!stack.empty()) {
+                    String node = stack.pop();
+                    component.add(node);
+                    for (String nei: adjlist.get(node)) {
+                        if (!seen.contains(nei)) {
+                            seen.add(nei);
+                            stack.push(nei);
+                        }
+                    }
+                }
+                Collections.sort(component);
+                component.add(0, map.get(email));
+                ans.add(component);
+            }
+        }
+        return ans;
+    }
+}
