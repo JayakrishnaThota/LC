@@ -1,0 +1,26 @@
+//O(nlogk) time and O(1) space
+//n - piles length and k - max item in pile
+class Solution {
+    public int minEatingSpeed(int[] piles, int H) {
+        int max = Integer.MIN_VALUE;
+        for(int pile:piles) max = Math.max(max, pile);
+        int low = 1, high = max;
+        while(low<high){
+            int k = low + (high-low)/2;
+            if(!possible(piles, H, k)){
+                low = k+1;
+            }
+            else{
+                high = k;
+            }
+        }
+        return low;
+    }
+    public boolean possible(int[] piles, int H, int k){
+        int time = 0;
+        for(int pile:piles){
+            time+=(pile-1)/k+1;
+        }
+        return (time<=H);
+    }
+}
