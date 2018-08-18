@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        return helper(root, val, new TreeNode(val));
+    }
+    public TreeNode helper(TreeNode root, int val, TreeNode node){
+        if(root==null) return node;
+        else if(root.val>val){
+            root.left = helper(root.left, val, node);
+        }
+        else if(root.val<val){
+            root.right = helper(root.right, val, node);
+        }
+        return root;
+    } 
+}
