@@ -28,7 +28,7 @@ class Solution {
         return bottomUp(N,K,r,c,memo);
     }
     
-    //O(N^2*K) time and space
+    //O(8^K) time and O(N^2*K) space
     public double bottomUp(int N, int K, int r, int c, double[][][] memo){
         if(r<0 || (r>=N) || (c<0) || (c>=N)) return 0;
         if(K==0) return 1;
