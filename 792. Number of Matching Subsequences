@@ -1,0 +1,30 @@
+//O(swl) time and O(w) space
+//s - length of S
+//w - number of words
+//l - max length of a word in words
+class Solution {  
+    public int numMatchingSubseq(String S, String[] words) {
+        Map<Character, Queue<String>> map = new HashMap();
+        for(char c='a';c<='z';c++){
+            map.put(c, new LinkedList());
+        }
+        for(String word:words){
+            char c = word.charAt(0);
+            map.get(c).add(word);
+        }
+        int count = 0;
+        for(char c : S.toCharArray()) {
+            Queue<String> queue = map.get(c);
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String word = queue.poll();
+                if (word.length() == 1) {
+                    count++;
+                } else {
+                    map.get(word.charAt(1)).add(word.substring(1));
+                }
+            }
+        }
+        return count;
+    }
+}
