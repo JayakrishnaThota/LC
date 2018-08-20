@@ -1,54 +1,47 @@
-public class Solution {
-    class UnionFind {
-        private int count = 0;
-        private int[] parent, rank;
-        
-        public UnionFind(int n) {
-            count = n;
-            parent = new int[n];
-            rank = new int[n];
-            for (int i = 0; i < n; i++) {
-                parent[i] = i;
-            }
-        }
-        
-        public int find(int p) {
-        	while (p != parent[p]) {
-                parent[p] = parent[parent[p]];    // path compression by halving
-                p = parent[p];
-            }
-            return p;
-        }
-        
-        public void union(int p, int q) {
-            int rootP = find(p);
-            int rootQ = find(q);
-            if (rootP == rootQ) return;
-            if (rank[rootQ] > rank[rootP]) {
-                parent[rootP] = rootQ;
-            }
-            else {
-                parent[rootQ] = rootP;
-                if (rank[rootP] == rank[rootQ]) {
-                    rank[rootP]++;
-                }
-            }
-            count--;
-        }
-        
-        public int count() {
-            return count;
+class Solution {
+    Map<Integer, List<Integer>> adjlist;
+    Set<Integer> set;
+    public int findCircleNum(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+  initialise(grid);
+  int count = 0;
+  for(int i=0;i<grid.length;i++){
+    if(!set.contains(i)){
+      dfs(i);
+      count++;
+    }
+  }
+  return count;
+}
+
+//O(V+E) time and space
+public void initialise(int[][] grid){
+  adjlist = new HashMap();
+  set = new HashSet();
+  for(int i=0;i<grid.length;i++){
+    if(adjlist.get(i)==null) adjlist.put(i, new ArrayList());
+    for(int j=0;j<grid[0].length;j++){
+      if(adjlist.get(j)==null) adjlist.put(j, new ArrayList());
+      if(grid[i][j]==1){
+        adjlist.get(i).add(j);
+        adjlist.get(j).add(i);
+      }
+    }
+  }
+}
+
+public void dfs(int source)
+{
+  
+    List<Integer> adj_elem = adjlist.get(source);
+    for(int elem: adj_elem)
+    {
+        if(!set.contains(elem))
+        {
+            set.add(elem);
+            dfs(elem);
         }
     }
-    
-    public int findCircleNum(int[][] M) {
-        int n = M.length;
-        UnionFind uf = new UnionFind(n);
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (M[i][j] == 1) uf.union(i, j);
-            }
-        }
-        return uf.count();
-    }
+  
+ }
 }
