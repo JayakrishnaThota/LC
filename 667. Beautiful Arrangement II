@@ -1,0 +1,11 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] constructArray(int n, int k) {
+        if(n<1) return new int[0];
+        int[] result = new int[n];
+        for(int i=0,l=1,r=n;l<=r;i++){
+            result[i] = k > 1 ? (k-- % 2 != 0 ? l++ : r--) : l++;
+        }
+        return result;
+    }
+}
