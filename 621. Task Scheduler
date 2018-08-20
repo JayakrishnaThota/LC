@@ -1,15 +1,16 @@
-public class Solution {
+//O(n) and O(1)
+class Solution {
     public int leastInterval(char[] tasks, int n) {
+        if(tasks==null || tasks.length==0) return 0;
+        if(n==0) return tasks.length;
         int[] map = new int[26];
-        for(char c:tasks){
-            map[c-'A']++;
-        }
+        for(char c:tasks) map[c-'A']++;
         Arrays.sort(map);
-        int max = map[25]-1;
-        int idle = max*n;
-        for(int i=24;i>=0&&map[i]>0;i--){
-            idle-=Math.min(map[i],max);
+        int max_val = map[25]-1;
+        int idle_slots = max_val*n;
+        for(int i=24;i>0&&map[i]>0;i--){
+            idle_slots -= Math.min(max_val, map[i]);
         }
-        return (idle>0?idle:0)+tasks.length;
+        return idle_slots>0?idle_slots+tasks.length:tasks.length;
     }
 }
