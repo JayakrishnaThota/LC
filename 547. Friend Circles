@@ -30,18 +30,16 @@ public void initialise(int[][] grid){
   }
 }
 
-public void dfs(int source)
-{
-  
-    List<Integer> adj_elem = adjlist.get(source);
-    for(int elem: adj_elem)
-    {
-        if(!set.contains(elem))
-        {
-            set.add(elem);
-            dfs(elem);
-        }
+public void dfs(int source){
+          Stack<Integer> stack = new Stack();
+  stack.push(source);
+  set.add(source);
+  while(!stack.isEmpty()){
+    int temp = stack.pop();
+    for(Integer neighbor:adjlist.get(temp)){
+      if(!set.add(neighbor)) continue;
+      stack.push(neighbor);
     }
-  
- }
+  }
+}
 }
