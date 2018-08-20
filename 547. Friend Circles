@@ -1,3 +1,4 @@
+//O(v+e) time and space
 class Solution {
     Map<Integer, List<Integer>> adjlist;
     Set<Integer> set;
@@ -30,7 +31,7 @@ public void initialise(int[][] grid){
   }
 }
 
-public void dfs(int source){
+    public void dfs(int source){
           Stack<Integer> stack = new Stack();
   stack.push(source);
   set.add(source);
