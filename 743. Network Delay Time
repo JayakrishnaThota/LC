@@ -1,35 +1,58 @@
-//O(ElogE) and O(V+E)
+//O(V+ElogE) time and O(V+E) space
 class Solution {
+    Map<Integer, List<int[]>> adjlist;//Adjacency list representation
+    Map<Integer, Integer> map;//Distance table to record the shortest distances from source to all other nodes
     public int networkDelayTime(int[][] times, int N, int K) {
-        Map<Integer, List<int[]>> graph = new HashMap();
-        for (int[] edge: times) {
-            if (!graph.containsKey(edge[0]))
-                graph.put(edge[0], new ArrayList<int[]>());
-            graph.get(edge[0]).add(new int[]{edge[1], edge[2]});
-        }
-        PriorityQueue<int[]> heap = new PriorityQueue<int[]>(
-                (info1, info2) -> info1[0] - info2[0]);
-        heap.offer(new int[]{0, K});
-
-        Map<Integer, Integer> dist = new HashMap();
-
-        while (!heap.isEmpty()) {
-            int[] info = heap.poll();
-            int d = info[0], node = info[1];
-            if (dist.containsKey(node)) continue;
-            dist.put(node, d);
-            if (graph.containsKey(node))
-                for (int[] edge: graph.get(node)) {
-                    int nei = edge[0], d2 = edge[1];
-                    if (!dist.containsKey(nei))
-                        heap.offer(new int[]{d+d2, nei});
-                }
-        }
-
-        if (dist.size() != N) return -1;
+        initialise(times, N);
+        dijkstras(K, N);
+        //Return the max 
+        if (map.size() != N) return -1;
         int ans = 0;
-        for (int cand: dist.values())
-            ans = Math.max(ans, cand);
+        for (int val: map.values())
+            ans = Math.max(ans, val);
         return ans;
+    }
+    
+    //Method to construct adjacency list for the given directed graph
+    public void initialise(int[][] times, int N){
+        adjlist = new HashMap();
+        map = new HashMap();
+        for(int i=1;i<=N;i++){
+            adjlist.put(i, new ArrayList<int[]>());
+        }
+        for(int[] time:times){
+            int u = time[0];
+            int v = time[1];
+            int weight = time[2];
+            adjlist.get(u).add(new int[]{v, weight});
+        }
+    }
+    
+    //Method to implement dijkstras to update the distance table
+    public void dijkstras(int source, int N){
+        //Min heap based on weights
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(N, new Comparator<int[]>(){
+           public int compare(int[] a, int[] b){
+               if(a[1]!=b[1])
+                   return a[1]-b[1];
+               else 
+                   return a[0]-b[0];
+           } 
+        });
+        pq.offer(new int[]{source, 0});
+        while(!pq.isEmpty()){
+            int[] cell = pq.poll();
+            int u = cell[0];
+            int distance = cell[1];
+            if(map.containsKey(u)) continue;
+            map.put(u, distance);
+            if(adjlist.get(u)==null) continue;
+            for(int[] neighbor:adjlist.get(u)){
+                int v = neighbor[0];
+                int uvdist = neighbor[1];
+                if(map.containsKey(v)) continue;
+                pq.offer(new int[]{v, distance+uvdist});
+            }
+        }
     }
 }
