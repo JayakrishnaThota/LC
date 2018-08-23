@@ -1,34 +1,18 @@
-//O(n^2) time and O(n) space
+//O(nlogn) time and O(n) space
 class Solution {
-    
     public boolean isNStraightHand(int[] hand, int W) {
         int n = hand.length;
-        if((n%W)!=0) return false;
-        Map<Integer, Integer> map = new HashMap();
-        for(int h:hand){
-            map.put(h,map.getOrDefault(h,0)+1);
-        }
-        for(int i=0;i<(n/W);i++){
-            int min = getMin(map); 
-            System.out.println(min);
-            for(int j=min;j<min+W;j++){
-                if(map.containsKey(j)){
-                    map.put(j, map.get(j)-1);
-                    if(map.get(j)==0) map.remove(j);
-                }
-                else{
-                    return false;
-                }
+        if(n%W!=0) return false;
+        TreeMap<Integer, Integer> map = new TreeMap();
+        for(int h:hand) map.put(h, map.getOrDefault(h,0)+1);
+        while(map.size()>0){
+            int key = map.firstKey();
+            for(int i=key;i<key+W;i++){
+                if(!map.containsKey(i)) return false;
+                map.put(i, map.get(i)-1);
+                if(map.get(i)==0) map.remove(i);
             }
         }
         return true;
-    }
-    
-    public int getMin(Map<Integer, Integer> map){
-        int min = Integer.MAX_VALUE;
-        for(int key:map.keySet()){
-            min = Math.min(min, key);
-        }
-        return min;
     }
 }
