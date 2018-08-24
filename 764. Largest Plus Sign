@@ -1,0 +1,52 @@
+//O(mn) time and space
+class Solution {
+    public int orderOfLargestPlusSign(int N, int[][] mines) {
+        int max = 0;
+        int[][] matrix = new int[N][N];
+        for(int i=0;i<matrix.length;i++){
+          for(int j=0;j<matrix[0].length;j++){
+            matrix[i][j] = 1;
+          }
+        }
+        for(int[] mine:mines){
+          int x = mine[0];
+          int y = mine[1];
+          matrix[x][y] = 0;
+        }
+        int[][] left = new int[N][N];
+        int[][] right = new int[N][N];
+        int[][] up = new int[N][N];
+        int[][] down = new int[N][N];
+        for(int i=0;i<N;i++){
+          for(int j=0;j<N;j++){
+            if(i>0){
+                left[i][j] = (matrix[i-1][j]==1)?left[i-1][j]+1:0;   
+            }
+            if(j>0){
+                up[i][j] = (matrix[i][j-1]==1)?up[i][j-1]+1:0;
+            }
+          }
+        }
+      for(int i=N-1;i>=0;i--){
+        for(int j=N-1;j>=0;j--){
+            if(i<N-1){
+                right[i][j] = (matrix[i+1][j]==1)?right[i+1][j]+1:0;
+            }
+            if(j<N-1){
+                down[i][j] = (matrix[i][j+1]==1)?down[i][j+1]+1:0;
+            }
+        }
+      }
+      for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+          if(matrix[i][j]==1){
+              int min1 = Math.min(left[i][j],right[i][j]);
+              int min2 = Math.min(up[i][j], down[i][j]);
+              int min = Math.min(min1, min2);
+              max = Math.max(max, 1+min);
+          }
+        }
+      }
+      return max;
+    }
+}
