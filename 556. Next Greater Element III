@@ -1,24 +1,22 @@
-//O(nlogn) and O(n)
-class Solution {
+//O(n) time and space
+public class Solution {
     public int nextGreaterElement(int n) {
-    char[] num = (n + "").toCharArray();
-    for(int i = num.length-2; i >= 0; i--) {
-        // find min number greater than num(i)
-        int minIdx = i;
-        for(int j = i+1; j < num.length; j++) {
-            minIdx = num[j] > num[i] ? j : minIdx;
-        }
-        if(minIdx != i) {
-            char temp = num[i]; //swap minIdx and i;
-            num[i] = num[minIdx];
-            num[minIdx] = temp;
-            
-            Arrays.sort(num, i+1, num.length);
-
-            long val = Long.parseLong(new String(num));
-            return (val <= Integer.MAX_VALUE) ? (int) val : -1;
-        }
+        char[] number = String.valueOf(n).toCharArray();
+        int i, j;
+        for (i = number.length-1; i > 0; i--)
+            if (number[i-1] < number[i])
+               break;
+        if (i == 0)
+            return -1;
+        int x = number[i-1], smallest = i;
+        for (j = i+1; j < number.length; j++)
+            if (number[j] > x && number[j] <= number[smallest])
+                smallest = j;
+        char temp = number[i-1];
+        number[i-1] = number[smallest];
+        number[smallest] = temp;
+        Arrays.sort(number, i, number.length);
+        long val = Long.parseLong(new String(number));
+        return (val <= Integer.MAX_VALUE) ? (int) val : -1;
     }
-    return -1;
-}
 }
