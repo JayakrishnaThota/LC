@@ -1,4 +1,4 @@
-//O(nlogn) time and O(n) space
+//O(n^2) time and O(n) space
 class Solution {
     public int[][] reconstructQueue(int[][] people) {
         //Sanity check
