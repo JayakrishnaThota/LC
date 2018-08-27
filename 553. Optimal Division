@@ -1,17 +1,17 @@
-//O(n) time and O(1) space
+//O(n) time and space
 class Solution {
     public String optimalDivision(int[] nums) {
+        if(nums==null || nums.length==0) return "";
+        if(nums.length==1) return String.valueOf(nums[0]);
+        else if(nums.length==2) return nums[0]+"/"+nums[1];
+        int n = nums.length;
         StringBuffer sb = new StringBuffer();
-        if(nums==null || nums.length==0) return sb.toString();
-        if(nums.length==1) return nums[0]+"";
-        if(nums.length==2) return nums[0]+"/"+nums[1];
-        sb.append(nums[0]+"/(");
-        for(int i=1;i<nums.length;i++){
-            if(i!=nums.length-1){
-            sb.append(nums[i]+"/");
-            }
+        for(int i=0;i<nums.length;i++){
+            int num = nums[i];
+            if(i==0)sb.append(num+"/(");
+            else if(i==nums.length-1) sb.append(num+")");
             else{
-                sb.append(nums[i]+")");
+                sb.append(num+"/");
             }
         }
         return sb.toString();
