@@ -1,4 +1,4 @@
-//O(n) time and space
+//O(n) time and O(1) space
 class Solution {
     public int characterReplacement(String s, int k) {
         int len = s.length();
