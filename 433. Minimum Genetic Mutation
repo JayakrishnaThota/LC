@@ -1,28 +1,29 @@
 //O(n*4^k) time and O(n) space
+//k is the length of the string and n is the number of words in the bank
 class Solution {
-    public int minMutation(String beginWord, String endWord, String[] bank) {
-        if(beginWord.equals(endWord)) return 0;
-        int level = 1;
-        Set<String> set = new HashSet();
-        for(String b:bank) set.add(b);
-        set.remove(beginWord);
-        char[] charset = new char[]{'A','C','G','T'};
-        Queue<String> q = new LinkedList();
-        q.offer(beginWord);
-        while(!q.isEmpty()){
-            int size = q.size();
+    public int minMutation(String start, String end, String[] bank) {
+        Set<String> dict = new HashSet();
+        for(String b : bank) dict.add(b);
+        char[] charSet = new char[]{'A','C','G','T'};
+        if(dict.contains(start)) dict.remove(start);
+        if(!dict.contains(end)) return -1;
+        Queue<String> queue = new LinkedList();
+        int level = 0;
+        queue.offer(start);
+        while(!queue.isEmpty()){
+            int size = queue.size();
             for(int j=0;j<size;j++){
-                String word = q.poll();
-                char[] ch = word.toCharArray();
+                String temp = queue.poll();
+                char[] ch = temp.toCharArray();
                 for(int i=0;i<ch.length;i++){
                     char original = ch[i];
-                    for(char c:charset){
+                    for(char c:charSet){
                         ch[i] = c;
                         String key = String.valueOf(ch);
-                        if(set.contains(key)){
-                            if(endWord.equals(key)) return level;
-                            set.remove(key);
-                            q.offer(key);
+                        if(dict.contains(key)){
+                            if(key.equals(end)) return level+1;
+                            dict.remove(key);
+                            queue.offer(key);
                         }
                     }
                     ch[i] = original;
