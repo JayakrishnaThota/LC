@@ -7,7 +7,7 @@ class Solution {
             if(n%i==0){
                 String key = s.substring(0,i);
                 for(int j=0;j<(n/i);j++){
-                    sb.append(key)
+                    sb.append(key);
                 }
                 if(sb.toString().equals(s)) return true;
             }
