@@ -1,13 +1,16 @@
-//O(n) time and space solution
+//O(n) time and space 
 class Solution {
-    private int sum = 0;
+    int sum = 0;
     public TreeNode convertBST(TreeNode root) {
-        if (root != null) {
-            convertBST(root.right);
-            sum += root.val;
-            root.val = sum;
-            convertBST(root.left);
-        }
+        if(root==null) return root;
+        helper(root);
         return root;
+    }
+    public void helper(TreeNode node){
+        if(node==null) return;
+        helper(node.right);
+        node.val = node.val+sum;
+        sum=node.val;
+        helper(node.left);
     }
 }
