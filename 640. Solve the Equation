@@ -1,45 +1,24 @@
 //O(n) time and space
-public class Solution {
-    public String coeff(String x) {
-        if (x.length() > 1 && x.charAt(x.length() - 2) >= '0' && x.charAt(x.length() - 2) <= '9')
-            return x.replace("x", "");
-        return x.replace("x", "1");
-    }
+class Solution {
     public String solveEquation(String equation) {
-        String[] lr = equation.split("=");
-        int lhs = 0, rhs = 0;
-        for (String x: breakIt(lr[0])) {
-            if (x.indexOf("x") >= 0) {
-                lhs += Integer.parseInt(coeff(x));
-            } else
-                rhs -= Integer.parseInt(x);
-        }
-        for (String x: breakIt(lr[1])) {
-            if (x.indexOf("x") >= 0)
-                lhs -= Integer.parseInt(coeff(x));
-            else
-                rhs += Integer.parseInt(x);
-        }
-        if (lhs == 0) {
-            if (rhs == 0)
-                return "Infinite solutions";
-            else
-                return "No solution";
-        }
-        return "x=" + rhs / lhs;
+    int[] res = evaluateExpression(equation.split("=")[0]),  
+  	  res2 = evaluateExpression(equation.split("=")[1]);
+    res[0] -= res2[0];
+    res[1] = res2[1] - res[1];
+    if (res[0] == 0 && res[1] == 0) return "Infinite solutions";
+    if (res[0] == 0) return "No solution";
+    return "x=" + res[1]/res[0];
+}  
+
+public int[] evaluateExpression(String exp) {
+    String[] tokens = exp.split("(?=[-+])"); 
+    int[] res =  new int[2];
+    for (String token : tokens) {
+        if (token.equals("+x") || token.equals("x")) res[0] += 1;
+	else if (token.equals("-x")) res[0] -= 1;
+	else if (token.contains("x")) res[0] += Integer.parseInt(token.substring(0, token.indexOf("x")));
+	else res[1] += Integer.parseInt(token);
     }
-    public List < String > breakIt(String s) {
-        List < String > res = new ArrayList < > ();
-        String r = "";
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '+' || s.charAt(i) == '-') {
-                if (r.length() > 0)
-                    res.add(r);
-                r = "" + s.charAt(i);
-            } else
-                r += s.charAt(i);
-        }
-        res.add(r);
-        return res;
-    }
+    return res;
+}
 }
