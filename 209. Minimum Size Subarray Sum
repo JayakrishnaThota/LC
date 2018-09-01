@@ -1,4 +1,4 @@
-//O(n) time and space
+//O(n) time and O(1) space
 class Solution {
     public int minSubArrayLen(int s, int[] nums) {
         if(nums==null || nums.length==0 || s<=0) return 0;
