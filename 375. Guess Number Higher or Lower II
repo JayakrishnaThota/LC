@@ -1,0 +1,14 @@
+class Solution {
+    public int getMoneyAmount(int n) {
+        return recursive(1, n);
+    }
+    public int recursive(int low, int high){
+        if(low>=high) return 0;
+        if(low==high-1) return Math.min(low, high);
+        int min = Integer.MAX_VALUE;
+        for(int i=low;i<=high;i++){
+            min = Math.min(min, i + Math.max(recursive(low,i-1) , recursive(i+1,high)));
+        }
+        return min;
+    }
+}
