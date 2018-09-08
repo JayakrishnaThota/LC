@@ -1,6 +1,5 @@
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        //Sanity check
         if(nums==null || nums.length==0) return false;
         int sum = 0;
         for(int n:nums) sum+=n;
@@ -14,8 +13,7 @@ class Solution {
             return helper(nums, k-1, visited, 0, 0, target);
         }
         for(int i = start;i<nums.length;i++){
-            if(visited[i]) continue;
-            if(cursum+nums[i]>target) break;
+            if((visited[i]) || (cursum+nums[i]>target)) continue;
             visited[i] = true;
             if(helper(nums,k,visited,i+1,cursum+nums[i],target)) return true;
             visited[i] = false;
