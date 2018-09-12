@@ -1,0 +1,16 @@
+class StockSpanner {
+    Stack<Integer> stack;
+    Stack<Integer> result;
+    public StockSpanner() {
+        stack = new Stack();
+        result = new Stack();
+    }
+    
+    public int next(int price) {
+        int count = 1;
+        while(!stack.isEmpty() && stack.peek()<=price) { count+=result.pop(); stack.pop();  }
+        stack.push(price);
+        result.push(count);
+        return count;
+    }
+}
