@@ -1,24 +1,25 @@
 public class Vector2D implements Iterator<Integer> {
-
     List<Integer> list;
     Iterator<Integer> iter;
+    //O(n) time and space
     public Vector2D(List<List<Integer>> vec2d) {
         list = new ArrayList();
-        for(List<Integer> vec:vec2d){
-            for(Integer v:vec){
-                list.add(v);
+        for(List<Integer> vec1d:vec2d){
+            for(Integer vec:vec1d){
+                list.add(vec);
             }
         }
         iter = list.iterator();
     }
 
-    @Override
+    //O(1) time
     public Integer next() {
         return iter.next();
     }
 
-    @Override
+    //O(1) time
     public boolean hasNext() {
         return iter.hasNext();
     }
 }
+
