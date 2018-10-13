@@ -1,4 +1,4 @@
-//O(n) time and space
+//O(n) time and O(n) space
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         int[] result = new int[2];
@@ -10,7 +10,25 @@ class Solution {
                 result[1] = i;
                 return result;
             }
-            map.put(nums[i],i);
+            map.put(nums[i], i);
+        }
+        return result;
+    }
+}
+
+//O(n^2) time and O(1) space
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] result = new int[2];
+        int n = nums.length;
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                int sum = nums[i] + nums[j];
+                if(sum==target){
+                    result[0] = i;
+                    result[1] = j;
+                }
+            }
         }
         return result;
     }
