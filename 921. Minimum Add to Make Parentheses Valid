@@ -1,0 +1,15 @@
+//O(n) time and O(1) space
+class Solution {
+    public int minAddToMakeValid(String S) {
+        if(S==null || S.length()==0) return 0;
+        int n = S.length();
+        int result = 0, count = 0;
+        for(char c:S.toCharArray()){
+            if(c=='(') count++;
+            else if(c==')') count--;
+            if(count<0) { count++; result++; }
+        }
+        while(count>0) {result++; count--;}
+        return result;
+    }
+}
