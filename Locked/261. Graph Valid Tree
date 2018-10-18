@@ -17,47 +17,33 @@ Note: you can assume that no duplicate edges will appear in edges. Since all edg
 
 */
 
-//Cycle detection algorithm using DFS
-//There is a cycle, if for a vertex 'v', there is an adjacent vertex 'u' such that it is already visited and 'u' is not the
-//parent of 'v'
 //O(V+E) time and space
 class Solution {
-    List<List<Integer>> adjlist;
-    boolean[] visited;
+    Map<Integer, List<Integer>> adjlist;
+    Set<Integer> visited;
     public boolean validTree(int n, int[][] edges) {
-        initialiseGraph(n, edges);
-        //It is not a tree if there is a cycle
-        if(cycle(0,-1)) return false;
-        //Check if all the components are visited
-        for(int i=0;i<visited.length;i++){
-            if(!visited[i]) return false;
-        }
-        return true;
+        initialise(n,edges);
+        if(hasCycle(0,-1)) return false;
+        return (visited.size()==n);
     }
-    
-    public void initialiseGraph(int n, int[][] edges){
-        adjlist = new ArrayList(n);
+    public void initialise(int n, int[][] edges){
+        adjlist = new HashMap();
+        visited = new HashSet();
         for(int i=0;i<n;i++){
-            adjlist.add(i, new ArrayList());
+            adjlist.put(i, new ArrayList<Integer>());
         }
-        visited = new boolean[n];
         for(int[] edge:edges){
-            int u = edge[0];
-            int v = edge[1];
-            adjlist.get(u).add(v);
-            adjlist.get(v).add(u);
+            adjlist.get(edge[0]).add(edge[1]);
+            adjlist.get(edge[1]).add(edge[0]);
         }
     }
-    
-    //Perform dfs in this method and look for the above mentioned condition
-    public boolean cycle(int u, int parent){
-        visited[u] = true;
-        for (int i = 0; i < adjlist.get(u).size(); i++) {
-            int v = adjlist.get(u).get(i);
-            if ((visited[v] && parent != v) || (!visited[v] && cycle(v,u)))
-                return true;
+    public boolean hasCycle(int u, int parent){
+        if(visited.contains(u)) return true;
+        visited.add(u);
+        for(Integer v:adjlist.get(u)){
+            if(parent==v) continue;
+            if(hasCycle(v,u)) return true;
         }
         return false;
     }
-    
 }
