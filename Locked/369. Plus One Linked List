@@ -1,32 +1,32 @@
-//O(n) and O(1)
+//O(n) time and space
 class Solution {
     public ListNode plusOne(ListNode head) {
         ListNode rev = reverse(head);
         ListNode iter = rev;
-        int count = 0;
+        ListNode prev = null;
         while(iter!=null){
-            count++;
+            prev = iter;
+            int val = iter.val;
             if(iter.val==9){
                 iter.val = 0;
                 iter = iter.next;
             }
             else{
-                iter.val = iter.val+1;
-                return reverse(rev);
+                iter.val = val+1;
+                break;
             }
         }
-        ListNode one = new ListNode(1);
-        ListNode result = one;
-        while(count-->0){
-            one.next = new ListNode(0);
-            one = one.next;
+        if(iter==null){
+            prev.next = new ListNode(1);
+            reverse(prev.next);
         }
-        return result;
+        return reverse(rev);
     }
-    //O(n) and O(1)
+    
     public ListNode reverse(ListNode head){
+        //Sanity Check
         if(head==null || head.next==null) return head;
-        ListNode cur = head,prev=null;
+        ListNode cur = head, prev = null;
         while(cur!=null){
             ListNode next = cur.next;
             cur.next = prev;
@@ -35,4 +35,5 @@ class Solution {
         }
         return prev;
     }
+    
 }
