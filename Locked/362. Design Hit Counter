@@ -1,21 +1,27 @@
-//O(n) space for storing all the timestamps
 class HitCounter {
-    Map<Integer, Integer> map;
+    int[] flag;
+    int[] buckets;
     public HitCounter() {
-        map = new HashMap();
+        flag = new int[300];
+        buckets = new int[300];
     }
     
-    //O(1) time and O(1) space
     public void hit(int timestamp) {
-        map.put(timestamp,map.getOrDefault(timestamp,0)+1);
+        int index = timestamp%300;
+        if(flag[index]==timestamp) buckets[index]++;
+        else{
+            flag[index] = timestamp;
+            buckets[index] = 1;
+        }
     }
     
-    //O(1) time and O(1) space
+    
     public int getHits(int timestamp) {
-        int ret = 0;
-        for(int i=timestamp-299;i<=timestamp;i++){
-            ret+=map.getOrDefault(i,0);
+        int sum = 0;
+        for(int i=0;i<300;i++){
+            if(timestamp-flag[i]<300)   sum+=buckets[i];
         }
-        return ret;
+        return sum;
     }
 }
+
