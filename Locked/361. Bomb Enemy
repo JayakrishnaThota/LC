@@ -40,3 +40,53 @@ class Solution {
     }
     
 }
+
+//O(mn) time and space
+class Solution {
+    public int maxKilledEnemies(char[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+            int m = grid.length;
+            int n = grid[0].length;
+            int[][] left = new int[m][n];
+            int[][] right = new int[m][n];
+            int[][] up = new int[m][n];
+            int[][] down = new int[m][n];
+            for(int i=0;i<m;i++){
+                for(int j=0;j<n;j++){
+                    char c = grid[i][j];
+                    if(c=='W') continue;
+                    if(j>0){
+                        left[i][j] = (grid[i][j-1]=='E')?(1+left[i][j-1]):left[i][j-1];
+                    }
+                    if(i>0){
+                        up[i][j] = (grid[i-1][j]=='E')?1+up[i-1][j]:up[i-1][j];
+                    }
+
+                }
+            }
+
+            for(int i=m-1;i>=0;i--) {
+                for (int j = n-1; j >=0; j--) {
+                    if(grid[i][j]=='W') continue;
+                    if (i < m - 1) {
+                        down[i][j] = (grid[i+1][j] == 'E') ? 1 + down[i+1][j] : down[i+1][j];
+                    }
+                    if (j < n - 1) {
+                        right[i][j] = (grid[i][j+1] == 'E') ? 1 + right[i][j+1] : right[i][j+1];
+                    }
+                }
+            }
+
+            int max = 0;
+             for(int i=0;i<m;i++){
+                 for(int j=0;j<n;j++){
+                     char c = grid[i][j];
+                     if(c=='0'){
+                         int sum = left[i][j] + right[i][j] + up[i][j] + down[i][j];
+                         max = Math.max(max, sum);
+                     }
+                 }
+             }
+            return max;
+        }
+}
