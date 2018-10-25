@@ -1,0 +1,22 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    Map<String, PriorityQueue<String>> map;
+    LinkedList<String> list;
+    public List<String> findItinerary(String[][] tickets) {
+        map = new HashMap();
+        list = new LinkedList();
+        for(String[] ticket:tickets){
+            if(map.get(ticket[0])==null) map.put(ticket[0], new PriorityQueue<String>());
+            map.get(ticket[0]).offer(ticket[1]);
+        }
+        dfs("JFK");
+        return list;
+    }
+    public void dfs(String source){
+        PriorityQueue<String> destinations = map.get(source);
+        while(destinations!=null && !destinations.isEmpty()){
+            dfs(destinations.poll());
+        }
+        list.addFirst(source);
+    }
+}
