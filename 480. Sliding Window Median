@@ -1,0 +1,51 @@
+//O(nk) time and O(k) space
+class Solution {
+    PriorityQueue<Integer> minpq;
+    PriorityQueue<Integer> maxpq;
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        if(nums==null || nums.length==0 || k<=0) return null;
+        int n = nums.length;
+        double[] result = new double[n-k+1];
+        minpq = new PriorityQueue();
+        maxpq = new PriorityQueue<Integer>(
+        new Comparator<Integer>() {
+            public int compare(Integer i1, Integer i2) {
+                return i2.compareTo(i1);
+            }
+        }
+        );
+        for(int i=0;i<=n;i++){
+            if(i>=k){
+                result[i-k] = Median();
+                remove(nums[i-k]);
+            }
+            if(i==n) continue;
+            add(nums[i]);
+        }
+        return result;
+    }
+    
+    public void add(int num){
+        maxpq.offer(num);
+        minpq.offer(maxpq.poll());
+        if(maxpq.size()<minpq.size()-1){
+            maxpq.offer(minpq.poll());
+        }
+    }
+    
+    public void remove(int num){
+        double median = Median();
+        if(num<median) maxpq.remove(num);
+        else minpq.remove(num);
+        if(maxpq.size()<minpq.size()-1){
+            maxpq.offer(minpq.poll());
+        }
+        if(minpq.size()<maxpq.size()) minpq.offer(maxpq.poll());
+    }
+    
+    public double Median(){
+        if(minpq.isEmpty() && maxpq.isEmpty()) return 0;
+        if(minpq.size()==maxpq.size()) return (((double)minpq.peek()+(double)maxpq.peek())/2.0);
+        return (double)minpq.peek();
+    }
+}
