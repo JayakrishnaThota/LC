@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    Node prev;
+    public Node treeToDoublyList(Node root) {
+        if(root==null)  return null;
+        Node dummy = new Node(0);
+        prev = dummy;
+        inorder(root);
+        prev.right = dummy.right;
+        dummy.right.left = prev;
+        return dummy.right;
+    }
+    
+    public void inorder(Node node){
+        if(node==null) return;
+        inorder(node.left);
+        prev.right = node;
+        node.left = prev;
+        prev = node;
+        inorder(node.right);
+    }
+}
