@@ -1,0 +1,34 @@
+//DFS
+class Solution {
+    public List<List<String>> wordSquares(String[] words) {
+        List<List<String>> list = new ArrayList();
+        for(int i=0;i<words.length;i++){
+            List<String> sublist = new ArrayList(); 
+            backtrack(list, sublist, words, i, new boolean[words.length], 0);
+        }
+        return list;
+    }
+    public void backtrack(List<List<String>> list, List<String> sublist, String[] words, int index, boolean[] visited, int row){
+        sublist.add(words[index]);
+        visited[index] = true;
+        row++;
+        if(words[0].length()==row){
+            list.add(new ArrayList(sublist));
+            return;
+        }
+        for(int i=0;i<words.length;i++){
+            String word = words[i];
+            for(int j=0;j<sublist.size();j++){
+                if(word.charAt(j)!=sublist.get(j).charAt(row)) break;
+                if(j==sublist.size()-1){
+                    System.out.println(word+" is added");
+                    backtrack(list, sublist, words, i, visited, row);
+                    System.out.println(word+" is removed");
+                    sublist.remove(sublist.size()-1);
+                }
+            }
+        }
+    }
+}
+
+//DFS + Trie
