@@ -1,0 +1,23 @@
+//O(n) time and O(1) space
+//Where n is the number of words in the sentence
+class Solution {
+    public int wordsTyping(String[] sentence, int rows, int cols) {
+        int line = 0, index=0, sindex=0, result=0;
+        while(line<rows){
+            int curlength = sentence[sindex].length();
+            if(curlength+index>cols){
+                index = 0;
+                line++;
+            }
+            else{
+                index+=(curlength+1);
+                sindex++;
+                if(sindex==sentence.length){
+                    sindex = 0;
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+}
