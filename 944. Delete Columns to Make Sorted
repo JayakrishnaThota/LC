@@ -1,0 +1,16 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int minDeletionSize(String[] A) {
+        if(A==null || A.length==0) return 0;
+        int n = A.length, m = A[0].length();
+        int count = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n-1;j++){
+                char a = A[j].charAt(i);
+                char b = A[j+1].charAt(i);
+                if(a>b){ count++; break; }
+            }
+        }
+        return count;
+    }
+}
