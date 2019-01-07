@@ -1,0 +1,38 @@
+//O(n^2) time and O(n) space
+class Solution {
+    public List<Integer> pancakeSort(int[] A) {
+        int[] B = new int[A.length];
+        B = Arrays.copyOf(A, A.length);
+        Arrays.sort(B);
+        int n = B.length;
+        int large = n-1;
+        List<Integer> res = new ArrayList<>();
+        for(int i = n-1; i >=0; i--)
+        {
+            int idx = find(A, B[i]);
+            flip(A, idx);
+            flip(A, large);
+            res.add(idx+1);
+            res.add(large+1);
+            large--; 
+            
+        }
+        return res;
+    }
+    public int find(int[] A, int val)
+    {
+        for(int i=0; i<A.length; i++)
+            if(A[i] == val)
+                return i;
+        return -1;
+    }
+    public void flip(int[] A, int idx)
+    {
+        for(int i=0,j=idx; i<=j; i++,j--)
+        {
+            int tmp = A[i];
+            A[i] = A[j];
+            A[j] = tmp;
+        }
+    }
+}
