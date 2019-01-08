@@ -1,18 +1,29 @@
-//O(V+E) time and O(V) space
+//O(V+E) time and O(E) space
+//V is the number of rooms and E is the number of keys
 class Solution {
+    Map<Integer, List<Integer>> adjlist;
+    Set<Integer> set;
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
-        Set<Integer> visited = new HashSet();
-        Stack<Integer> stack = new Stack();
-        stack.push(0);
-        visited.add(0);
-        while(!stack.isEmpty()){
-            int temp = stack.pop();
-            for(Integer neighbor:rooms.get(temp)){
-                if(visited.contains(neighbor)) continue;
-                visited.add(neighbor);
-                stack.push(neighbor);
+        initialise(rooms);
+        dfs(0);
+        return (set.size()==rooms.size());
+    }
+    public void initialise(List<List<Integer>> rooms) {
+        adjlist = new HashMap();
+        set = new HashSet();
+        for(int i=0;i<rooms.size();i++) {
+            List<Integer> room = rooms.get(i);
+            for(Integer r:room) {
+                if(adjlist.get(i)==null) adjlist.put(i, new ArrayList());
+                adjlist.get(i).add(r);
             }
         }
-        return (visited.size()==rooms.size());
+    }
+    public void dfs(int source) {
+        if(!set.add(source)) return;
+        if(adjlist.get(source)==null) return;
+        for(Integer neighbor:adjlist.get(source)) {
+            dfs(neighbor);
+        }
     }
 }
