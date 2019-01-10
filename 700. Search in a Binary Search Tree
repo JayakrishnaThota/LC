@@ -1,4 +1,4 @@
-//O(logn) time and O(1) space
+//O(logn) time and O(1) space Itertive Solution
 class Solution {
     public TreeNode searchBST(TreeNode root, int val) {
         if(root==null) return null;
@@ -8,5 +8,14 @@ class Solution {
             else root = root.left;
         }
         return null;
+    }
+}
+
+//O(logn) time and O(logn) space Recursive Solution
+class Solution {
+    public TreeNode searchBST(TreeNode root, int val) {
+        if(root==null || (root.val==val)) return root;
+        else if(root.val<val) return searchBST(root.right, val);
+        else return searchBST(root.left, val);
     }
 }
