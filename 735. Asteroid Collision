@@ -1,25 +1,23 @@
+//O(n) time and space
 class Solution {
     public int[] asteroidCollision(int[] asteroids) {
-        Stack<Integer> stack = new Stack();
-        for (int ast: asteroids) {
-            collision: {
-                while (!stack.isEmpty() && ast < 0 && 0 < stack.peek()) {
-                    if (stack.peek() < -ast) {
-                        stack.pop();
-                        continue;
-                    } else if (stack.peek() == -ast) {
-                        stack.pop();
-                    }
-                    break collision;
-                }
-                stack.push(ast);
+        LinkedList<Integer> s = new LinkedList<>();
+        for (int i : asteroids) {
+            if (i > 0)
+                s.add(i);
+            else {
+                while (!s.isEmpty() && s.getLast() > 0 && s.getLast() < -i)
+                    s.pollLast();
+                if (!s.isEmpty() && s.getLast() == -i)
+                    s.pollLast();
+                else if (s.isEmpty() || s.getLast() < 0)
+                    s.add(i);
             }
         }
-
-        int[] ans = new int[stack.size()];
-        for (int t = ans.length - 1; t >= 0; --t) {
-            ans[t] = stack.pop();
+        int[] result = new int[s.size()];
+        for(int i=s.size()-1;i>=0;i--){
+            result[i] = s.get(i);
         }
-        return ans;
+        return result;
     }
 }
