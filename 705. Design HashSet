@@ -1,0 +1,29 @@
+class MyHashSet {
+    int bucketscount;
+    int bucketssize;
+    boolean[][] buckets;
+    public MyHashSet() {
+        bucketscount = 1000;
+        bucketssize = 1001;
+        buckets = new boolean[bucketscount][bucketssize];
+    }
+    
+    public void add(int key) {
+        int x = key/bucketscount;
+        int y = key%bucketscount;
+        buckets[x][y] = true;
+    }
+    
+    public void remove(int key) {
+        int x = key/bucketscount;
+        int y = key%bucketscount;
+        buckets[x][y] = false;
+    }
+    
+    /** Returns true if this set contains the specified element */
+    public boolean contains(int key) {
+        int x = key/bucketscount;
+        int y = key%bucketscount;
+        return buckets[x][y];
+    }
+}
