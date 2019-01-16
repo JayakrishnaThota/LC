@@ -1,0 +1,23 @@
+class KthLargest {
+    PriorityQueue<Integer> pq;
+    int k;
+    public KthLargest(int k, int[] nums) {
+        pq = new PriorityQueue();
+        this.k = k;
+        for(int i=0;i<nums.length;i++){
+            if(pq.isEmpty() || pq.peek()<=nums[i] || pq.size()<k) {
+                pq.offer(nums[i]);
+                if(pq.size()>k) pq.poll();
+            }
+        }
+    }
+    
+    //O(logn) time and O(n) space
+    public int add(int val) {
+        if(pq.isEmpty() || pq.peek()<=val || pq.size()<k) {
+                pq.offer(val);
+                if(pq.size()>k)  pq.poll(); 
+        }
+        return pq.peek();
+    }
+}
