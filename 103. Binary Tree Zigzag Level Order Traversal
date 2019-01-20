@@ -3,21 +3,21 @@ class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> list = new ArrayList();
         if(root==null) return list;
-        Queue<TreeNode> q = new LinkedList();
-        q.offer(root);
-        boolean z = false;
-        while(!q.isEmpty()){
-            int level = q.size();
-            List<Integer> sublist = new ArrayList();
-            for(int i=0;i<level;i++){
-                TreeNode temp = q.poll();
-                if(z)sublist.add(0,temp.val);
-                else sublist.add(temp.val);
-                if(temp.left!=null) q.offer(temp.left);
-                if(temp.right!=null) q.offer(temp.right);
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        boolean zigzag = false;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            LinkedList<Integer> sublist = new LinkedList();
+            for(int i=0;i<size;i++){
+                TreeNode temp = queue.poll();
+                if(zigzag) sublist.addFirst(temp.val);
+                else sublist.addLast(temp.val);
+                if(temp.left!=null) queue.offer(temp.left);
+                if(temp.right!=null) queue.offer(temp.right);
             }
+            zigzag = (zigzag==true)?false:true;
             list.add(sublist);
-            z = ((z==true)?false:true);
         }
         return list;
     }
