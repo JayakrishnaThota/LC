@@ -1,0 +1,17 @@
+//O(n) time and O(1) space
+class Solution {
+    public int minPatches(int[] nums, int n) {
+	long max = 0;
+	int count = 0, index = 0;
+	while(max<n){
+        if(index>=nums.length || max<nums[index]-1){
+            max+=(max+1);
+            count++;
+            
+        } else {
+            max+=nums[index++];
+        }
+    }
+	return count;
+}
+}
