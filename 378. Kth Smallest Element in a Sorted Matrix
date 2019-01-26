@@ -1,27 +1,36 @@
-//O(klogn) and O(n)
+//O(nlogk) time and O(max(n,k)) space
 class Solution {
     public int kthSmallest(int[][] matrix, int k) {
-        int row = matrix.length;
-        int col = matrix[0].length;
-        PriorityQueue<Tuple> pq = new PriorityQueue();
-        for(int i=0;i<col;i++)
+        //Edge case when there are no elements present
+        if(matrix==null || matrix.length==0 || k<0) return -1; 
+        int m = matrix.length, n = matrix[0].length;
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(k, new Comparator<Tuple>(){
+            public int compare(Tuple a, Tuple b){
+                return a.val-b.val;
+            }
+        });
+        //O(nlogk) time and O(max(n,k)) space
+        for(int i=0;i<n;i++){
             pq.offer(new Tuple(0,i,matrix[0][i]));
-        for(int i=0;i<k-1;i++){
-            Tuple t = pq.poll();
-            if(t.row==row-1) continue;
-            pq.offer(new Tuple(t.row+1,t.col,matrix[t.row+1][t.col]));
         }
-        return pq.poll().val;
+        int index = 0;
+        while(!pq.isEmpty()){
+            Tuple t = pq.poll();
+            index++;
+            if(index==k) return t.val;
+            if(t.x==m-1) continue;
+            pq.offer(new Tuple(t.x+1, t.y, matrix[t.x+1][t.y]));
+        }
+        return -1;
     }
-}
-class Tuple implements Comparable<Tuple>{
-        int row,col,val;
-        public Tuple(int row, int col, int val){
-            this.row = row;
-            this.col = col;
+    class Tuple{
+        int x;
+        int y;
+        int val;
+        public Tuple(int x, int y, int val){
+            this.x = x;
+            this.y = y;
             this.val = val;
         }
-        public int compareTo(Tuple that){
-            return this.val-that.val;
-        }
+    }
 }
