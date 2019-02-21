@@ -1,23 +1,20 @@
-//O(m+n) extra space
 public class ZigzagIterator {
-    Iterator<Integer> iter;
+    LinkedList<Iterator> list;
     public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        List<Integer> list = new ArrayList();
-        int index1 = 0, index2 = 0;
-        while(index1<v1.size() || index2<v2.size()){
-            if(index1<v1.size()) list.add(v1.get(index1++));
-            if(index2<v2.size()) list.add(v2.get(index2++));
-        }
-        iter = list.iterator();
+        list = new LinkedList<Iterator>();
+        if(!v1.isEmpty()) list.add(v1.iterator());
+        if(!v2.isEmpty()) list.add(v2.iterator());
     }
 
-    //O(1) time and O(m+n) extra space
     public int next() {
-        return iter.next();
+        Iterator iter = list.poll();
+        int ret = (Integer)iter.next();
+        if(iter.hasNext()) list.add(iter);
+        return ret;
     }
 
-    //O(1) time and O(m+n) extra space
     public boolean hasNext() {
-        return iter.hasNext();
+        return !list.isEmpty();
     }
 }
+
