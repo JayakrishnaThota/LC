@@ -1,0 +1,75 @@
+class NumArray {
+    
+    class SegmentTreeNode{
+        SegmentTreeNode left, right;
+        int sum;
+        int low;
+        int high;
+        public SegmentTreeNode(int low, int high){
+            this.low = low;
+            this.high = high;
+            this.sum = 0;
+            this.left = null;
+            this.right = null;
+        }
+    }
+    
+    SegmentTreeNode root;
+
+    public NumArray(int[] nums) {
+        root = buildTree(nums, 0, nums.length-1);
+    }
+    
+    public SegmentTreeNode buildTree(int[] nums, int low, int high){
+        if(low>high) return null;
+        SegmentTreeNode ret = new SegmentTreeNode(low, high);
+        if(low==high){
+            ret.sum = nums[low];
+        }
+        else{
+            int mid = low + (high-low)/2;
+            ret.left = buildTree(nums, low, mid);
+            ret.right = buildTree(nums, mid+1, high);
+            ret.sum = ret.left.sum + ret.right.sum;
+        }
+        return ret;
+    }
+    
+    //O(logn) time
+    public void update(int i, int val) {
+        update(root, i, val);
+    }
+    
+    public void update(SegmentTreeNode root, int i, int val){
+        if(root.low==root.high){
+            root.sum = val;
+        }
+        else{
+            int mid = root.low + (root.high-root.low)/2;
+            if(i>mid){
+                update(root.right, i, val);
+            }
+            else{
+                update(root.left, i, val);
+            }
+            root.sum = root.left.sum + root.right.sum;
+        }
+    }
+    
+    //O(logn) time
+    public int sumRange(int i, int j) {
+       return sumRange(root, i, j);
+    }
+    
+    public int sumRange(SegmentTreeNode root, int i, int j){
+        if((root.low==i)&&(root.high==j)){
+            return root.sum;
+        }
+        else{
+            int mid = root.low + (root.high-root.low)/2;
+            if(i>mid) return sumRange(root.right, i, j);
+            else if(j<=mid) return sumRange(root.left, i, j);
+            else return sumRange(root.left, i, mid) + sumRange(root.right, mid+1, j);
+        }
+    }
+}
