@@ -1,36 +1,34 @@
-//O(nlogk) time and O(max(n,k)) space
 class Solution {
-    public int kthSmallest(int[][] matrix, int k) {
-        //Edge case when there are no elements present
-        if(matrix==null || matrix.length==0 || k<0) return -1; 
-        int m = matrix.length, n = matrix[0].length;
-        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(k, new Comparator<Tuple>(){
-            public int compare(Tuple a, Tuple b){
-                return a.val-b.val;
-            }
-        });
-        //O(nlogk) time and O(max(n,k)) space
-        for(int i=0;i<n;i++){
-            pq.offer(new Tuple(0,i,matrix[0][i]));
-        }
-        int index = 0;
-        while(!pq.isEmpty()){
-            Tuple t = pq.poll();
-            index++;
-            if(index==k) return t.val;
-            if(t.x==m-1) continue;
-            pq.offer(new Tuple(t.x+1, t.y, matrix[t.x+1][t.y]));
-        }
-        return -1;
-    }
     class Tuple{
         int x;
         int y;
-        int val;
-        public Tuple(int x, int y, int val){
+        int sum;
+        public Tuple(int x, int y, int sum){
             this.x = x;
             this.y = y;
-            this.val = val;
+            this.sum = sum;
         }
+    }
+    
+    //O(klogn) time and O(n) space
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<int[]> list = new ArrayList();
+        if(nums1.length==0 || nums2.length==0) return list;
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(new Comparator<Tuple>(){
+           public int compare(Tuple a, Tuple b){
+               return a.sum - b.sum;
+           } 
+        });
+        for(int i=0;i<nums2.length;i++){
+            pq.offer(new Tuple(0, i, nums1[0]+nums2[i]));
+        }
+        while(!pq.isEmpty()){
+            Tuple t = pq.poll();
+            list.add(new int[]{nums1[t.x], nums2[t.y]});
+            if(list.size()==k) return list;
+            if(t.x==nums1.length-1) continue;
+            pq.offer(new Tuple(t.x+1, t.y, nums1[t.x+1]+nums2[t.y]));
+        }
+        return list;
     }
 }
