@@ -1,21 +1,39 @@
 //O(n) time and O(1) space
-public class Solution {
+class Solution {
     public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
         int n = nums.length;
-        int[] sorted = new int[n];
-        int i = 0, j = n - 1;
-        int index = a >= 0 ? n - 1 : 0;
-        while (i <= j) {
-            if (a >= 0) {
-                sorted[index--] = quad(nums[i], a, b, c) >= quad(nums[j], a, b, c) ? quad(nums[i++], a, b, c) : quad(nums[j--], a, b, c);
-            } else {
-                sorted[index++] = quad(nums[i], a, b, c) >= quad(nums[j], a, b, c) ? quad(nums[j--], a, b, c) : quad(nums[i++], a, b, c);
+        int[] result = new int[n];
+        int low = 0, high = n-1;
+        int index = (a>=0)?high:low;
+        while(low<=high){
+            int l = quad(nums[low], a, b, c);
+            int h = quad(nums[high], a, b, c);
+            if(a>=0){
+                if(l>h){
+                    result[index--] = l;
+                    low++;
+                }
+                else{
+                    result[index--] = h;
+                    high--;
+                }
+            }
+            else{
+                if(l<=h){
+                    result[index++] = l;
+                    low++;
+                }
+                else{
+                    result[index++] = h;
+                    high--;
+                }
             }
         }
-        return sorted;
+        return result;
     }
     
-    private int quad(int x, int a, int b, int c) {
+    public int quad(int x, int a, int b, int c) {
         return a * x * x + b * x + c;
     }
+    
 }
