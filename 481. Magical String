@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public int magicalString(int n) {
+        if(n<1) return 0;
+        if(n<4) return 1;
+        int[] magical = new int[n];
+        magical[0] = 1; magical[1] = 2; magical[2] = 2;
+        int num = 1, result = 1;
+        int head = 2, tail = 3;
+        while(tail<n){
+            for(int i=0;i<magical[head];i++){
+                if(tail>=n) return result;
+                magical[tail] = num;
+                if(num==1) result++;
+                tail++;
+            }
+            if(num==1) num = 2; else num = 1;
+            head++;
+        }
+        return result;
+    }
+}
