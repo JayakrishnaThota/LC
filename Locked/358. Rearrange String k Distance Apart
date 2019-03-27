@@ -1,0 +1,33 @@
+//O(n) time and space
+class Solution {
+    public String rearrangeString(String s, int k) {
+        if(s==null || s.length()==0 || k<2) return s;
+        int[] count = new int[26];
+        for(char c:s.toCharArray()) count[c-'a']++;
+        StringBuffer sb = new StringBuffer();
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(1, new Comparator<int[]>(){
+           public int compare(int[] a, int[] b){
+               return b[1]-a[1];
+           } 
+        });
+        for(int i=0;i<26;i++){
+            if(count[i]>0){
+                pq.offer(new int[]{i, count[i]});
+            }
+        }
+        Queue<int[]> waitqueue = new LinkedList();
+        while(!pq.isEmpty()){
+            int[] max = pq.poll();
+            sb.append((char)(max[0]+'a'));
+            max[1]--;
+            waitqueue.offer(max);
+            if(waitqueue.size()>=k){
+                int[] temp = waitqueue.poll();
+                if(temp[1]>0){
+                    pq.offer(temp);
+                }
+            }
+        }
+        return (sb.length()==s.length())?sb.toString():"";
+    }
+}
