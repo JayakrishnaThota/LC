@@ -20,7 +20,7 @@ class Solution {
         if(root==null) return new Node(Integer.MIN_VALUE,Integer.MAX_VALUE,0);
         Node left = postOrder(root.left);
         Node right = postOrder(root.right);
-        if(left.size==-1 || right.size==-1 || root.val<=left.upper || root.val>=right.lower) return new Node(0,0,-1);
+        if(left.size==-1 || right.size==-1 || root.val<=left.upper || root.val>=right.lower) return new Node(Integer.MIN_VALUE,Integer.MAX_VALUE,-1);
         int size = left.size + 1 + right.size;
         max = Math.max(size, max);
         return new Node(Math.max(right.upper, root.val), Math.min(left.lower, root.val),size);
