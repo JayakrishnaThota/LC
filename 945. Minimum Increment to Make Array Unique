@@ -1,0 +1,15 @@
+//O(nlogn) time and O(1) space
+class Solution {
+    public int minIncrementForUnique(int[] A) {
+        if(A==null || A.length==0) return 0;
+        Arrays.sort(A);
+        int n = A.length;
+        int prev = A[0], sum = 0;
+        for(int i=1;i<n;i++){
+            int min = prev+1;
+            if(A[i]<min) sum+=(min-A[i]);
+            prev = Math.max(A[i], min);
+        }
+        return sum;
+    }
+}
