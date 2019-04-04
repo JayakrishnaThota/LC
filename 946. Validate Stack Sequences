@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        Stack<Integer> stack = new Stack();
+        int index = 0;
+        for(int i=0;i<pushed.length;i++){
+            int cur = pushed[i];
+            stack.push(cur);
+            while(!stack.isEmpty() && stack.peek()==popped[index]){
+                stack.pop();
+                index++;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
