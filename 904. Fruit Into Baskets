@@ -1,0 +1,29 @@
+//O(n) time and O(1) space
+class Solution {
+    public int totalFruit(int[] tree) {
+        if(tree==null || tree.length==0) return 0;
+        int n = tree.length;
+        int lastFruit = -1, secondLastFruit = -1, lastFruitCount = 0;
+        int cur = 0, max = 0;
+        for(int fruit:tree){
+            if(fruit==lastFruit || fruit==secondLastFruit){
+                cur++;
+            }
+            else{
+                cur = lastFruitCount + 1;
+            }
+            if(fruit==lastFruit){
+                lastFruitCount++;
+            }
+            else{
+                lastFruitCount=1;
+            }
+            if(fruit!=lastFruit){
+                secondLastFruit = lastFruit;
+                lastFruit = fruit;
+            }
+            max = Math.max(max, cur);
+        }
+        return max;
+    }
+}
