@@ -1,0 +1,24 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean isLongPressedName(String name, String typed) {
+        int i = 0, j = 0;
+        while(i<name.length() && j<typed.length()){
+            if(typed.charAt(j)==name.charAt(i)){
+                if((i<name.length()-1)&&(name.charAt(i)==name.charAt(i+1))){
+                    i++;
+                    j++;
+                }
+                else{
+                    while(j<typed.length() && typed.charAt(j)==name.charAt(i)){
+                    j++;
+                    }
+                    i++;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        return (i==name.length())&&(j==typed.length());
+    }
+}
