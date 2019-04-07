@@ -1,0 +1,15 @@
+//O(n) time and O(1) space
+class Solution {
+    public int partitionDisjoint(int[] A) {
+        int n = A.length;
+        int leftMax = A[0], max = A[0], partitionIndex = 0;
+        for(int i=1;i<n;i++){
+            max = Math.max(max, A[i]);
+            if(A[i]<leftMax){
+                partitionIndex = i;
+                leftMax = max;
+            }
+        }
+        return partitionIndex+1;
+    }
+}
