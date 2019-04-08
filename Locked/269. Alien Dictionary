@@ -1,0 +1,61 @@
+class Solution {
+    Map<Character, Set<Character>> adjlist;
+    Map<Character, Integer> indegree;
+    public String alienOrder(String[] words) {
+        if(words==null || words.length==0)
+            return "";
+        initialise(words);
+        return topSort(words);
+    }
+    
+    public void initialise(String[] words){
+        adjlist = new HashMap();
+        indegree = new HashMap();
+        for(String word:words){
+            for(char c:word.toCharArray()){
+                indegree.put(c,0);
+            }
+        }
+        for(int i=0;i<words.length-1;i++){
+            String cur = words[i], next = words[i+1];
+            int length = Math.min(cur.length(), next.length());
+            for(int j=0;j<length;j++){
+                char a = cur.charAt(j), b = next.charAt(j);
+                if(a!=b){
+                    adjlist.putIfAbsent(a, new HashSet());
+                    Set<Character> set = adjlist.get(a);
+                    if(!set.contains(b)){
+                        set.add(b);
+                        adjlist.put(a, set);
+                        indegree.put(b, indegree.getOrDefault(b,0)+1);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    public String topSort(String[] words){
+        StringBuffer sb = new StringBuffer();
+        Queue<Character> queue = new LinkedList();
+        for(Character key:indegree.keySet()){
+            if(indegree.get(key)==0){
+                queue.offer(key);
+            }
+        }
+        while(!queue.isEmpty()){
+            char u = queue.poll();
+            sb.append(u);
+            if(adjlist.containsKey(u)){
+                for(char v:adjlist.get(u)){
+                    indegree.put(v,indegree.getOrDefault(v,0)-1);
+                    if(indegree.get(v)==0){
+                        queue.offer(v);
+                    }
+                }
+            }
+        }
+        return (sb.length()==indegree.size())?sb.toString():"";
+    }
+    
+}
