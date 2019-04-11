@@ -1,0 +1,25 @@
+class ValidWordAbbr {
+    Map<String, String> map;
+    public ValidWordAbbr(String[] dictionary) {
+        map = new HashMap();
+        for(String d:dictionary){
+            String key = helper(d);
+            if(map.containsKey(key)){
+                if(!map.get(key).equals(d))
+                    map.put(key,"");
+            }
+            else{
+                map.put(key,d);
+            }
+        }
+    }
+    
+    public boolean isUnique(String word) {
+        return !map.containsKey(helper(word))||map.get(helper(word)).equals(word);
+    }
+    
+    public String helper(String s){
+        if(s.length()<=2) return s;
+        return s.charAt(0)+String.valueOf(s.length()-2)+s.charAt(s.length()-1);
+    }
+}
