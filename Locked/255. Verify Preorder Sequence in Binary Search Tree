@@ -1,0 +1,22 @@
+//O(n^2) time and O(n) space
+class Solution {
+    public boolean verifyPreorder(int[] preorder) {
+        if(preorder==null || preorder.length==1) return true;
+        return helper(preorder,0,preorder.length-1);
+    }
+    
+    public boolean helper(int[] p, int l, int h){
+        if(l>=h) return true;
+        int pivot = l, bigger = -1;
+        for(int i=l+1;i<=h;i++){
+            if((bigger==-1) && (p[i]>p[pivot])) bigger = i;
+            if((bigger!=-1)&&(p[i]<p[pivot])) return false;
+        }
+        if(bigger==-1){
+            return helper(p,l+1,h);
+        }
+        else{
+            return helper(p,l+1,bigger-1) && helper(p,bigger,h);
+        }
+    }
+}
