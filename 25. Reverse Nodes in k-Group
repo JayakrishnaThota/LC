@@ -1,22 +1,37 @@
-
+//O(n) time and O(1) space
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
-    ListNode curr = head;
-    int count = 0;
-    while (curr != null && count != k) { 
-        curr = curr.next;
-        count++;
-    }
-    if (count == k) { 
-        curr = reverseKGroup(curr, k); 
-        while (count-- > 0) {  
-            ListNode tmp = head.next; 
-            head.next = curr; 
-            curr = head; 
-            head = tmp; 
+        if(head==null || head.next==null || k<2) return head;
+        ListNode dummy = new ListNode(0);
+        ListNode iter = dummy;
+        dummy.next = head;
+        boolean flag = false;
+        while(iter!=null){
+            ListNode start = iter.next, end = iter.next;
+            for(int i=0;i<k-1;i++){
+                if(end == null || end.next == null) { flag = true; break; }
+                end = end.next;
+            }
+            if(flag) return dummy.next;
+            ListNode next = end.next;
+            end.next = null;
+            ListNode rev = reverse(start);
+            iter.next = end;
+            start.next = next;
+            iter = start;
         }
-        head = curr;
+        return dummy.next;
     }
-    return head;
-}
+    
+    public ListNode reverse(ListNode head){
+        if(head==null || head.next==null) return head;
+        ListNode cur = head, prev = null;
+        while(cur!=null){
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
 }
