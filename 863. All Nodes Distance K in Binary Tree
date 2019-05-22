@@ -1,0 +1,42 @@
+//O(N) time and space
+class Solution {
+    Map<TreeNode, List<TreeNode>> adjlist = new HashMap();
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        dfs(root, null);
+        return bfs(target, K);
+    }
+    
+    public void dfs(TreeNode node, TreeNode parent){
+        if(node==null || adjlist.containsKey(node)) return;
+        adjlist.put(node, new ArrayList());
+        if(parent!=null) { adjlist.get(parent).add(node); adjlist.get(node).add(parent); }
+        dfs(node.left, node);
+        dfs(node.right, node);
+    }
+    
+    public List<Integer> bfs(TreeNode target, int K){
+        List<Integer> result = new ArrayList();
+        Queue<TreeNode> queue = new LinkedList();
+        Set<TreeNode> visited = new HashSet();
+        queue.offer(target);
+        visited.add(target);
+        while(!queue.isEmpty())
+        {
+            if(K==0){
+                for(TreeNode q:queue) result.add(q.val);
+                return result;
+            }
+            int level = queue.size();
+            for(int i=0;i<level;i++){
+                TreeNode node = queue.poll();
+                for(TreeNode neighbor:adjlist.get(node)){
+                    if(!visited.add(neighbor)) continue;
+                    queue.offer(neighbor);
+                }
+            }
+            K--;
+        }
+        return result;
+    }
+    
+}
