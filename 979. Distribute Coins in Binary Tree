@@ -1,0 +1,17 @@
+//O(n) time and space
+class Solution {
+    int result = 0;
+    public int distributeCoins(TreeNode root) {
+        if(root==null) return result;
+        postOrder(root);
+        return result;
+    }
+    
+    public int postOrder(TreeNode root){
+        if(root==null) return 0;
+        int left = postOrder(root.left);
+        int right = postOrder(root.right);
+        result+=(Math.abs(left)+Math.abs(right));
+        return root.val + left + right -1;
+    }
+}
