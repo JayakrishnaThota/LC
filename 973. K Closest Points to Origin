@@ -1,0 +1,40 @@
+//O(nlogk) time and O(k) space
+class Solution {
+    public int[][] kClosest(int[][] points, int K) {
+        if(points==null || points.length==0 || K<1) return null;
+        int[][] result = new int[K][2];
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(K, new Comparator<Tuple>(){
+           public int compare(Tuple a, Tuple b){
+               return b.distance-a.distance;
+           } 
+        });
+        for(int[] point:points){
+            int distance = distance(point);
+            pq.offer(new Tuple(distance, point));
+            if(pq.size()>K){
+                pq.poll();
+            }
+        }
+        for(int i=0;i<K;i++){
+            if(pq.isEmpty()) break;
+            Tuple tuple = pq.poll();
+            result[i][0] = tuple.point[0];
+            result[i][1] = tuple.point[1];
+        }
+        return result;
+    }
+    
+    public int distance(int[] point){
+        return point[0]*point[0] + point[1]*point[1];
+    }
+    
+    public class Tuple{
+        int distance;
+        int[] point;
+        public Tuple(int distance, int[] point){
+            this.distance = distance;
+            this.point = point;
+        }
+    }
+    
+}
