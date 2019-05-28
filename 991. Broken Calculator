@@ -1,0 +1,17 @@
+//O(logn) time and O(1) space
+class Solution {
+    public int brokenCalc(int x, int y) {
+        int min = 0;
+        while(x<y){
+            if(y%2==1){
+                y++;
+            }
+            else{
+                y/=2;
+            }
+            min++;
+        }
+        min+=(x-y);
+        return min;
+    }
+}
