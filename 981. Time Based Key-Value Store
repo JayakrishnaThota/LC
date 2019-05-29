@@ -1,0 +1,21 @@
+class TimeMap {
+
+    Map<String, TreeMap<Integer, String>> map;
+    public TimeMap() {
+        map = new HashMap();
+    }
+    
+    //O(logn) time and O(n) space
+    public void set(String key, String value, int timestamp) {
+        if(map.get(key)==null) map.put(key, new TreeMap());
+        map.get(key).put(timestamp, value);
+    }
+    
+    //O(logn) time
+    public String get(String key, int timestamp) {
+        if(!map.containsKey(key)) return "";
+        TreeMap<Integer, String> treemap = map.get(key);
+        Integer floor = treemap.floorKey(timestamp);
+        return (floor==null)?"":treemap.get(floor);
+    }
+}
