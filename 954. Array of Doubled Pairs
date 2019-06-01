@@ -1,0 +1,19 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public boolean canReorderDoubled(int[] A) {
+        if(A==null || A.length==0 ) return true;
+        if(A.length%2!=0) return false;
+        Map<Integer, Integer> map = new TreeMap();
+        for(int a:A){
+            map.put(a, map.getOrDefault(a,0)+1);
+        }
+        for(int key:map.keySet()){
+            if(map.get(key)==0) continue;
+            int target = (key<0)?key/2:2*key;
+            if((key<0)&&(key%2!=0)) return false;
+            if(map.get(key)>map.getOrDefault(target,0)) return false;
+            map.put(target, map.get(target)-map.get(key));
+        }
+        return true;
+    }
+}
