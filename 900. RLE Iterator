@@ -1,0 +1,19 @@
+class RLEIterator {
+    
+    int[] nums;
+    int index;
+    public RLEIterator(int[] A) {
+        nums = A;
+        index = 0;
+    }
+    
+    public int next(int n) {
+        while(index<nums.length && nums[index]<n){
+            n-=nums[index];
+            index+=2;
+        }
+        if(index>=nums.length) return -1;
+        nums[index]-=n;
+        return nums[index+1];
+    }
+}
