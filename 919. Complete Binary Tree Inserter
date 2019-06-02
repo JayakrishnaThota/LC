@@ -1,0 +1,29 @@
+//O(n) time and space
+class CBTInserter {
+    List<TreeNode> tree;
+    public CBTInserter(TreeNode root) {
+        tree = new ArrayList();
+        tree.add(root);
+        for(int i=0;i<tree.size();i++){
+            if(tree.get(i).left!=null) tree.add(tree.get(i).left);
+            if(tree.get(i).right!=null) tree.add(tree.get(i).right);
+        }
+    }
+    
+    public int insert(int v) {
+        int size = tree.size();
+        TreeNode node = new TreeNode(v);
+        tree.add(node);
+        if(size%2==0){
+            tree.get((size-1)/2).right = node;
+        }
+        else{
+            tree.get((size-1)/2).left = node;
+        }
+        return tree.get((size-1)/2).val;
+    }
+    
+    public TreeNode get_root() {
+        return tree.get(0);
+    }
+}
