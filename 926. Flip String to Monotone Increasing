@@ -1,0 +1,20 @@
+//O(n) time and O(1) space
+class Solution {
+    public int minFlipsMonoIncr(String S) {
+        int onesCount = 0;
+        int flipCount = 0;
+        for(char c:S.toCharArray()){
+            if(c=='0'){
+                if(onesCount==0) continue;
+                flipCount++;
+            }
+            else if(c=='1'){
+                onesCount++;
+            }
+            if(flipCount>onesCount){
+                flipCount = onesCount;
+            }
+        }
+        return flipCount;
+    }
+}
