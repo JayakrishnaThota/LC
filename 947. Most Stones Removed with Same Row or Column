@@ -1,0 +1,30 @@
+//O(n^2) time and O(n) space
+class Solution {
+    
+    public int removeStones(int[][] stones) {
+        Set<int[]> visited = new HashSet();
+        int count = 0;
+        for(int[] stone:stones){
+            if(!visited.contains(stone)){
+                dfs(stone, visited, stones);
+                count++;
+            }
+        }
+        return stones.length - count;
+    }
+    
+    public void dfs(int[] source, Set<int[]> visited, int[][] stones){
+        if(visited.contains(source)) return;
+        visited.add(source);
+        for(int[] destination:stones){
+            if(!visited.contains(stones) && sameRowOrColumn(source, destination)){
+                dfs(destination, visited, stones);
+            }
+        }
+    }
+    
+    public boolean sameRowOrColumn(int[] a, int[] b){
+        return ((a[0]==b[0])||(a[1]==b[1]));
+    }
+    
+}
