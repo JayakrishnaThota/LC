@@ -1,0 +1,28 @@
+//O(n) time and O(1) space
+class Solution {
+    int[][] dirs = new int[][]{{2,1},{2,-1},{-2,1},{-2,-1},{1,2},{1,-2},{-1,2},{-1,-2}};
+    public static final long MOD = 1000000007;
+    public int knightDialer(int N) {
+        long[][][] dp = new long[4][3][N+1];
+        long sum = 0;
+        for(int i=0;i<4;i++){
+            for(int j=0;j<3;j++){
+                sum = (sum + helper(dp,i,j,N))%MOD;
+            }
+        }
+        return (int)sum;
+    }
+    
+    public long helper(long[][][] dp, int i, int j, int N){
+        if(i<0 || j<0 || i>3 || j>2 || (i==3 && j!=1)) return 0;
+        if(N==1) return 1;
+        if(dp[i][j][N]>0) return dp[i][j][N];
+        for(int[] dir:dirs){
+            int x = i + dir[0];
+            int y = j + dir[1];
+            dp[i][j][N] = (dp[i][j][N] + helper(dp,x,y,N-1))%MOD;
+        }
+        return dp[i][j][N];
+    }
+    
+}
