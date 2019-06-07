@@ -1,25 +1,38 @@
 //Exponential time and space complexity
 class Solution {
+    Map<Integer, List<Integer>> adjlist;
+    List<List<Integer>> result;
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> path = new ArrayList<>();
-					
-        path.add(0);
-        dfsSearch(graph, 0, res, path);
-					
-        return res;
+        construct(graph);
+        dfs(0, graph.length-1, new ArrayList());
+        return result;
     }
-
-    private void dfsSearch(int[][] graph, int node, List<List<Integer>> res, List<Integer> path) {
-        if (node == graph.length - 1) {
-            res.add(new ArrayList<Integer>(path));
+    
+    public void construct(int[][] graph){
+        adjlist = new HashMap();
+        result = new ArrayList();
+        int source = 0;
+        for(int[] g:graph){
+            adjlist.put(source, new ArrayList());
+            for(int neighbor:g){
+                adjlist.get(source).add(neighbor);
+            }
+            source++;
+        }
+    }
+    
+    public void dfs(int source, int destination, List<Integer> list){
+        if(list.contains(source)) return;
+        if(source==destination){
+            list.add(source);
+            result.add(new ArrayList(list));
             return;
         }
-
-        for (int nextNode : graph[node]) {
-            path.add(nextNode);
-            dfsSearch(graph, nextNode, res, path);
-            path.remove(path.size() - 1);
+        list.add(source);
+        for(Integer neighbor:adjlist.get(source)){
+            dfs(neighbor, destination, list);
+            list.remove(neighbor);
         }
     }
+    
 }
