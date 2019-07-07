@@ -1,29 +1,39 @@
-//Interval Scheduling problem
 //O(nlogn) time and O(1) space
 class Solution {
-    public List<Interval> merge(List<Interval> intervals) {
-    if (intervals.size() <= 1)
-        return intervals;
-    
-    // Sort by ascending starting point using an anonymous Comparator
-    intervals.sort((i1, i2) -> Integer.compare(i1.start, i2.start));
-    
-    List<Interval> result = new LinkedList<Interval>();
-    int start = intervals.get(0).start;
-    int end = intervals.get(0).end;
-    
-    for (Interval interval : intervals) {
-        if (interval.start <= end) // Overlapping intervals, move the end if needed
-            end = Math.max(end, interval.end);
-        else {                     // Disjoint intervals, add the previous one and reset bounds
-            result.add(new Interval(start, end));
-            start = interval.start;
-            end = interval.end;
+    public int[][] merge(int[][] intervals) {
+        if(intervals==null || intervals.length==0) return new int[0][0];
+        List<int[]> list = new ArrayList();
+        Arrays.sort(intervals, new Comparator<int[]>(){
+           public int compare(int[] a, int[] b){
+               if(a[0]!=b[0])
+                   return a[0]-b[0];
+               else
+                   return a[1]-b[1];
+           } 
+        });
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        for(int i=1;i<intervals.length;i++){
+            int curstart = intervals[i][0];
+            int curend = intervals[i][1];
+            if(curstart>end){
+                list.add(new int[]{start, end});
+                start = curstart;
+                end = curend;
+            } else {
+                end = Math.max(end, curend);
+            }
         }
+        list.add(new int[]{start, end});
+        return array(list);
     }
     
-    // Add the last interval
-    result.add(new Interval(start, end));
-    return result;
-}
+    public int[][] array(List<int[]> list) {
+        int[][] array = new int[list.size()][list.get(0).length];
+        int i = 0;
+        for(int[] l:list){
+            array[i++] = l;
+        }
+        return array;
+    }
 }
