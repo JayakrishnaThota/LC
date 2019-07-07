@@ -1,20 +1,33 @@
-//O(n) and O(1)
+//O(n) time and O(1) space
 class Solution {
     public ListNode reverseBetween(ListNode head, int m, int n) {
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode prev = dummy;
+        ListNode prevm = null, curm = head;
         for(int i=1;i<m;i++){
-            prev = prev.next;
+            prevm = curm;
+            curm = curm.next;
         }
-        ListNode start = prev.next;
-        ListNode then = start.next;
-        for(int i=0;i<(n-m);i++){
-            start.next = then.next;
-            then.next = prev.next;
-            prev.next = then;
-            then = start.next;
+        ListNode nextn = null, curn = head;
+        for(int i=1;i<n;i++){
+            curn = curn.next;
         }
-        return dummy.next;
+        nextn = curn.next;
+        curn.next = null;
+        ListNode[] rev = reverse(curm);
+        if(prevm==null) head = rev[0];
+        else prevm.next = rev[0];
+        rev[1].next = nextn;
+        return head;
+    }
+    
+    public ListNode[] reverse(ListNode head){
+        if(head==null || head.next==null) return new ListNode[]{head, head};
+        ListNode cur = head, prev = null;
+        while(cur!=null){
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return new ListNode[]{prev, head};
     }
 }
