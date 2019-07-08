@@ -1,40 +1,45 @@
-//O(v+e) time and space
+//O(n) time and space
 class Solution {
-    ArrayList<Integer>[] vertexlist;
+    Map<Integer, List<Integer>> adjlist;
+    int[] outdegree;
+    
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        initialise(numCourses, prerequisites);
-        return toplogicalsort(numCourses,prerequisites); 
+        construct(numCourses, prerequisites);
+        return topSort(numCourses);
     }
     
-    public void initialise(int numCourses, int[][] prerequisites){
-        vertexlist = new ArrayList[numCourses];
-        for(int i=0;i<numCourses;i++)
-            vertexlist[i] = new ArrayList();
-        for(int[] p: prerequisites){
+    public void construct(int n, int[][] pre){
+        adjlist = new HashMap();
+        outdegree = new int[n];
+        for(int[] p:pre){
             int dependent = p[0];
-            vertexlist[dependent].add(p[1]);
+            int independent = p[1];
+            outdegree[dependent]++;
+            if(adjlist.get(independent)==null) adjlist.put(independent, new ArrayList());
+            adjlist.get(independent).add(dependent);
         }
     }
     
-    public boolean toplogicalsort(int numCourses, int[][] prerequisites){
-        int count=0;
-        Queue<Integer> q = new LinkedList();
-        int[] indegree = new int[numCourses];
-        for(int[] p : prerequisites){
-            indegree[p[1]]++;
-        }
-        for(int i=0;i<numCourses;i++){
-            if(indegree[i]==0)
-                q.add(i);
-        }
-        while(!q.isEmpty()){
-            int temp = q.poll();
-            for(int i:vertexlist[temp]){
-                if(--indegree[i]==0)
-                    q.add(i);
+    public boolean topSort(int n) {
+        int count = 0;
+        Queue<Integer> queue = new LinkedList();
+        for(int i=0;i<n;i++){
+            if(outdegree[i]==0) {
+                count++;
+                queue.offer(i);
             }
-            count++;
         }
-        return (count==numCourses);
+        while(!queue.isEmpty()){
+            int u = queue.poll();
+            if(adjlist.get(u)==null) continue;
+            for(int v:adjlist.get(u)){
+                if(--outdegree[v]==0){
+                    queue.offer(v);
+                    count++;
+                }
+            }
+        }
+        return (count==n);
     }
+    
 }
