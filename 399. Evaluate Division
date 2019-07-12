@@ -1,26 +1,39 @@
-//O()
 class Solution {
-   public double[] calcEquation(String[][] eq, double[] vals, String[][] q) {
-        Map<String, Map<String, Double>> m = new HashMap<>();
-        for (int i = 0; i < vals.length; i++) {
-            m.putIfAbsent(eq[i][0], new HashMap<>());
-            m.putIfAbsent(eq[i][1], new HashMap<>());
-            m.get(eq[i][0]).put(eq[i][1], vals[i]);
-            m.get(eq[i][1]).put(eq[i][0], 1 / vals[i]);
+    Map<String, Map<String, Double>> adjlist;
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        if(queries==null || queries.size()==0) return new double[0];
+        double[] result = new double[queries.size()];
+        construct(equations, values);
+        print();
+        int index = 0;
+        for(List<String> query:queries){
+            result[index++] = dfs(query.get(0), query.get(1), 1, new HashSet<String>());
         }
-        double[] r = new double[q.length];
-        for (int i = 0; i < q.length; i++)
-            r[i] = dfs(q[i][0], q[i][1], 1, m, new HashSet<>());
-        return r;
+        return result;
     }
-
-    public double dfs(String s, String t, double r, Map<String, Map<String, Double>> m, Set<String> seen) {
-        if (!m.containsKey(s) || !seen.add(s)) return -1;
-        if (s.equals(t)) return r;
-        Map<String, Double> next = m.get(s);
-        for (String c : next.keySet()) {
-            double result = dfs(c, t, r * next.get(c), m, seen);
-            if (result != -1) return result;
+        
+    
+    public void construct(List<List<String>> equations, double[] values){
+        adjlist = new HashMap();
+        int index = 0;
+        for(List<String> equation:equations){
+            String u = equation.get(0), v = equation.get(1);
+            double w = values[index++];
+            if(adjlist.get(u)==null) adjlist.put(u, new HashMap<String, Double>());
+            if(adjlist.get(v)==null) adjlist.put(v, new HashMap<String, Double>());
+            adjlist.get(u).put(v, w);
+            adjlist.get(v).put(u, 1/w);
+        }
+    }
+    
+    public double dfs(String s, String d, double result, Set<String> visited){
+        if(!adjlist.containsKey(s) || !visited.add(s)) return -1;
+        if(s.equals(d)) return result;
+        Map<String, Double> map = adjlist.get(s);
+        for(String v:map.keySet()){
+            Double w = map.get(v);
+            double cur = dfs(v, d, result*w, visited);
+            if(cur!=-1) return cur;
         }
         return -1;
     }
