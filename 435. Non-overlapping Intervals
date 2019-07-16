@@ -1,25 +1,21 @@
 //O(nlogn) time and O(1) space
 class Solution {
-    public int eraseOverlapIntervals(Interval[] intervals) {
+    public int eraseOverlapIntervals(int[][] intervals) {
         if(intervals==null || intervals.length==0) return 0;
-        Arrays.sort(intervals, new Comparator<Interval>(){
-           public int compare(Interval i1, Interval i2){
-               if(i1.end!=i2.end){
-                   return i1.end - i2.end;
-               }
-               else{
-                   return i1.start - i2.start;
-               }
-           } 
+        Arrays.sort(intervals, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b){
+                if(a[1]!=b[1])
+                    return a[1]-b[1];
+                else
+                    return a[0]-b[0];
+            }
         });
         int count = 1;
-        int start = intervals[0].start;
-        int end = intervals[0].end;
+        int end = intervals[0][1];
         for(int i=1;i<intervals.length;i++){
-            int curstart = intervals[i].start;
-            int curend = intervals[i].end;
+            int curstart = intervals[i][0];
             if(curstart>=end){
-                end = curend;
+                end = intervals[i][1];
                 count++;
             }
         }
