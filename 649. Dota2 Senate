@@ -1,27 +1,21 @@
 //O(n) time and space
 class Solution {
     public String predictPartyVictory(String senate) {
-        Queue<Integer> queue = new LinkedList();
-        int[] people = new int[]{0, 0};
-        int[] bans = new int[]{0, 0};
-
-        for (char person: senate.toCharArray()) {
-            int x = person == 'R' ? 1 : 0;
-            people[x]++;
-            queue.add(x);
+        Queue<Integer> rq = new LinkedList();
+        Queue<Integer> dq = new LinkedList();
+        int index = 0;
+        for(char c:senate.toCharArray()){
+            if(c=='R') rq.offer(index++);
+            else dq.offer(index++);
         }
-
-        while (people[0] > 0 && people[1] > 0) {
-            int x = queue.poll();
-            if (bans[x] > 0) {
-                bans[x]--;
-                people[x]--;
+        while(!rq.isEmpty() && !dq.isEmpty()){
+            int r = rq.poll(), d = dq.poll();
+            if(r<d) {
+                rq.offer(r+senate.length());
             } else {
-                bans[x^1]++;
-                queue.add(x);
+                dq.offer(d+senate.length());
             }
         }
-
-        return people[1] > 0 ? "Radiant" : "Dire";
+        return dq.isEmpty() ? "Radiant" : "Dire";
     }
 }
