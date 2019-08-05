@@ -1,15 +1,26 @@
-//O(n) time and O(1)
+//O(n) time and O(1) space
 class Solution {
     public int countBinarySubstrings(String s) {
-    int prevRunLength = 0, curRunLength = 1, res = 0;
-    for (int i=1;i<s.length();i++) {
-        if (s.charAt(i) == s.charAt(i-1)) curRunLength++;
-        else {
-            prevRunLength = curRunLength;
-            curRunLength = 1;
+        if(s==null || s.length()<2) return 0;
+        int n = s.length();
+        int zeroesCount = (s.charAt(0)=='0')?1:0;
+        int onesCount = (s.charAt(0)=='1')?1:0;
+        int result = 0;
+        for(int i=1;i<n;i++){
+            if(s.charAt(i)==s.charAt(i-1)){
+                if(s.charAt(i)=='0') zeroesCount++;
+                else onesCount++;
+            }
+            else{
+                result+=Math.min(onesCount, zeroesCount);
+                if(s.charAt(i)=='0'){
+                    zeroesCount = 1;
+                } else {
+                    onesCount = 1;
+                }
+            }
         }
-        if (prevRunLength >= curRunLength) res++;
+        result+=Math.min(onesCount, zeroesCount);
+        return result;
     }
-    return res;
-}
 }
