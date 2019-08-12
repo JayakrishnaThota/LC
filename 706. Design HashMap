@@ -1,0 +1,65 @@
+class MyHashMap {
+
+    class ListNode{
+        int key, val;
+        ListNode next;
+        public ListNode(int key, int val){
+            this.key = key;
+            this.val = val;
+        }
+    }
+    
+    ListNode[] buckets;
+    
+    public MyHashMap() {
+        buckets = new ListNode[10000];
+    }
+    
+    
+    public void put(int key, int value) {
+        int index = index(key);
+        if(buckets[index]==null){
+            buckets[index] = new ListNode(-1,-1);
+        }
+        ListNode prev = findPrevListNode(buckets[index], key);
+        if(prev.next==null) prev.next = new ListNode(key, value);
+        else prev.next.val = value;
+    }
+    
+    
+    public int get(int key) {
+        int index = index(key);
+        if(buckets[index]==null){
+            return -1;
+        }
+        ListNode prev = findPrevListNode(buckets[index], key);
+        if(prev.next==null) return -1;
+        return prev.next.val;
+    }
+    
+    
+    public void remove(int key) {
+        int index = index(key);
+        if(buckets[index]==null){
+            return;
+        }
+        ListNode prev = findPrevListNode(buckets[index], key);
+        if(prev.next==null) return;
+        prev.next = prev.next.next;
+    }
+    
+    public int index(int key){
+        return Integer.hashCode(key)%buckets.length;
+    }
+    
+    
+    //Returns previous listnode in the linked list with key as given parameter
+    public ListNode findPrevListNode(ListNode bucket, int key){
+        ListNode iter = bucket, prev = null;
+        while(iter!=null && iter.key!=key){
+            prev = iter;
+            iter = iter.next;
+        }
+        return prev;
+    }
+}
