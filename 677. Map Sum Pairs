@@ -1,26 +1,51 @@
 class MapSum {
-    Map<String, Integer> map;
-    Map<String, Integer> score;
-    //O(k) space
-    public MapSum() {
-        map = new HashMap();
-        score = new HashMap();
-    }
-    
-    //n is the length of the key
-    //O(n) time
-    public void insert(String key, int val) {
-        int delta = val - map.getOrDefault(key,0);
-        map.put(key, delta);
-        String prefix = "";
-        for(char c:key.toCharArray()){
-            prefix+=c;
-            score.put(prefix, score.getOrDefault(prefix,0)+delta);
+
+    class TrieNode{
+        TrieNode[] children;
+        int val;
+        boolean isWord;
+        public TrieNode() {
+            children = new TrieNode[26];
+            val = 0;
+            isWord = false;
         }
     }
     
-    //O(1) time
-    public int sum(String prefix) {
-        return score.getOrDefault(prefix,0);
+    TrieNode root;
+    
+    public MapSum() {
+        root = new TrieNode();
+    }
+    
+    //O(n) time and space
+    public void insert(String word, int val) {
+        TrieNode node = root;
+        for(int i=0;i<word.length();i++){
+            int index = word.charAt(i)-'a';
+            if(node.children[index]==null) node.children[index] = new TrieNode();
+            node = node.children[index];
+        }
+        node.isWord = true;
+        node.val = val;
+    }
+    
+    //O(n) time and space
+    public int sum(String word) {
+        TrieNode node = root;
+        for(int i=0;i<word.length();i++){
+            int index = word.charAt(i)-'a';
+            if(node.children[index]==null) return 0;
+            node = node.children[index];
+        }
+        return dfs(node);
+    }
+    
+    public int dfs(TrieNode node){
+        if(node==null) return 0;
+        int sum = 0;
+        for(TrieNode child:node.children){
+            sum+=dfs(child);
+        }
+        return node.val + sum;
     }
 }
