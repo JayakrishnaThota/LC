@@ -1,32 +1,38 @@
-public class Solution {
-    public int shoppingOffers(List < Integer > price, List < List < Integer >> special, List < Integer > needs) {
-        Map < List < Integer > , Integer > map = new HashMap();
-        return shopping(price, special, needs, map);
+class Solution {
+    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+        Map<List<Integer>, Integer> map = new HashMap();
+        return helper(price, special, needs, map);
     }
-    public int shopping(List < Integer > price, List < List < Integer >> special, List < Integer > needs, Map < List < Integer > , Integer > map) {
-        if (map.containsKey(needs))
-            return map.get(needs);
-        int j = 0, res = dot(needs, price);
-        for (List < Integer > s: special) {
-            ArrayList < Integer > clone = new ArrayList < > (needs);
-            for (j = 0; j < needs.size(); j++) {
-                int diff = clone.get(j) - s.get(j);
-                if (diff < 0)
-                    break;
-                clone.set(j, diff);
+    
+    public int helper(List<Integer> price, List<List<Integer>> special, List<Integer> needs, Map<List<Integer>, Integer> map) {
+        if(map.containsKey(needs)) return map.get(needs);
+        int cost = bruteforce(price, needs);
+        for(List<Integer> s:special){
+            boolean possible = true;
+            for(int i=0;i<s.size()-1;i++){
+                if(needs.get(i)-s.get(i)<0) possible = false;
             }
-            if (j == needs.size())
-                res = Math.min(res, s.get(j) + shopping(price, special, clone, map));
+            if(possible){
+                cost = Math.min(cost, s.get(s.size()-1)+helper(price, special, modify(needs, s), map));
+            }
         }
-        map.put(needs, res);
-        return res;
+        map.put(needs, cost);
+        return cost;
     }
-    public int dot(List < Integer > a, List < Integer > b) {
+    
+    public int bruteforce(List<Integer> price, List<Integer> needs) {
         int sum = 0;
-        for (int i = 0; i < a.size(); i++) {
-            sum += a.get(i) * b.get(i);
+        for(int i=0;i<price.size();i++){
+            sum+=(price.get(i)*needs.get(i));
         }
         return sum;
     }
-
+    
+    public List<Integer> modify(List<Integer> needs, List<Integer> s){
+        List<Integer> list = new ArrayList();
+        for(int i=0;i<needs.size();i++){
+            list.add(needs.get(i)-s.get(i));
+        }
+        return list;
+    }
 }
