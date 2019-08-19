@@ -1,26 +1,41 @@
-//O(h*2^h) time and space
-public class Solution {
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
     public List<List<String>> printTree(TreeNode root) {
-        int height = getHeight(root);
-        String[][] res = new String[height][(1 << height) - 1];
-        for(String[] arr:res)
-            Arrays.fill(arr,"");
-        List<List<String>> ans = new ArrayList<>();
-        fill(res, root, 0, 0, res[0].length);
-        for(String[] arr:res)
-            ans.add(Arrays.asList(arr));
-        return ans;
+        int height = height(root);
+        String[][] result = new String[height][(1<<height)-1];
+        for(String[] r:result){
+            Arrays.fill(r,"");
+        }
+        helper(root, result, 0, 0, ((1<<height)-1));
+        return list(result);
     }
-    public void fill(String[][] res, TreeNode root, int i, int l, int r) {
-        if (root == null)
-            return;
-        res[i][(l + r) / 2] = "" + root.val;
-        fill(res, root.left, i + 1, l, (l + r) / 2);
-        fill(res, root.right, i + 1, (l + r + 1) / 2, r);
+    
+    public void helper(TreeNode node, String[][] result, int r, int l, int h) {
+        if((l>h)||(node==null)) return;
+        int mid = (l+h)/2;
+        result[r][mid] = node.val+"";
+        helper(node.left, result, r+1, l, mid);
+        helper(node.right, result, r+1, mid+1, h);
     }
-    public int getHeight(TreeNode root) {
-        if (root == null)
-            return 0;
-        return 1 + Math.max(getHeight(root.left), getHeight(root.right));
+    
+    public List<List<String>> list(String[][] result){
+        List<List<String>> list = new ArrayList();
+        for(String[] r:result){
+            list.add(Arrays.asList(r));
+        }
+        return list;
+    }
+    
+    public int height(TreeNode node){
+        if(node==null) return 0;
+        return 1 + Math.max(height(node.left), height(node.right));
     }
 }
