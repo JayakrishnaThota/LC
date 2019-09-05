@@ -1,16 +1,16 @@
 //O(nlogn) time and O(n) space
 class Solution {
-    public int[] findRightInterval(Interval[] intervals) {
+    public int[] findRightInterval(int[][] intervals) {
         if(intervals==null || intervals.length==0) return new int[0];
         int n = intervals.length;
-        int[] result = new int[n];
         TreeMap<Integer, Integer> map = new TreeMap();
         for(int i=0;i<intervals.length;i++){
-            map.put(intervals[i].start, i);
+            map.put(intervals[i][0], i);
         }
+        int[] result = new int[intervals.length];
         for(int i=0;i<intervals.length;i++){
-            Integer key = map.ceilingKey(intervals[i].end);
-            result[i] = (key==null)?-1:map.get(key);
+            Integer ceilingKey = map.ceilingKey(intervals[i][1]);
+            result[i] = (ceilingKey==null)?-1:map.get(ceilingKey);
         }
         return result;
     }
