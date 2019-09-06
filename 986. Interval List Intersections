@@ -1,0 +1,35 @@
+//O(m+n) time and O(1) space
+class Solution {
+    public int[][] intervalIntersection(int[][] A, int[][] B) {
+        if(A==null || B==null || A.length==0 || B.length==0) return new int[0][0]; 
+        int i = 0, j = 0;
+        List<List<Integer>> list = new ArrayList();
+        while(i<A.length && j<B.length){
+            int astart = A[i][0], bstart = B[j][0];
+            int aend = A[i][1], bend = B[j][1];
+            int startMax = Math.max(astart, bstart);
+            int endMin = Math.min(aend, bend);
+            if(startMax<=endMin) {
+                List<Integer> sublist = new ArrayList();
+                sublist.add(startMax);
+                sublist.add(endMin);
+                list.add(sublist);
+            }
+            if(aend==endMin) i++;
+            if(bend==endMin) j++;
+        }
+        return array(list);
+    }
+    
+    public int[][] array(List<List<Integer>> list) {
+        if(list==null || list.size()==0) return new int[0][0];
+        int m = list.size(), n = list.get(0).size();
+        int[][] result = new int[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                result[i][j] = list.get(i).get(j);
+            }
+        }
+        return result;
+    }
+}
