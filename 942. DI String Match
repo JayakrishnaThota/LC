@@ -1,0 +1,13 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] diStringMatch(String S) {
+        int[] result = new int[S.length()+1];
+        int low = 0, high = S.length();
+        for(int i=0;i<S.length();i++){
+            if(S.charAt(i)=='I') result[i] = low++;
+            else result[i] = high--;
+        }
+        result[S.length()] = high;
+        return result;
+    }
+}
