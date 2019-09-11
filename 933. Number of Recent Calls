@@ -1,0 +1,31 @@
+class RecentCounter {
+    
+    long[] count;
+    long[] buckets;
+    public RecentCounter() {
+        count = new long[3001];
+        buckets = new long[3001];
+    }
+    
+    //O(1) time and space
+    public int ping(int t) {
+        int index = t%3001;
+        if(buckets[index]==t){
+            count[index]++;
+        }
+        else{
+            count[index] = 1;
+            buckets[index]=t;
+        }
+        return sum(t);
+    }
+    
+    public int sum(int t){
+        int sum = 0;
+        for(int i=0;i<3001;i++){
+            long cur = buckets[i];
+            if(t-cur<=3000) sum+=count[i];
+        }
+        return sum;
+    }
+}
