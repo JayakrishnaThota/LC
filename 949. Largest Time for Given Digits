@@ -1,0 +1,45 @@
+//O(1) time and space
+class Solution {
+    public String largestTimeFromDigits(int[] A) {
+        List<Integer> list = new ArrayList();
+        for(int a:A){
+            list.add(a);
+        }
+        for(int h=23;h>=0;h--){
+            for(int m=59;m>=0;m--){
+                List<Integer> hourDigits = digits(h);
+                List<Integer> minuteDigits = digits(m);
+                List<Integer> copy = new ArrayList(list);
+                boolean done = true;
+                for(Integer d:hourDigits){
+                    if(!copy.contains(d)){
+                        done = false;
+                        break;
+                    }
+                    copy.remove(d);
+                }
+                for(Integer d:minuteDigits){
+                    if(!copy.contains(d)){
+                        done = false;
+                        break;
+                    }
+                    copy.remove(d);
+                }
+                if(done){
+                    return ((h>9)?h+"":"0"+h)+":"+((m>9)?m+"":"0"+m);
+                }
+            }
+        }
+        return "";
+    }
+    
+    public List<Integer> digits(int h){
+        List<Integer> list = new ArrayList();
+        if(h<10) { list.add(0); list.add(h); }
+        else {
+            list.add(h/10);
+            list.add(h%10);
+        }
+        return list;
+    }
+}
