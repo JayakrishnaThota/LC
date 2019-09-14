@@ -3,27 +3,18 @@ class Solution {
     public int totalFruit(int[] tree) {
         if(tree==null || tree.length==0) return 0;
         int n = tree.length;
-        int lastFruit = -1, secondLastFruit = -1, lastFruitCount = 0;
-        int cur = 0, max = 0;
-        for(int fruit:tree){
-            if(fruit==lastFruit || fruit==secondLastFruit){
-                cur++;
+        Map<Integer, Integer> map = new HashMap();
+        int left = 0, result = 0;
+        for(int right=0;right<n;right++){
+            int r = tree[right];
+            map.put(r, map.getOrDefault(r,0)+1);
+            while(map.size()>2){
+                int l = tree[left++];
+                map.put(l, map.getOrDefault(l,0)-1);
+                if(map.get(l)==0) map.remove(l);
             }
-            else{
-                cur = lastFruitCount + 1;
-            }
-            if(fruit==lastFruit){
-                lastFruitCount++;
-            }
-            else{
-                lastFruitCount=1;
-            }
-            if(fruit!=lastFruit){
-                secondLastFruit = lastFruit;
-                lastFruit = fruit;
-            }
-            max = Math.max(max, cur);
+            result = Math.max(result, right-left+1);
         }
-        return max;
+        return result;
     }
 }
