@@ -1,28 +1,35 @@
-//O(nk^2) time and O(n) space
-//Where n is the length of the words
-//k is the max length of the word
+//O(n) time and O(1) space
 class Solution {
     public String[] findWords(String[] words) {
-        String r1 = "qwertyuiopQWERTYUIOP";
-        String r2 = "asdfghjklASDFGHJKL";
-        String r3 = "zxcvbnmZXCVBNM";
+        String s1 = "qwertyuiopQWERTYUIOP";
+        String s2 = "asdfghjklASDFGHJKL";
+        String s3 = "zxcvbnmZXCVBNM";
+        Set<Character> set1 = new HashSet();
+        for(char c:s1.toCharArray()) set1.add(c);
+        Set<Character> set2 = new HashSet();
+        for(char c:s2.toCharArray()) set2.add(c);
+        Set<Character> set3 = new HashSet();
+        for(char c:s3.toCharArray()) set3.add(c);
         List<String> list = new ArrayList();
         for(String word:words){
-            int i1 =0, i2 =0, i3 =0;
+            int c1 = 0, c2 = 0, c3 = 0;
             for(char c:word.toCharArray()){
-                if(r1.indexOf(c)>=0) i1++;
-                else if(r2.indexOf(c)>=0) i2++;
-                else i3++;
+                if(set1.contains(c)) c1++;
+                else if(set2.contains(c)) c2++;
+                else c3++;
             }
-            if(i1==word.length() || i2==word.length() || i3==word.length()) list.add(word);
+            int n = word.length();
+            if(c1==n || c2==n || c3==n) list.add(word);
         }
         return array(list);
     }
-    public String[] array(List<String> list){
+    
+    public String[] array(List<String> list) {
         String[] result = new String[list.size()];
         for(int i=0;i<result.length;i++){
             result[i] = list.get(i);
         }
         return result;
     }
+    
 }
