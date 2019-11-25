@@ -1,39 +1,28 @@
-//O(n2) and O(n2)
+//O(n^2) time and space
 class Solution {
     public int minCut(String s) {
-        //Sanity check
         if(s==null || s.length()==0) return 0;
         int n = s.length();
-        int[] dp = new int[n];
-        boolean[][] b =  new boolean[n][n];
-        //A single character is always a palindrome
-        for(int i=0;i<n;i++){
-            b[i][i] = true;
-        }
-        for(int L=2;L<=n;L++){
-            for(int i=0;i<n-L+1;i++){
-                int j = i+L-1;
-                if(L==2){
-                        b[i][j] = (s.charAt(i)==s.charAt(j));
-                    }
-                else{
-                    b[i][j] = ((s.charAt(i)==s.charAt(j))&&(b[i+1][j-1]));
-                }
+        boolean[][] dp = new boolean[n][n];
+        for(int i=n-1;i>=0;i--){
+            for(int j=i;j<n;j++){
+                dp[i][j] = s.charAt(i)==s.charAt(j) && (j-i<3 || dp[i+1][j-1]);
             }
         }
+        int[] mincut = new int[n];
         for(int i=0;i<n;i++){
-            if(b[0][i]==true){
-                dp[i] = 0;
-            }
-            else{
-                dp[i] = Integer.MAX_VALUE;
+            if(dp[0][i]){
+                continue;
+            }else{
+                int min = Integer.MAX_VALUE;
                 for(int j=0;j<i;j++){
-                    if(b[j+1][i]){
-                        dp[i] = Math.min(dp[i], 1 + dp[j]);
+                    if(dp[j+1][i]){
+                        min = Math.min(min, 1+mincut[j]);
                     }
                 }
+                mincut[i] = min;
             }
         }
-        return dp[n-1];
+        return mincut[n-1];
     }
 }
