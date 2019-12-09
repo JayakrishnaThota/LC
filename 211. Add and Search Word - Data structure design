@@ -38,3 +38,7 @@ public class WordDictionary {
         }
     }
 }
+
+
+//addWord - O(m) - m is the length of the new word
+//search - O(n) - n is the total number of characters in all words
