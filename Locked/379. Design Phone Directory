@@ -1,4 +1,4 @@
-Design a Phone Directory which supports the following operations:
+/* Design a Phone Directory which supports the following operations:
 
 get: Provide a number which is not assigned to anyone.
 check: Check if a number is available or not.
@@ -27,7 +27,7 @@ directory.check(2);
 directory.release(2);
 
 // Number 2 is available again, return true.
-directory.check(2);
+directory.check(2); */
 
 class PhoneDirectory {
 
