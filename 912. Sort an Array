@@ -1,0 +1,42 @@
+//O(n^2) time and O(n) space
+class Solution {
+    
+    public List<Integer> sortArray(int[] nums) {
+        quicksort(nums, 0, nums.length-1);
+        return list(nums);
+    }
+    
+    public List<Integer> list(int[] nums) {
+        List<Integer> list = new ArrayList();
+        for(int num:nums){
+            list.add(num);
+        }
+        return list;
+    }
+    
+    
+    public void quicksort(int[] nums, int low, int high) {
+        if(low>high) return;
+        int pivot = partition(nums, low, high);
+        quicksort(nums, low, pivot-1);
+        quicksort(nums, pivot+1, high);
+    }
+    
+    public int partition(int[] nums, int low, int high) {
+        int i = low-1, pivot = nums[high];
+        for(int j=low;j<high;j++){
+            if(nums[j]<=nums[high]){
+                i++;
+                swap(nums, i, j);
+            }
+        }
+        swap(nums,i+1,high);
+        return i+1;
+    }
+    
+    public void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
