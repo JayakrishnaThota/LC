@@ -1,0 +1,41 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean isNumber(String s) {
+        if(s==null || s.length()==0) return true;
+        s = s.trim();
+        int n = s.length();
+        boolean numberSeen = false;
+        boolean pointSeen = false;
+        boolean exponentialSeen = false;
+        boolean numberAfterE = true;
+        for(int i=0;i<n;i++){
+            char c = s.charAt(i);
+            if(c>='0' && c<='9'){
+                numberSeen = true;
+                numberAfterE = true;
+            }
+            else if(c=='.'){
+                if(pointSeen || exponentialSeen) {
+                    return false;
+                }
+                pointSeen = true;
+            }
+            else if(c=='e'){
+                if(!numberSeen || exponentialSeen) {
+                    return false;
+                }
+                exponentialSeen = true;
+                numberAfterE = false;
+            }
+            else if(c=='+' || c=='-'){
+                if(i!=0 && s.charAt(i-1)!='e') {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        return numberSeen && numberAfterE;
+    }
+}
