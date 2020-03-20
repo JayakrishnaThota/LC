@@ -1,0 +1,42 @@
+class Solution {
+    
+    Map<Integer, Boolean> map;
+    boolean[] used;
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        int max = (maxChoosableInteger*(maxChoosableInteger+1))/2;
+        if(max<desiredTotal) return false;
+        if(maxChoosableInteger>=desiredTotal) return true;
+        map = new HashMap();
+        used = new boolean[maxChoosableInteger+1];
+        return helper(desiredTotal);
+    }
+    
+    public boolean helper(int desiredTotal) {
+        if(desiredTotal<=0) return false;
+        int key = format(used);
+        if(map.containsKey(key)) return map.get(key);
+        for(int i=1;i<used.length;i++){
+            if(used[i]) continue;
+            used[i] = true;
+            if(!helper(desiredTotal-i)) {
+                used[i] = false;
+                map.put(key, true);
+                return true;
+            }
+            used[i] = false;
+        }
+        map.put(key, false);
+        return false;
+    }
+    
+    public int format(boolean[] used) {
+        int result = 0;
+        for(int i=0;i<used.length;i++){
+            if(used[i]) {
+                result = result | (1<<i);
+            }
+        }
+        return result;
+    }
+    
+}
