@@ -14,17 +14,12 @@ By calling next repeatedly until hasNext returns false, the order of elements re
 */
 
 public class Vector2D implements Iterator<Integer> {
-    List<Integer> list;
+
+    Iterator<List<Integer>> listIter;
     Iterator<Integer> iter;
-    //O(n) time and space
     public Vector2D(List<List<Integer>> vec2d) {
-        list = new ArrayList();
-        for(List<Integer> vec1d:vec2d){
-            for(Integer vec:vec1d){
-                list.add(vec);
-            }
-        }
-        iter = list.iterator();
+        listIter = vec2d.iterator();
+        iter = Collections.emptyIterator();
     }
 
     //O(1) time
@@ -34,7 +29,18 @@ public class Vector2D implements Iterator<Integer> {
 
     //O(1) time
     public boolean hasNext() {
+        if(iter.hasNext()) return true;
+        if(!listIter.hasNext()) return false;
+        iter = listIter.next().iterator();
+        while(!iter.hasNext() && listIter.hasNext()) {
+            iter = listIter.next().iterator();
+        }
         return iter.hasNext();
     }
 }
 
+/**
+ * Your Vector2D object will be instantiated and called as such:
+ * Vector2D i = new Vector2D(vec2d);
+ * while (i.hasNext()) v[f()] = i.next();
+ */
