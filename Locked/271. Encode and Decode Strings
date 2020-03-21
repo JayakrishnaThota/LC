@@ -40,14 +40,20 @@ Do not rely on any library method such as eval or serialize methods. You should 
 
 
 public class Codec {
-    Map<Integer, List<String>> map = new HashMap();
-    int cur = 0;
+    //O(1) time
     public String encode(List<String> strs) {
-        map.put(cur,strs);
-        return cur+"";
+        String key = map.size()+"";
+        map.put(key, strs);
+        return key;
     }
 
-    public List<String> decode(String s) {
-        return map.get(Integer.parseInt(s));
+    /*
+     * @param str: A string
+     * @return: dcodes a single string to a list of strings
+     */
+     
+    //O(1) time 
+    public List<String> decode(String str) {
+        return map.get(str);
     }
 }
