@@ -2,20 +2,21 @@
 class Solution {
     public int rob(TreeNode root) {
         if(root==null) return 0;
-        return helper(root, new HashMap<>());
-    }    
-    public int helper(TreeNode root, Map<TreeNode, Integer> map){
-        if(root==null)
-            return 0;
-        if(map.containsKey(root))
-            return map.get(root);
-        int val = 0;
-        if(root.left!=null)
-            val+=helper(root.left.left,map)+helper(root.left.right,map);
-        if(root.right!=null)
-            val+=helper(root.right.left,map)+helper(root.right.right,map);
-        val = Math.max(root.val+val, helper(root.left,map)+helper(root.right,map));
-        map.put(root,val);
-        return val;
+        int[] res = helper(root);
+        return Math.max(res[0], res[1]);
     }
+    
+    //Returns an array of length 2
+    //1st element returns the max value if root is robbed
+    //2nd element returns the max value if root is not robbed
+    public int[] helper(TreeNode root) {
+        if(root==null) return new int[2];
+        int[] left = helper(root.left);
+        int[] right = helper(root.right);
+        int[] ret = new int[2];
+        ret[0] = root.val + left[1] + right[1];
+        ret[1] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        return ret;
+    }
+    
 }
