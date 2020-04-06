@@ -1,25 +1,16 @@
-//O(nlogn) and O(n)
+//O(nlogn) time and O(n) space
 class Solution {
     public String longestWord(String[] words) {
         Arrays.sort(words);
+        String result = "";
         Set<String> set = new HashSet();
-        for(String w:words) set.add(w);
-        String ret = "";
-        int max = 0;
-        boolean flag = false;
-        for(int i=words.length-1;i>=0;i--){
+        for(int i=0;i<words.length;i++){
             String s = words[i];
-            int count = 0;
-            for(int j=s.length();j>0;j--){
-                String temp = words[i].substring(0,j);
-                if(set.contains(temp)){
-                    count++;
-                }
-            }
-            if(count==s.length()){
-                if(count>=max) { ret = s; max = count; }
+            if(s.length()==1 || set.contains(s.substring(0,s.length()-1))){
+                set.add(s);
+                result = (s.length()>result.length())?s:result;
             }
         }
-        return ret;
+        return result;
     }
 }
