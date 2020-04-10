@@ -1,20 +1,32 @@
-//O(n2) time and space
+//O(n^2) time and O(n) space
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        List<List<Integer>> list = new ArrayList();
-        helper(list, new ArrayList<>(), sum, root);
-        return list;
-    }
-    public void helper(List<List<Integer>> list, List<Integer> sublist, int rem, TreeNode root){
-        if(root==null) return;
-        sublist.add(root.val);
-        if(rem==root.val && root.left==null && root.right==null){
-            list.add(new ArrayList(sublist));
-        } 
-        else{
-        helper(list,sublist,rem-root.val,root.left);
-        helper(list, sublist, rem-root.val, root.right);
+        List<String> list = new ArrayList();
+        List<List<Integer>> result = new ArrayList();
+        backtrack(list, "", root);
+        for(String s:list){
+            String[] tokens = s.split(",");
+            List<Integer> sublist = new ArrayList();
+            int cur = 0;
+            for(String token:tokens){
+                cur+=Integer.parseInt(token);
+                sublist.add(Integer.parseInt(token));
+            }
+            if(cur==sum) result.add(new ArrayList(sublist));
         }
-        sublist.remove(sublist.size()-1);
+        return result;
     }
+    
+    public void backtrack(List<String> list, String s, TreeNode root) {
+        if(root==null) return;
+        if(root.left==null && root.right==null){
+            s+=root.val;
+            list.add(s);
+            return;
+        }
+        s+=root.val+",";
+        backtrack(list, s, root.left);
+        backtrack(list, s, root.right);
+    }
+    
 }
