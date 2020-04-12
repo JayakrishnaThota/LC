@@ -1,0 +1,39 @@
+//Exponential time and space complexity
+public class Solution {
+     public int balanceGraph(int[][] transactions) {
+        Map<Integer, Long> map = new HashMap<>();
+        for(int[] t : transactions){
+            long val1 = map.getOrDefault(t[0], 0L);//balance
+            long val2 = map.getOrDefault(t[1], 0L);
+            map.put(t[0], val1-t[2]);
+            map.put(t[1], val2+t[2]);
+        }
+        
+        List<Long> list = new ArrayList<>();
+        for(long val : map.values()){
+            if(val!=0) list.add(val);
+        }
+        Long[] debts = new Long[list.size()];
+        debts = list.toArray(debts);
+        HashMap<String, Integer> dp = new HashMap<>();
+        return helper(debts, 0, 0, dp);
+    }
+    
+    public int helper(Long[] debts, int pos, int count, HashMap<String, Integer> dp){
+        String key = Arrays.toString(debts)+" "+pos+" "+count;
+        if(dp.containsKey(key))
+            return dp.get(key);
+        while(pos<debts.length && debts[pos] == 0) pos++;
+        if(pos>=debts.length) return count;
+        int res = Integer.MAX_VALUE;
+        for(int i=pos+1; i<debts.length; i++){
+            if((debts[pos] ^ debts[i])<0){
+                debts[i] += debts[pos];
+                res = Math.min(res, helper(debts, pos+1, count+1, dp));
+                debts[i] -= debts[pos];//backtracking
+            }
+        }
+        dp.put(key, res);
+        return res;
+    }
+}
