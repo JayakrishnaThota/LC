@@ -1,0 +1,32 @@
+//O(1) time and space
+class Solution {
+    public int numRookCaptures(char[][] board) {
+        if(board==null || board.length==0) return 0;
+        int m = board.length, n = board[0].length;
+        int ri = 0, rj = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='R'){
+                    ri = i;
+                    rj = j;
+                }
+            }
+        }
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        int count = 0;
+        for(int[] dir:dirs){
+            int x = ri + dir[0];
+            int y = rj + dir[1];
+            while(true) {
+                if(x<0 || x>=m || y<0 || y>=n || board[x][y]=='B') break;
+                if(board[x][y]=='p') {
+                    count++;
+                    break;
+                }
+                x+=dir[0];
+                y+=dir[1];
+            }
+        }
+        return count;
+    }
+}
