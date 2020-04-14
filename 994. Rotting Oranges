@@ -1,0 +1,41 @@
+//O(mn) time and space
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList();
+        boolean[][] visited = new boolean[m][n];
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        int count = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==2) {
+                    queue.offer(new int[]{i,j});
+                    visited[i][j] = true;
+                }
+                else if(grid[i][j]==1) {
+                    count++;
+                }
+            }
+        }
+        if(count==0) return 0;
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++){
+                int[] cell = queue.poll();
+                for(int[] dir:dirs){
+                    int x = cell[0] + dir[0];
+                    int y = cell[1] + dir[1];
+                    if(x<0 || y<0 || x>=m || y>=n || visited[x][y] || grid[x][y]==0) continue;
+                    visited[x][y] = true;
+                    queue.offer(new int[]{x,y});
+                    count--;
+                }
+            }
+            level++;
+            if(count==0) break;
+        }
+        return (count==0)?level:-1;
+    }
+}
