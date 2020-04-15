@@ -1,0 +1,19 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int carFleet(int target, int[] position, int[] speed) {
+        TreeMap<Integer, Integer> map = new TreeMap();
+        for(int i=0;i<position.length;i++){
+            map.put(target-position[i], speed[i]);
+        }
+        int result = 0;
+        double maxTime = -1;
+        for(Integer key:map.keySet()){
+            double curTime = 1.0*key/map.get(key);
+            if(curTime>maxTime){
+                maxTime = curTime;
+                result++;
+            }
+        }
+        return result;
+    }
+}
