@@ -1,11 +1,18 @@
-//O(n) time and space
+//O(logn) time and O(1) space
 class Solution {
     public int peakIndexInMountainArray(int[] A) {
-        Stack<Integer> stack = new Stack();
-        for(int i=0;i<A.length;i++){
-            if(stack.isEmpty() || A[i]>A[stack.peek()])
-                stack.push(i);
+        int n = A.length;
+        int low = 0, high = n - 1;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (A[mid] < A[mid + 1]) { // peak index is after mid.
+                low = mid + 1;
+            }else if (A[mid -1] > A[mid]) { // peak index is before mid.
+                high = mid;
+            }else { // peak index is mid.
+                return mid;
+            }
         }
-        return stack.peek();
+        return -1; // no peak.
     }
 }
