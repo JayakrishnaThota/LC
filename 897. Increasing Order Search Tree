@@ -1,0 +1,29 @@
+//O(n) time and space
+class Solution {
+    TreeNode dummy = new TreeNode(0);
+    TreeNode iter = dummy;
+    public TreeNode increasingBST(TreeNode root) {
+        if(root==null) return root;
+        Stack<TreeNode> stack = new Stack();
+        TreeNode cur = root;
+        boolean done = false;
+        while(!done) {
+            if(cur!=null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            else{
+                if(stack.isEmpty()) done = true;
+                else{
+                    cur = stack.pop();
+                    TreeNode temp = cur.right;
+                    iter.right = cur;
+                    iter = iter.right;
+                    cur.left = null;
+                    cur = temp;
+                }
+            }
+        }
+        return dummy.right;
+    }
+}
