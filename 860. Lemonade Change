@@ -1,31 +1,13 @@
 //O(n) time and O(1) space
 class Solution {
     public boolean lemonadeChange(int[] bills) {
-        //Sanity check
-        if(bills==null || bills.length==0) return true;
-        int fives = 0, tens = 0, twenties = 0;
-        for(int i=0;i<bills.length;i++){
-            int bill = bills[i];
-            if(bill==5){
-                fives++;
-            }
-            else if(bill==10){
-                tens++;
-                if(fives<1) return false;
-                fives--;
-            }
-            else{
-                twenties++;
-                if(tens<1){
-                    if(fives<3) return false;
-                    fives-=3;
-                } 
-                else{
-                    tens--;
-                    if(fives<1) return false;
-                    fives--;
-                }
-            }
+        int five = 0, ten = 0;
+        for (int i : bills) {
+            if (i == 5) five++;
+            else if (i == 10) {five--; ten++;}
+            else if (ten > 0) {ten--; five--;}
+            else five -= 3;
+            if (five < 0) return false;
         }
         return true;
     }
