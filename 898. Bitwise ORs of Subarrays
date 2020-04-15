@@ -1,0 +1,19 @@
+//O(30*n) time and O(n) space
+class Solution {
+    public int subarrayBitwiseORs(int[] A) {
+        if(A==null || A.length==0) return 0;
+        int n = A.length;
+        Set<Integer> result = new HashSet();
+        Set<Integer> prev = new HashSet(), cur = new HashSet();
+        for(int x:A) {
+            cur = new HashSet();
+            prev.add(0);
+            for(int y:prev){
+                cur.add(x|y);
+            }
+            prev = cur;
+            for(int c:cur) result.add(c);
+        }
+        return result.size();
+    }
+}
