@@ -1,0 +1,18 @@
+//O(nk) time and O(n) space
+class Solution {
+    public int numSpecialEquivGroups(String[] A) {
+        Set<String> set= new HashSet<>();
+        for (String s: A){
+            int[] odd= new int[26];
+            int[] even= new int[26];
+            for (int i=0; i<s.length(); i++){
+                int index = s.charAt(i)-'a';
+                if (i%2==1) odd[index]++;
+                else even[index]++;
+            }
+            String sig= Arrays.toString(odd)+Arrays.toString(even);
+            set.add(sig);
+        }
+        return set.size();
+    }
+}
