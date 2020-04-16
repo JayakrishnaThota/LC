@@ -1,0 +1,21 @@
+//O(n) time and O(1) space
+class Solution {
+    public int numFriendRequests(int[] ages) {
+        if(ages==null || ages.length==0) return 0;
+        int[] buckets = new int[121];
+        for(int age:ages){
+            buckets[age]++;
+        }
+        int[] sum = new int[121];
+        for(int i=1;i<=120;i++){
+            sum[i] = sum[i-1] + buckets[i];
+        }
+        int result = 0;
+        for(int i=15;i<=120;i++){
+            if(buckets[i]==0) continue;
+            int count = sum[i] - sum[i/2 + 7];
+            result = result + count*buckets[i]- buckets[i];
+        }
+        return result;
+    }
+}
