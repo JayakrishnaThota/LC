@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public List<String> subdomainVisits(String[] cpdomains) {
+        Map<String, Integer> map = new HashMap();
+        for(String cpdomain:cpdomains){
+            String[] splitter = cpdomain.split(" ");
+            Integer count = Integer.parseInt(splitter[0]);
+            for(int i=0;i<splitter[1].length();i++){
+                if(splitter[1].charAt(i)=='.'){
+                    String key = splitter[1].substring(i+1);
+                    map.put(key, map.getOrDefault(key,0)+count);
+                }
+            }
+            map.put(splitter[1], map.getOrDefault(splitter[1],0)+count);
+        }
+        List<String> result = new ArrayList();
+        for(String key:map.keySet()){
+            result.add(map.get(key) +" " +key);
+        }
+        return result;
+    }
+}
