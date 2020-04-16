@@ -1,69 +1,13 @@
-//O(n) time and O(n) space
+//O(n) time and space
 class Solution {
-    
+    String[] country = {"", "+*-", "+**-", "+***-"};
     public String maskPII(String S) {
-        if(S.indexOf('@')!=-1){
-            return convertEmail(S);
+        int at = S.indexOf("@");
+        if (at > 0) {
+            S = S.toLowerCase();
+            return (S.charAt(0) + "*****" + S.substring(at - 1)).toLowerCase();
         }
-        else{
-            return convertPhone(S);
-        }
+        S = S.replaceAll("[^0-9]", "");
+        return country[S.length() - 10] + "***-***-" + S.substring(S.length() - 4);
     }
-    
-    public String convertEmail(String s){
-        StringBuffer sb = new StringBuffer();
-        char a = '@', b = '@';
-        int i = 0;
-        for(i=0;i<s.length();i++){
-            char c = s.charAt(i);
-            if(a=='@') a = Character.toLowerCase(c);
-            else{
-                if(c=='@') break;
-                b = Character.toLowerCase(c);
-            }
-        }
-        sb.append(a+"*****"+b);
-        for(;i<s.length();i++) sb.append(Character.toLowerCase(s.charAt(i)));
-        return sb.toString();
-    }
-    
-    public String convertPhone(String s){
-        if(s==null || s.length()==0) return "";
-        int n = s.length();
-        int count = 0;
-        for(char c:s.toCharArray()){
-            if(Character.isDigit(c)) count++;
-        }
-        if(count==10) return ten(s);
-        else return twelve(s);
-    }
-    
-    public String ten(String s){
-        StringBuffer sb = new StringBuffer();
-        for(int i=s.length()-1;i>=0;i--){
-            if(Character.isDigit(s.charAt(i))) sb.append(s.charAt(i));
-            if(sb.length()==4) break;
-        }
-        sb.append("-***-***");
-        return sb.reverse().toString();
-    }
-    
-    public String twelve(String s){
-        StringBuffer sb = new StringBuffer();
-        int i=s.length()-1, count = 4;
-        for(;i>=0;i--){
-            if(Character.isDigit(s.charAt(i))) sb.append(s.charAt(i));
-            if(sb.length()==4) break;
-        }
-        for(;i>=0;i--){
-            if(Character.isDigit(s.charAt(i))) count++;
-        }
-        System.out.println(count);
-        count-=11;
-        sb.append("-***-***-");
-        while(count-->0) sb.append("*");
-        sb.append("+");
-        return sb.reverse().toString();
-    }
-    
 }
