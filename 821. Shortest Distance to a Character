@@ -1,24 +1,20 @@
-//O(nk) time and O(k) space
+//O(n) time and O(1) space
 class Solution {
     public int[] shortestToChar(String S, char C) {
+        int[] result = new int[S.length()];
         int n = S.length();
-        int[] result = new int[n];
-        Set<Integer> set = new HashSet();
-        int in = 0;
-        for(char c:S.toCharArray()){
-            if(c==C) set.add(in);
-            in++;
-        }
+        int index = -n;
         for(int i=0;i<n;i++){
-            char c = S.charAt(i);
-            if(c==C) result[i] = 0;
-            else{
-                int min = Integer.MAX_VALUE;
-                for(Integer s:set){
-                    min = Math.min(min, Math.abs(i-s));
-                } 
-                result[i] = min;
+            if(C==S.charAt(i)){
+                index = i;
             }
+            result[i] = i-index;
+        }
+        for(int i=index-1;i>=0;i--){
+            if(C==S.charAt(i)){
+                index = i;
+            }
+            result[i] = Math.min(index-i, result[i]);
         }
         return result;
     }
