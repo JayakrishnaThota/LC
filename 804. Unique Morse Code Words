@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    public int uniqueMorseRepresentations(String[] words) {
+        String[] bank = {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        Set<String> set = new HashSet();
+        for(String word:words){
+            StringBuffer sb = new StringBuffer();
+            for(char c:word.toCharArray()){
+                int index = c-'a';
+                sb.append(bank[index]);
+            }
+            set.add(sb.toString());
+        }
+        return set.size();
+    }
+}
