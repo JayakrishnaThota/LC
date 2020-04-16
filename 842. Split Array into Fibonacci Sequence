@@ -1,0 +1,33 @@
+class Solution {
+    public List<Integer> splitIntoFibonacci(String S) {
+        List<Integer> result = new ArrayList();
+        backtrack(result, S, 0);
+        return result;
+    }
+    
+    public boolean backtrack(List<Integer> result, String s, int index) {
+        if(index==s.length() && result.size()>2) {
+            return true;
+        }
+        for(int i=index;i<s.length();i++){
+            //Leading zero can only be one number
+            if(i>index && s.charAt(index)=='0') break;
+            long num = Long.parseLong(s.substring(index, i+1));
+            //Overflow Check
+            if (num > Integer.MAX_VALUE) {
+                break;
+            }
+            int size = result.size();
+            if(size>1 && result.get(size-1)+result.get(size-2)<num) {
+                break;
+            }
+            if(size<2 || result.get(size-1)+result.get(size-2)==num) {
+                result.add((int)num);
+                if(backtrack(result, s, i+1)) return true;
+                result.remove(result.size()-1);
+            }
+        }
+        return false;
+    }
+    
+}
