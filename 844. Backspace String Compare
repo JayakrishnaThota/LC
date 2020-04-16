@@ -1,0 +1,26 @@
+//O(max(m,n)) time and O(1) space
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        int m = S.length(), n = T.length();
+        int i = m-1, j = n-1;
+        int backA = 0, backB = 0;
+        while(i>=0 || j>=0) {
+            while(i>=0 && (backA>0 || S.charAt(i)=='#')){
+                if(S.charAt(i)=='#') backA++;
+                else backA--;
+                i--;
+            }
+            char a = (i<0)?'#':S.charAt(i);
+            while(j>=0 && (backB>0 || T.charAt(j)=='#')){
+                if(T.charAt(j)=='#') backB++;
+                else backB--;
+                j--;
+            }
+            char b = (j<0)?'#':T.charAt(j);
+            if(a!=b) return false;
+            i--;
+            j--;
+        }
+        return true;
+    }
+}
