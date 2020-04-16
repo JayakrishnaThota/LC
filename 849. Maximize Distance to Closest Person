@@ -1,0 +1,14 @@
+//O(n) time and O(1) space
+class Solution {
+    public int maxDistToClosest(int[] seats) {
+        int prev = -1, result = 0;
+        for(int i=0;i<seats.length;i++){
+            if(seats[i]==1) {
+                result = (prev<0)?i:Math.max(result, (i-prev)/2);
+                prev = i; 
+            }
+        }
+        result = Math.max(result, (seats.length-1-prev));
+        return result;
+    }
+}
