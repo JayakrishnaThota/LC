@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    int preIndex = 0, postIndex = 0;
+    public TreeNode constructFromPrePost(int[] pre, int[] post) {
+        TreeNode root = new TreeNode(pre[preIndex++]);
+        if(post[postIndex]!=root.val){
+            root.left = constructFromPrePost(pre, post);
+        }
+        if(post[postIndex]!=root.val){
+            root.right = constructFromPrePost(pre, post);
+        }
+        postIndex++;
+        return root;
+    }
+
+}
