@@ -1,0 +1,17 @@
+//O(n) time and space
+class Solution {
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        StringBuffer sb1 = new StringBuffer();
+        StringBuffer sb2 = new StringBuffer();
+        leafStructure(root1, sb1);
+        leafStructure(root2, sb2);
+        return sb1.toString().equals(sb2.toString());
+    }
+    
+    public void leafStructure(TreeNode root, StringBuffer sb) {
+        if(root==null) return;
+        if(root.left==null && root.right==null) { sb.append(root.val+","); return; }
+        leafStructure(root.left, sb);
+        leafStructure(root.right, sb);
+    }
+}
