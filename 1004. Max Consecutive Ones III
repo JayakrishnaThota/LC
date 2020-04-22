@@ -1,0 +1,19 @@
+//O(n) time and O(k) space 
+class Solution {
+    public int longestOnes(int[] A, int K) {
+        Queue<Integer> queue = new LinkedList();
+        int left = 0, right = 0, max = 0;
+        while(right<A.length){
+            if(A[right++]==0) {
+                queue.offer(right);
+            }
+            while(left<=right && queue.size()>K){
+                if(A[left++]==0) {
+                    queue.poll();
+                }
+            }
+            max = Math.max(max, right-left);
+        }
+        return max;
+    }
+}
