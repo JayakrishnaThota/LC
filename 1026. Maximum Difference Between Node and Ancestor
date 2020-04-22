@@ -1,0 +1,20 @@
+//O(n) time and space
+class Solution {
+    int result = 0;
+    public int maxAncestorDiff(TreeNode root) {
+        dfs(root, root.val, root.val);
+        return result;
+    }
+    
+    public void dfs(TreeNode root, int min, int max) {
+        if(root==null) return;
+        min = Math.min(min, root.val);
+        max = Math.max(max, root.val);
+        int curDifference = Math.max(Math.abs(max-root.val), Math.abs(min-root.val));
+        System.out.println(curDifference);
+        result = Math.max(result, curDifference);
+        dfs(root.left, min, max);
+        dfs(root.right, min, max);
+    }
+    
+}
