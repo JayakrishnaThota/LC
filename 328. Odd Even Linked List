@@ -2,36 +2,35 @@
 class Solution {
     public ListNode oddEvenList(ListNode head) {
         if(head==null || head.next==null) return head;
-        ListNode os = null, oe = null, es = null, ee = null, iter = head;
-        int count = 1;
+        ListNode es = null, ee = null, os = null, oe = null, iter = head;
+        int index = 1;
         while(iter!=null){
-            ListNode next = iter.next;
-            iter.next = null;
-            if((count%2)==1){
-                if(os==null){
-                    os = iter;
-                    oe = os;
-                }
-                else{
-                    oe.next = iter;
-                    oe = oe.next;
-                }
-            }
-            else{
-                if(es==null){
+            if((index%2)==0) {
+                if(es==null) {
                     es = iter;
                     ee = es;
                 }
-                else{
+                else {
                     ee.next = iter;
                     ee = ee.next;
                 }
             }
-            iter = next;
-            count++;
+            else {
+                if(os==null) {
+                    os = iter;
+                    oe = os;
+                }
+                else {
+                    oe.next = iter;
+                    oe = oe.next;
+                }
+            }
+            iter = iter.next;
+            index++;
         }
-        if(os==null || es==null) return head;
+        if(es==null || os==null) return head;
         oe.next = es;
+        ee.next = null;
         return os;
     }
 }
