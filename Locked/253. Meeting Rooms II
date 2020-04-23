@@ -11,6 +11,9 @@ return 2.
 
 */
 
+//The minimal number of rooms equal to the max number of overlapping meeting in any time point.
+//The code is actually counting the number of overlapping meetings throughout the timeline and recording the maximum.
+
 
 //O(nlogn) and O(n)
 public class Solution {
