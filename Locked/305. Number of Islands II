@@ -1,0 +1,42 @@
+//O(mn+klogmn) time and O(mn) space
+class Solution {
+    int[][] dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> result = new ArrayList();
+        if(positions==null || positions.length==0) return result;
+        int count = 0;
+        int[] parent = new int[m*n];
+        Arrays.fill(parent, -1);
+        for(int[] position:positions) {
+            int index = n*position[0] + position[1];
+            if (parent[index] != -1) {
+                result.add(count);
+                continue;
+            }
+            parent[index] = index;
+            count++;
+            for(int[] dir:dirs) {
+                int x = dir[0] + position[0];
+                int y = dir[1] + position[1];
+                int newIndex = n*x + y;
+                if(x<0 || y<0 || x>=m || y>=n || parent[newIndex]==-1) continue;
+                int parentnewIndex = find(parent, newIndex);
+                if(index!=parentnewIndex) {
+                    parent[parentnewIndex] = index;
+                    count--;
+                }
+            }
+            result.add(count);
+        }
+        return result;
+    }
+    
+    public int find(int[] parent, int index) {
+        while(index!=parent[index]) {
+            parent[index] = parent[parent[index]];
+            index = parent[index];
+        }
+        return index;
+    }
+    
+}
