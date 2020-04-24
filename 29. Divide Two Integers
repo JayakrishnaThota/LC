@@ -1,3 +1,4 @@
+//O(logn^2) time and O(logn) space
 class Solution {
     public int divide(int dividend, int divisor) {
         int sign = 1;
