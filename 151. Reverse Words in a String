@@ -1,12 +1,39 @@
 //O(n) time and space
-public class Solution {
+class Solution {
     public String reverseWords(String s) {
-        String[] words =  s.trim().split("\\s+");
-        StringBuffer sb = new StringBuffer();
-        for(int i=words.length-1;i>=0;i--){
-            sb.append(words[i]);
-            if(i!=0) sb.append(" ");
+        if(s==null || s.length()==0) return s;
+        char[] ch = s.toCharArray();
+        int n = ch.length;
+        reverse(ch,0,n-1);
+        int start = 0;
+        for(int i=0;i<n;i++){
+            if(ch[i]==' ') {
+                reverse(ch, start, i-1);
+                start = i+1;
+            }
         }
-        return sb.toString();
+        reverse(ch, start, n-1);
+        return cleanSpaces(ch);
     }
+    
+    public String cleanSpaces(char[] ch) {
+        int n = ch.length;
+        int i = 0, j = 0;
+        while(j<n) {
+            while(j<n && ch[j]==' ') j++;
+            while(j<n && ch[j]!=' ') ch[i++] = ch[j++];
+            while(j<n && ch[j]==' ') j++;
+            if(j<n) ch[i++] = ' ';
+        }
+        return String.valueOf(ch).substring(0,i);
+    }
+    
+    public void reverse(char[] ch, int low, int high) {
+        while(low<high) {
+            char c = ch[low];
+            ch[low++] = ch[high];
+            ch[high--] = c;
+        }
+    }
+    
 }
