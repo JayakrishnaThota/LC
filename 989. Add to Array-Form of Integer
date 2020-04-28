@@ -1,0 +1,17 @@
+//O(n) time and O(1) space
+class Solution {
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        List<Integer> result = new ArrayList();
+        int carry = K;
+        for(int i=A.length-1;i>=0;i--) {
+            int sum = (A[i]+carry)%10;
+            carry = (A[i]+carry)/10;
+            result.add(0, sum);
+        }
+        while(carry!=0) {
+            result.add(0, carry%10);
+            carry/=10;
+        }
+        return result;
+    }
+}
