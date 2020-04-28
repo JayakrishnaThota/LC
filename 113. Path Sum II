@@ -1,4 +1,4 @@
-//O(n^2) time and O(n) space
+//O(nlogn) time and space
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<String> list = new ArrayList();
