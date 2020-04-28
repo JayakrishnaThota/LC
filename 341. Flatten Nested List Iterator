@@ -1,49 +1,28 @@
-/**
- * // This is the interface that allows for creating nested lists.
- * // You should not implement it, or speculate about its implementation
- * public interface NestedInteger {
- *
- *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
- *     public boolean isInteger();
- *
- *     // @return the single integer that this NestedInteger holds, if it holds a single integer
- *     // Return null if this NestedInteger holds a nested list
- *     public Integer getInteger();
- *
- *     // @return the nested list that this NestedInteger holds, if it holds a nested list
- *     // Return null if this NestedInteger holds a single integer
- *     public List<NestedInteger> getList();
- * }
- */
+
 public class NestedIterator implements Iterator<Integer> {
-    List<Integer> list;
+    Stack<NestedInteger> stack;
     public NestedIterator(List<NestedInteger> nestedList) {
-        list = new ArrayList();
-        for(NestedInteger n:nestedList){
-            flatten(n);
-        }
-    }
-    
-    public void flatten(NestedInteger n){
-        if(n.isInteger()){
-            list.add(n.getInteger());
-        }
-        else{
-            for(NestedInteger ni:n.getList()){
-                flatten(ni);
-            }
-        }
+        stack = new Stack();
+        prepstack(nestedList);
     }
 
     @Override
     public Integer next() {
-        int ret = list.get(0);
-        list.remove(0);
-        return ret;
+        if(!hasNext()) return null;
+        return stack.pop().getInteger();
     }
 
     @Override
     public boolean hasNext() {
-        return (list.size()!=0);
+        while(!stack.isEmpty() && !stack.peek().isInteger()) {
+            prepstack(stack.pop().getList());
+        }
+        return !stack.isEmpty();
+    }
+    
+    public void prepstack(List<NestedInteger> nestedList) {
+        for(int i=nestedList.size()-1;i>=0;i--) {
+            stack.push(nestedList.get(i));
+        }
     }
 }
