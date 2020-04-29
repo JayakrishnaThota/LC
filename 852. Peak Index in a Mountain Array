@@ -2,17 +2,14 @@
 class Solution {
     public int peakIndexInMountainArray(int[] A) {
         int n = A.length;
-        int low = 0, high = n - 1;
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-            if (A[mid] < A[mid + 1]) { // peak index is after mid.
-                low = mid + 1;
-            }else if (A[mid -1] > A[mid]) { // peak index is before mid.
+        int low = 0, high = n-1;
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(A[mid]<A[mid+1])
+                low = mid+1;
+            else
                 high = mid;
-            }else { // peak index is mid.
-                return mid;
-            }
         }
-        return -1; // no peak.
+        return low;
     }
 }
