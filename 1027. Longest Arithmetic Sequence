@@ -1,0 +1,24 @@
+//O(n^2) time and space
+class Solution {
+    public int longestArithSeqLength(int[] A) {
+        if(A==null || A.length<1) return 0;
+        int n = A.length;
+        Map<Integer, Integer>[] dp = new HashMap[n];
+        for(int i=0;i<n;i++) {
+            dp[i] = new HashMap();
+        }
+        int max = 0;
+        for(int i=1;i<n;i++) {
+            for(int j=0;j<i;j++) {
+                int len = 2;
+                int diff = A[i] - A[j];
+                if(dp[j].containsKey(diff)) {
+                    len = Math.max(len, dp[j].get(diff)+1);
+                }
+                dp[i].put(diff, len);
+                max = Math.max(max, len);
+            }
+        }
+        return max;
+    }
+}
