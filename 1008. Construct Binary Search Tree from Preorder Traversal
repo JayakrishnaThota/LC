@@ -21,3 +21,20 @@ class Solution {
     }
 
 }
+
+
+//O(n) time and O(n) space
+class Solution {
+    int index = 0;
+    public TreeNode bstFromPreorder(int[] preorder) {
+        return helper(preorder, Integer.MAX_VALUE);
+    }
+    
+    public TreeNode helper(int[] preorder, int threshold){
+        if(index==preorder.length || threshold<preorder[index]) return null;
+        TreeNode root = new TreeNode(preorder[index++]);
+        root.left = helper(preorder, root.val);
+        root.right = helper(preorder, threshold);
+        return root;
+    }
+}
