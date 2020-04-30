@@ -1,0 +1,17 @@
+//O(n) time and space
+class Solution {
+    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            if (leftChild[i] != -1) {
+                if(!set.add(leftChild[i])) return false;
+            }
+            if (rightChild[i] != -1) {
+                if (!set.add(rightChild[i])) return false;
+            }   
+			if (leftChild[i] == -1 && rightChild[i] == -1 && !set.isEmpty() && !set.contains(i)) return false;  // add this line because @libofeng's correction.
+        }
+        return set.size() == n-1;
+        
+    }
+}
