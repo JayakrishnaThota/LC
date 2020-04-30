@@ -1,32 +1,40 @@
-//O(VlogV) time and O(V) space
+//O(E+NlogN) time and O(V+E) space
 class Solution {
+    Map<Integer, Map<Integer, Integer>> adjlist;
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-        int[][] graph = new int[n][n];
-        for (int[] flight: flights)
-            graph[flight[0]][flight[1]] = flight[2];
-
-        Map<Integer, Integer> best = new HashMap();
-
-        PriorityQueue<int[]> pq = new PriorityQueue<int[]>((a, b) -> a[0] - b[0]);
-        pq.offer(new int[]{0, 0, src});
-
-        while (!pq.isEmpty()) {
-            int[] info = pq.poll();
-            int cost = info[0], k = info[1], place = info[2];
-            if (k > K+1 || cost > best.getOrDefault(k * 1000 + place, Integer.MAX_VALUE))
-                continue;
-            if (place == dst)
-                return cost;
-
-            for (int nei = 0; nei < n; ++nei) if (graph[place][nei] > 0) {
-                int newcost = cost + graph[place][nei];
-                if (newcost < best.getOrDefault((k+1) * 1000 + nei, Integer.MAX_VALUE)) {
-                    pq.offer(new int[]{newcost, k+1, nei});
-                    best.put((k+1) * 1000 + nei, newcost);
+        construct(flights, n);
+        return dijkstras(src, dst, K);
+    }
+    
+    public void construct(int[][] flights, int n) {
+        adjlist = new HashMap();
+        for(int i=0;i<n;i++) {
+            adjlist.put(i, new HashMap());
+        }
+        for(int[] flight:flights) {
+            int u = flight[0], v = flight[1], w = flight[2];
+            adjlist.get(u).put(v,w);
+        }
+    }
+    
+    public int dijkstras(int s, int d, int k) {
+        PriorityQueue<int[]> pq = new PriorityQueue(1, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[1]-b[1];
+            }
+        });
+        pq.offer(new int[]{s, 0, 0});
+        while(!pq.isEmpty()) {
+            int[] cell = pq.poll();
+            int u = cell[0], distance = cell[1], stops = cell[2];
+            if(u==d) return distance;
+            if(stops<=k) {
+                Map<Integer, Integer> map = adjlist.get(u);
+                for(int v:map.keySet()) {
+                    pq.offer(new int[]{v, distance+map.get(v), stops+1});
                 }
             }
         }
-
         return -1;
     }
 }
