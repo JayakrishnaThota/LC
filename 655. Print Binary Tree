@@ -1,29 +1,26 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
+//O(h*2^h) time and space
 class Solution {
     public List<List<String>> printTree(TreeNode root) {
         int height = height(root);
         String[][] result = new String[height][(1<<height)-1];
-        for(String[] r:result){
-            Arrays.fill(r,"");
+        for(String[] res:result) {
+            Arrays.fill(res, "");
         }
-        helper(root, result, 0, 0, ((1<<height)-1));
+        helper(root, result, 0, 0, (1<<height)-1);
         return list(result);
     }
     
-    public void helper(TreeNode node, String[][] result, int r, int l, int h) {
-        if((l>h)||(node==null)) return;
-        int mid = (l+h)/2;
-        result[r][mid] = node.val+"";
-        helper(node.left, result, r+1, l, mid);
-        helper(node.right, result, r+1, mid+1, h);
+    public void helper(TreeNode root, String[][] result, int r, int c1, int c2) {
+        if(root==null) return;
+        int cmid = (c1+c2)/2;
+        result[r][cmid] = root.val+"";
+        helper(root.left, result, r+1, c1, cmid);
+        helper(root.right, result, r+1, cmid+1, c2);
+    } 
+    
+    public int height(TreeNode root) {
+        if(root==null) return 0;
+        return 1 + Math.max(height(root.left), height(root.right));
     }
     
     public List<List<String>> list(String[][] result){
@@ -34,8 +31,4 @@ class Solution {
         return list;
     }
     
-    public int height(TreeNode node){
-        if(node==null) return 0;
-        return 1 + Math.max(height(node.left), height(node.right));
-    }
 }
