@@ -1,22 +1,37 @@
-//O(n) time and space
-public class Solution {
-    public int nextGreaterElement(int n) {
-        char[] number = String.valueOf(n).toCharArray();
-        int i, j;
-        for (i = number.length-1; i > 0; i--)
-            if (number[i-1] < number[i])
-               break;
-        if (i == 0)
-            return -1;
-        int x = number[i-1], smallest = i;
-        for (j = i+1; j < number.length; j++)
-            if (number[j] > x && number[j] <= number[smallest])
-                smallest = j;
-        char temp = number[i-1];
-        number[i-1] = number[smallest];
-        number[smallest] = temp;
-        Arrays.sort(number, i, number.length);
-        long val = Long.parseLong(new String(number));
-        return (val <= Integer.MAX_VALUE) ? (int) val : -1;
+//O(n) time and O(1) space
+class Solution {
+    public int nextGreaterElement(int num) {
+        char[] ch = String.valueOf(num).toCharArray();
+        int n = ch.length;
+        int i = n-2;
+        while(i>=0) {
+            if(ch[i]<ch[i+1]) break;
+            i--;
+        }
+        if(i<0) return -1;
+        int j = n-1;
+        while(j>=0 && ch[j]<=ch[i]) j--;
+        swap(ch,i,j);
+        reverse(ch, i+1);
+        //Edge Case
+        Long result = Long.parseLong(String.valueOf(ch));
+        if(result>Integer.MAX_VALUE) return -1;
+        return Integer.parseInt(String.valueOf(ch));
     }
+    
+    public void swap(char[] ch, int i, int j) {
+        char c = ch[i];
+        ch[i] = ch[j];
+        ch[j] = c;
+    }
+    
+    public void reverse(char[] ch, int low) {
+        int high = ch.length-1;
+        while(low<high) {
+            char c = ch[low];
+            ch[low++] = ch[high];
+            ch[high--] = c;
+        }
+    }
+    
 }
