@@ -1,45 +1,16 @@
 //O(1) time and space
 class Solution {
     public String largestTimeFromDigits(int[] A) {
-        List<Integer> list = new ArrayList();
-        for(int a:A){
-            list.add(a);
-        }
-        for(int h=23;h>=0;h--){
-            for(int m=59;m>=0;m--){
-                List<Integer> hourDigits = digits(h);
-                List<Integer> minuteDigits = digits(m);
-                List<Integer> copy = new ArrayList(list);
-                boolean done = true;
-                for(Integer d:hourDigits){
-                    if(!copy.contains(d)){
-                        done = false;
-                        break;
-                    }
-                    copy.remove(d);
-                }
-                for(Integer d:minuteDigits){
-                    if(!copy.contains(d)){
-                        done = false;
-                        break;
-                    }
-                    copy.remove(d);
-                }
-                if(done){
-                    return ((h>9)?h+"":"0"+h)+":"+((m>9)?m+"":"0"+m);
-                }
-            }
+        Map<Integer, Integer> original = new HashMap();
+        for(int a:A) original.put(a, original.getOrDefault(a,0)+1);
+        for(int i=24*60-1;i>=0;i--) {
+            Map<Integer, Integer> map = new HashMap(original);
+            int a = i/60/10, b = i/60%10, c = i%60/10, d = i%60%10;
+            if(!map.containsKey(a) || !map.containsKey(b) || !map.containsKey(c) || !map.containsKey(d)) continue;
+            map.put(a, map.get(a)-1);map.put(b, map.get(b)-1);map.put(c, map.get(c)-1);map.put(d, map.get(d)-1);
+            if((map.get(a)<0) || (map.get(b)<0) || (map.get(c)<0) || (map.get(d)<0)) continue;
+            return a+""+b+":"+c+d;
         }
         return "";
-    }
-    
-    public List<Integer> digits(int h){
-        List<Integer> list = new ArrayList();
-        if(h<10) { list.add(0); list.add(h); }
-        else {
-            list.add(h/10);
-            list.add(h%10);
-        }
-        return list;
     }
 }
