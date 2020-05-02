@@ -1,0 +1,59 @@
+class Solution {
+    
+    class TrieNode {
+        TrieNode[] children;
+        int index;
+        List<Integer> list;
+        public TrieNode() {
+            children = new TrieNode[26];
+            index = -1;
+            list = new ArrayList();
+        }
+    }
+    
+    //O(nk2) time and O(k) space
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> result = new ArrayList();
+        TrieNode root = new TrieNode();
+        for(int i=0;i<words.length;i++) {
+            insert(words[i], root, i);
+        }
+        for(int i=0;i<words.length;i++) {
+            search(words, i, result, root);
+        }
+        return result;
+    }
+    
+    public void search(String[] words ,int i, List<List<Integer>> result, TrieNode root) {
+        for(int j=0;j<words[i].length();j++) {
+            if(root.index>-1 && root.index!=i && isPalindrome(words[i], j, words[i].length()-1)) {
+                result.add(Arrays.asList(i, root.index));
+            }
+            root = root.children[words[i].charAt(j)-'a'];
+            if(root==null) return;
+        }
+        for(Integer l:root.list) {
+            if(i==l) continue;
+            result.add(Arrays.asList(i,l));
+        }
+    }
+    
+    public void insert(String word, TrieNode root, int index) {
+        for(int i=word.length()-1;i>=0;i--) {
+            int in = word.charAt(i)-'a';
+            if(root.children[in]==null) root.children[in] = new TrieNode();
+            if(isPalindrome(word, 0, i)) root.list.add(index);
+            root = root.children[in];
+        }
+        root.index = index;
+        root.list.add(index);
+    }
+    
+    public boolean isPalindrome(String s, int low, int high) {
+        while(low<high) {
+            if(s.charAt(low++)!=s.charAt(high--)) return false;
+        }
+        return true;
+    }
+    
+}
