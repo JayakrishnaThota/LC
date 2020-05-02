@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+class Solution {
+    public String reverseOnlyLetters(String s) {
+        if(s==null || s.length()==0) return "";
+        int n = s.length();
+        char[] ch = s.toCharArray();
+        int low = 0, high = n-1;
+        while(low<high) {
+            while(low<high && !Character.isLetter(ch[low])) low++;
+            while(low<high && !Character.isLetter(ch[high])) high--;
+            if(low<high) {
+                char c = ch[low];
+                ch[low++] = ch[high];
+                ch[high--] = c;
+            }
+        }
+        return String.valueOf(ch);
+    }
+}
