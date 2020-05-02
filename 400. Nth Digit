@@ -1,4 +1,4 @@
-//O(1) time and space
+//O(logn) time and O(1) space
 class Solution {
     public int findNthDigit(int n) {
         if(n<1) return -1;
