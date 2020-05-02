@@ -1,16 +1,20 @@
-//O(n) time and space
+//O(n) time and O(logn) space
 class Solution {
+    
     public List<Integer> lexicalOrder(int n) {
-        List<Integer> list = new ArrayList();
-        for(int i=1;i<10;i++)
-            backtrack(list, i, n);
-        return list;
+        List<Integer> result = new ArrayList();
+        for(int i=1;i<10;i++) {
+            backtrack(i,n,result);
+        }
+        return result;
     }
-    public void backtrack(List<Integer> list, int i, int n){
+    
+    public void backtrack(int i, int n, List<Integer> result) {
         if(i>n) return;
-        list.add(i);
-        for(int j=0;j<10;j++){
-            backtrack(list, i*10+j, n);
+        result.add(i);
+        for(int j=0;j<10;j++) {
+            backtrack(i*10+j, n, result);
         }
     }
+    
 }
