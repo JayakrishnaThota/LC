@@ -2,42 +2,48 @@
 class Solution {
     public List<String> removeInvalidParentheses(String s) {
         List<String> result = new ArrayList();
-        if(s==null) return result;
-        int n = s.length();
-        boolean done = false;
         Queue<String> queue = new LinkedList();
         Set<String> visited = new HashSet();
         queue.offer(s);
         visited.add(s);
-        while(!queue.isEmpty()){
-            s = queue.poll();
-            if(isValid(s)){
-                result.add(s);
-                done = true;
-            }
-            if(done) continue;
-            for(int i=0;i<s.length();i++){
-                if(s.charAt(i)!='(' && s.charAt(i)!=')') continue;
-                String t = s.substring(0,i) + s.substring(i+1);
-                if(!visited.contains(t)){
-                    queue.offer(t);
-                    visited.add(t);
+        boolean done = false;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                String key = queue.poll();
+                if(isValid(key)) {
+                    result.add(key);
+                    done = true;
+                }
+                else {
+                    for(int i=0;i<key.length();i++) {
+                        char c = key.charAt(i);
+                        if(c!=')' && c!='(') continue;
+                        String newKey = key.substring(0,i)+key.substring(i+1);
+                        if(!visited.contains(newKey)) {
+                            queue.offer(newKey);
+                            visited.add(newKey);
+                        }
+                    }
                 }
             }
+            if(done) break;
         }
+        if(result.size()==0)
+            result.add("");
         return result;
     }
     
-  //O(n) time and O(1) space  
-  public boolean isValid(String s){
-    int count = 0;
-    for(char c:s.toCharArray()){
-      if(c=='(') count++;
-      else if(c==')'){
-        if(count<=0) return false;
-        count--;
-      }
+    public boolean isValid(String s) {
+        if(s==null || s.length()==0) return true;
+        int balance = 0;
+        for(char c:s.toCharArray()) {
+            if(c=='(') balance++;
+            else if(c==')') {
+                balance--;
+                if(balance<0) return false;
+            }
+        }
+        return (balance==0);
     }
-    return (count==0);
-  }
 }
