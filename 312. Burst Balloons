@@ -1,0 +1,28 @@
+//O(n^3) time and O(n^2) space
+class Solution {
+    public int maxCoins(int[] nums) {
+        int[][] dp = new int[nums.length][nums.length];
+        return helper(nums, 0, nums.length-1, dp);
+    }
+    
+    public int helper(int[] nums, int low, int high, int[][] dp) {
+        if(low>high) return 0;
+        if(dp[low][high]>0) return dp[low][high];
+        int max = nums[low];
+        for(int i=low;i<=high;i++) {
+            int a = get(nums, low-1);
+            int b = get(nums,i);
+            int c = get(nums, high+1);
+            int val = helper(nums, low, i-1, dp) + helper(nums, i+1, high, dp) + a*b*c;
+            max = Math.max(max, val);
+        }
+        dp[low][high] = max;
+        return max;
+    }
+    
+    public int get(int[] nums, int i) {
+        if(i<0 || i>=nums.length) return 1;
+        return nums[i];
+    }
+    
+}
