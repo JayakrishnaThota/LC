@@ -1,0 +1,26 @@
+//O(n^2) time and O(n) space
+public class Solution {
+    public boolean splitArray(List<Integer> nums) {
+        if(nums==null || nums.size()<7) return false;
+        int n = nums.size();
+        int[] sum = new int[n];
+        sum[0] = nums.get(0);
+        for(int i=1;i<n;i++) {
+            sum[i] = sum[i-1] + nums.get(i);
+        }
+        for(int j=3;j<n-3;j++) {
+            Set<Integer> set = new HashSet();
+            for(int i=1;i<j-1;i++) {
+                if(sum[i-1]==sum[j-1]-sum[i]) {
+                    set.add(sum[i-1]);
+                }
+            }
+            for(int k=j+2;k<n-1;k++) {
+                int a = sum[k-1]-sum[j];
+                int b = sum[n-1] - sum[k];
+                if((a==b) && (set.contains(a))) return true;
+            }
+        }
+        return false;
+    }
+}
