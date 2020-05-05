@@ -1,29 +1,49 @@
-public class SummaryRanges {
-    TreeMap<Integer, Interval> tree;
-
-    public SummaryRanges() {
-        tree = new TreeMap<>();
-    }
-
-    //O(logn)
-    public void addNum(int val) {
-        if(tree.containsKey(val)) return;
-        Integer l = tree.lowerKey(val);
-        Integer h = tree.higherKey(val);
-        if(l != null && h != null && tree.get(l).end + 1 == val && h == val + 1) {
-            tree.get(l).end = tree.get(h).end;
-            tree.remove(h);
-        } else if(l != null && tree.get(l).end + 1 >= val) {
-            tree.get(l).end = Math.max(tree.get(l).end, val);
-        } else if(h != null && h == val + 1) {
-            tree.put(val, new Interval(val, tree.get(h).end));
-            tree.remove(h);
-        } else {
-            tree.put(val, new Interval(val, val));
+class SummaryRanges {
+    
+    class Interval {
+        int start;
+        int end;
+        public Interval(int start, int end) {
+            this.start = start;
+            this.end = end;
         }
     }
-
-    public List<Interval> getIntervals() {
-        return new ArrayList<>(tree.values());
+    
+    TreeMap<Integer, Interval> map;
+    
+    public SummaryRanges() {
+        map = new TreeMap();
+    }
+    
+    public void addNum(int val) {
+        if(map.containsKey(val)) return;
+        Integer l = map.lowerKey(val);
+        Integer h = map.higherKey(val);
+        if((l!=null && map.get(l).end+1==val)&&(h!=null && val+1==h)) {
+            map.get(l).end = map.get(h).end;
+            map.remove(h);
+        }
+        else if(l!=null && map.get(l).end+1>=val) {
+            map.get(l).end = Math.max(map.get(l).end, val);
+        }
+        else if(h!=null && val+1==h) {
+            map.put(val, new Interval(val, map.get(h).end));
+            map.remove(h);
+        }
+        else {
+            map.put(val, new Interval(val, val));
+        }
+    }
+    
+    public int[][] getIntervals() {
+        int[][] result = new int[map.values().size()][2];
+        int index = 0;
+        for(Integer key:map.keySet()) {
+            Interval i = map.get(key);
+            result[index][0] = i.start;
+            result[index][1] = i.end;
+            index++;
+        }
+        return result;
     }
 }
