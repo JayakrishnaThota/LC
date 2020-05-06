@@ -1,30 +1,39 @@
-//O(n2) time and O(n) space
+//O(n*logn) time and O(n) space
 class Solution {
-    public List<int[]> getSkyline(int[][] buildings) {
-        List<int[]> result = new ArrayList();
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<List<Integer>> result = new ArrayList();
+        if(buildings==null || buildings.length==0) return result;
         List<int[]> heights = new ArrayList();
-        for(int[] b:buildings){
-            heights.add(new int[]{b[0],-b[2]});
-            heights.add(new int[]{b[1], b[2]});
+        for(int[] building:buildings) {
+            int l = building[0], r = building[1], h = building[2];
+            heights.add(new int[]{l,-h});
+            heights.add(new int[]{r,h});
         }
-        Collections.sort(heights,(a,b)->{
-               if(a[0]!=b[0])
-                   return a[0]-b[0];
-               else 
-                   return a[1]-b[1];
+        Collections.sort(heights, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                if(a[0]==b[0])
+                    return a[1]-b[1];
+                else
+                    return a[0]-b[0];
+            }
         });
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->(b-a));
-        pq.offer(0);
+        TreeMap<Integer, Integer> map = new TreeMap(Collections.reverseOrder());
         int prev = 0;
-        for(int[] h: heights){
-            if(h[1]<0)
-                pq.offer(-h[1]);
-            else 
-                pq.remove(h[1]);
-            int cur = pq.peek();
-            if(cur!=prev){
+        map.put(0, 1);
+        for(int[] h:heights) {
+            if(h[1]<0) { 
+                map.put(-h[1], map.getOrDefault(-h[1],0)+1);
+            }
+            else { 
+                map.put(h[1], map.get(h[1])-1);
+                if(map.get(h[1])==0) map.remove(h[1]);
+            }
+            int cur = map.firstKey();
+            if(cur!=prev) {
+                List<Integer> list = new ArrayList();
+                list.add(h[0]);list.add(cur);
+                result.add(list);
                 prev = cur;
-                result.add(new int[]{h[0],cur});
             }
         }
         return result;
