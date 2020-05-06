@@ -1,20 +1,17 @@
-//O(n) time and space
+//O(nlog(log(n))) time and O(n) space
 class Solution {
     public int countPrimes(int n) {
-        if(n<=2) return 0;
-        //This array indicates whether it is a prime or not
-        boolean[] dp = new boolean[n];
-        Arrays.fill(dp,true);
-        dp[0] = false;
-        dp[1] = false;
-        for(int i=2;i<n;i++){
-            for(int j=2;j*i<n;j++){
-                dp[i*j] = false;
+        if(n<3) return 0;
+        boolean[] prime = new boolean[n];
+        Arrays.fill(prime, true);
+        prime[0] = false; prime[1] = false;
+        for(int i=2;i<n;i++) {
+            for(int j=2;j*i<n;j++) {
+                prime[i*j] = false;
             }
         }
-        int count = 0;
-        for(boolean d:dp)
-            if(d==true) count++;
-        return count;
+        int result = 0;
+        for(boolean p:prime) if(p) result++;
+        return result;
     }
 }
