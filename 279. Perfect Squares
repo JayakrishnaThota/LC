@@ -1,26 +1,16 @@
-//Solution inspired from coin change
-//O(n) space and O(nk) time 
+//O(n*sqrt(n)) time and O(n) space
 class Solution {
     public int numSquares(int n) {
-        List<Integer> list = new ArrayList();
-        for(int i=1;i*i<=n;i++)
-            list.add(i*i);
-        int[] coins = new int[list.size()];
-        for(int i=0;i<coins.length;i++)
-            coins[i] = list.get(i);
-        return arrange(coins, n);
-    }
-    public int arrange(int[] coins, int n){
         int[] dp = new int[n+1];
-        Arrays.fill(dp,n+1);
-        dp[0] = 0;
-        for(int i=1;i<=n;i++){
-            for(int j=0;j<coins.length;j++){
-                if(coins[j]<=i){
-                    dp[i] = Math.min(dp[i],dp[i-coins[j]]+1);
-                }
+        for(int i=1;i<=n;i++) {
+            int min = Integer.MAX_VALUE;
+            int j = 1;
+            while(i-j*j>=0) {
+                min = Math.min(min, dp[i-j*j]+1);
+                j++;
             }
+            dp[i] = min;
         }
-        return (dp[n]>n)?-1:dp[n];
+        return dp[n];
     }
 }
