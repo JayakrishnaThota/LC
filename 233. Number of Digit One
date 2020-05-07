@@ -1,0 +1,11 @@
+//O(logn) time and O(1) space
+class Solution {
+    public int countDigitOne(int n) {
+        int count = 0;
+        for(long k=1;k<=n;k*=10) {
+            long q = n/k, r = n%k;
+            count+=(q+8)/10*k + (((q%10)==1)?r+1:0);
+        }
+        return count;
+    }
+}
