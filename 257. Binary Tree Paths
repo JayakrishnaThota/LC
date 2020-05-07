@@ -1,4 +1,4 @@
-//O(n) time and space
+//O(n^2) time and O(n) space
 class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> list = new ArrayList();
@@ -14,4 +14,30 @@ class Solution {
         if(root.left != null) helper(root.left,list,s);
         if(root.right!=null) helper(root.right,list,s);
     } 
+}
+
+//O(n) time and O(n) space
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result = new ArrayList();
+        StringBuilder sb = new StringBuilder();
+        helper(result, sb, root);
+        return result;
+    }
+    
+    public void helper(List<String> result, StringBuilder sb, TreeNode root) {
+        if(root==null) return;
+        int len = sb.length();
+        sb.append(root.val+"");
+        if(root.left==null && root.right==null) {
+            result.add(sb.toString());
+        }
+        else {
+            sb.append("->");
+            helper(result, sb, root.left);
+            helper(result, sb, root.right);
+        }
+        sb.setLength(len);
+    }
+    
 }
