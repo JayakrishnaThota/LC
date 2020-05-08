@@ -4,29 +4,27 @@ class Solution {
         if(head==null || head.next==null || k<2) return head;
         ListNode dummy = new ListNode(0);
         ListNode iter = dummy;
-        dummy.next = head;
-        boolean flag = false;
-        while(iter!=null){
-            ListNode start = iter.next, end = iter.next;
-            for(int i=0;i<k-1;i++){
-                if(end == null || end.next == null) { flag = true; break; }
-                end = end.next;
+        iter.next = head;
+        while(iter!=null && iter.next!=null) {
+            ListNode slow = iter.next, fast = iter.next;
+            for(int i=1;i<k;i++) {
+                fast = fast.next;
+                if(fast==null) return dummy.next;
             }
-            if(flag) return dummy.next;
-            ListNode next = end.next;
-            end.next = null;
-            ListNode rev = reverse(start);
-            iter.next = end;
-            start.next = next;
-            iter = start;
+            ListNode next = fast.next;
+            fast.next = null;
+            reverse(slow);
+            iter.next = fast;
+            slow.next = next;
+            iter = slow;
         }
         return dummy.next;
     }
     
-    public ListNode reverse(ListNode head){
+    public ListNode reverse(ListNode head) {
         if(head==null || head.next==null) return head;
-        ListNode cur = head, prev = null;
-        while(cur!=null){
+        ListNode prev = null, cur = head;
+        while(cur!=null) {
             ListNode next = cur.next;
             cur.next = prev;
             prev = cur;
@@ -34,4 +32,5 @@ class Solution {
         }
         return prev;
     }
+    
 }
