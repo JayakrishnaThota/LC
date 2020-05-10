@@ -1,0 +1,54 @@
+//O(n) time and O(maxWidth) space 
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList();
+        if(words==null || words.length==0 || maxWidth<1) return result;
+        int left = 0, n = words.length;
+        while(left<n) {
+            int right = findRight(words, maxWidth, left);
+            result.add(justify(words, maxWidth, left, right));
+            left = right+1;
+        }
+        return result;
+    }
+    
+    public int findRight(String[] words, int maxWidth, int left) {
+        int right = left;
+        int sum = words[right++].length();
+        while(right<words.length && (sum+1+words[right].length())<=maxWidth) {
+            sum+=1+words[right++].length();
+        }
+        return right-1;
+    }
+    
+    public String justify(String[] words, int maxWidth, int left, int right) {
+        if(left==right) return padSpaces(words[left], maxWidth);
+        boolean isLastLine = (right==words.length-1);
+        int numSpaces = right-left;
+        int totalSpaces = maxWidth - length(words, left, right);
+        String space = isLastLine ? " " : blank(totalSpaces/numSpaces);
+        int remainder = isLastLine ? 0 : totalSpaces%numSpaces;
+        StringBuffer sb = new StringBuffer();
+        for(int i=left;i<=right;i++) {
+            sb.append(words[i]).append(space).append(remainder-->0 ? " " : "");
+        }
+        return padSpaces(sb.toString().trim(), maxWidth);
+    }
+    
+    public int length(String[] words, int left, int right) {
+        int result = 0;
+        for(int i=left;i<=right;i++) {
+            result+=words[i].length();
+        }
+        return result;
+    }
+    
+    public String padSpaces(String s, int maxWidth) {
+        return s+blank(maxWidth-s.length());
+    }
+    
+    public String blank(int length) {
+        return new String(new char[length]).replace('\0',' ');
+    }
+    
+}
