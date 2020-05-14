@@ -1,25 +1,29 @@
-//O(ns) time and O(1) space 
+//O(n) time and O(1) space
 class Solution {
     public boolean isAlienSorted(String[] words, String order) {
+        if(words==null || words.length==0) return true;
         int[] map = new int[26];
-        for(int i=0;i<order.length();i++){
-            map[order.charAt(i)-'a'] = i;
+        int index = 0;
+        for(char c:order.toCharArray()) {
+            map[c-'a'] = index++;
         }
-        for(int i=1;i<words.length;i++){
-            if(bigger(words[i-1], words[i], map)) return false;
+        int n = words.length;
+        for(int i=1;i<n;i++) {
+            String prev = words[i-1], cur = words[i];
+            if(isBigger(prev, cur, map)) return false;
         }
         return true;
     }
     
-    public boolean bigger(String prev, String cur, int[] map) {
-        for(int i=0;i<Math.min(prev.length(), cur.length());i++){
-            char p = prev.charAt(i);
-            char c = cur.charAt(i);
-            if(map[p-'a']>map[c-'a']) return true;
-            if(map[p-'a']<map[c-'a']) return false;
+    //Returns true if s is bigger than t
+    public boolean isBigger(String s, String t, int[] map) {
+        for(int i=0;i<Math.min(s.length(), t.length());i++) {
+            int a = s.charAt(i)-'a';
+            int b = t.charAt(i)-'a';
+            if(map[a]>map[b]) return true;
+            if(map[a]<map[b]) return false;
         }
-        if(prev.length()>cur.length()) return true;
-        return false;
-    }
+        return (s.length()>t.length());
+    } 
     
 }
