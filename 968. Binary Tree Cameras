@@ -1,0 +1,21 @@
+//O(n) time and space
+//0 - not covered, 1 - covering the node, 2 - already covered
+class Solution {
+    int sum = 0;
+    public int minCameraCover(TreeNode root) {
+        if(root==null) return sum;
+        return ((postOrder(root)<1)?1:0)+sum;
+    }
+    
+    public int postOrder(TreeNode root) {
+        if(root==null) return 2;
+        int left = postOrder(root.left);
+        int right = postOrder(root.right);
+        if(left==0 || right==0) {
+            sum++;
+            return 1;
+        }
+        return (left==1 || right==1)?2:0;
+    }
+    
+}
