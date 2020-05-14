@@ -1,0 +1,21 @@
+//O(1) time and space
+class Solution {
+    public int mincostTickets(int[] days, int[] costs) {
+        boolean[] flag = new boolean[366];
+        int[] dp = new int[366];
+        for(int i=0;i<days.length;i++) {
+            flag[days[i]] = true;
+        }
+        for(int i=1;i<=365;i++) {
+            if(!flag[i]) {
+                dp[i] = dp[i-1];
+                continue;
+            }
+            dp[i] = Integer.MAX_VALUE;
+            dp[i] = Math.min(dp[i], costs[0]+dp[i-1]);
+            dp[i] = Math.min(dp[i], costs[1]+dp[Math.max(0,i-7)]);
+            dp[i] = Math.min(dp[i], costs[2]+dp[Math.max(0,i-30)]);
+        }
+        return dp[365];
+    }
+}
