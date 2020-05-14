@@ -1,0 +1,40 @@
+//O(n^2*logn) time and O(n^2) space
+class Solution {
+    public double minAreaFreeRect(int[][] points) {
+        if(points==null || points.length<4) return 0;
+        int n = points.length;
+        double min = Double.MAX_VALUE;
+        Map<String, List<int[]>> map = new HashMap();
+        for(int i=0;i<n;i++) {
+            for(int j=i+1;j<n;j++){
+                double distance = distance(points[i], points[j]);
+                double xmid = (double)(points[i][0] + points[j][0])/2;
+                double ymid = (double)(points[i][1] + points[j][1])/2;
+                String key = distance+","+xmid+","+ymid;
+                map.putIfAbsent(key, new ArrayList());
+                map.get(key).add(new int[]{i,j});
+            }
+        }
+        for(String key:map.keySet()) {
+            List<int[]> list = map.get(key);
+            if(list.size()<2) continue;
+            for(int i=0;i<list.size();i++) {
+                for(int j=i+1;j<list.size();j++) {
+                    int a = list.get(i)[0], c = list.get(i)[1];
+                    int b = list.get(j)[0], d = list.get(j)[1];
+                    double x = distance(points[a], points[b]);
+                    double y = distance(points[a], points[d]);
+                    min = Math.min(min, x*y);
+                }
+            }
+        }
+        return (min==Double.MAX_VALUE)?0:min;
+    }
+    
+    public double distance(int[] a, int[] b) {
+        int dx = Math.abs(a[0]-b[0]);
+        int dy = Math.abs(a[1]-b[1]);
+        return Math.sqrt(dx*dx + dy*dy);
+    }
+    
+}
