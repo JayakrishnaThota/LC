@@ -1,23 +1,17 @@
 class MaxStack {
-    
-    DLNode head;
-    DLNode tail;
-    TreeMap<Integer, List<DLNode>> map;
-    
     class DLNode {
-        int value;
-        DLNode pre;
-        DLNode post;
-        
+        int val;
+        DLNode pre, post;
+        public DLNode(int val) {
+            this.val = val;
+        }
         public DLNode() {
             
         }
-        
-        public DLNode(int value){
-            this.value = value;
-        }
     }
     
+    DLNode head, tail;
+    TreeMap<Integer, List<DLNode>> map;
     public MaxStack() {
         head = new DLNode();
         tail = new DLNode();
@@ -25,76 +19,66 @@ class MaxStack {
         tail.pre = head;
         map = new TreeMap();
     }
-    
-    public void insertAtTail(DLNode node){
-        DLNode pre = tail.pre;
-        pre.post = node;
-        node.pre = pre;
-        node.post = tail;
-        tail.pre = node;
+
+    public void insertAtHead(DLNode node) {
+        node.pre = head;
+        node.post = head.post;
+        head.post.pre = node;
+        head.post = node;
     }
     
-    public void remove(DLNode node) {
+    public void delete(DLNode node) {
         DLNode pre = node.pre;
         DLNode post = node.post;
         pre.post = post;
         post.pre = pre;
     }
     
-    public DLNode getTail() {
-        DLNode ret = tail.pre;
-        remove(ret);
+    public DLNode popHead() {
+        DLNode ret = head.post;
+        delete(ret);
         return ret;
     }
-
-    /*
-     * @param number: An integer
-     * @return: nothing
-     */    
+      
     public void push(int x) {
         DLNode node = new DLNode(x);
-        insertAtTail(node);
-        if(map.get(x)==null) map.put(x, new ArrayList<DLNode>());
+        insertAtHead(node);
+        map.putIfAbsent(x, new ArrayList());
         map.get(x).add(node);
     }
-    
 
     public int pop() {
-        DLNode node = getTail();
-        List<DLNode> list = map.get(node.value);
+        DLNode pop = popHead();
+        List<DLNode> list = map.get(pop.val);
         list.remove(list.size()-1);
-        if(list.size()==0) map.remove(node.value);
-        return node.value;
+        map.put(pop.val, list);
+        return pop.val;
     }
 
     /*
      * @return: An integer
      */    
     public int top() {
-        DLNode node = getTail();
-        insertAtTail(node);
-        return node.value;
+        return head.post.val;
     }
 
     /*
      * @return: An integer
      */    
     public int peekMax() {
-        int maxKey = map.lastKey();
-        return maxKey;
+        int max = map.lastKey();
+        return max;
     }
 
     /*
      * @return: An integer
      */    
     public int popMax() {
-        int maxKey = map.lastKey();
-        List<DLNode> temp = map.get(maxKey);
-        DLNode node = temp.get(temp.size()-1);
-        remove(node);
-        List<DLNode> list = map.get(maxKey);
+        int max = map.lastKey();
+        List<DLNode> list = map.get(max);
+        delete(list.get(list.size()-1));
         list.remove(list.size()-1);
-        if(list.size()==0) map.remove(maxKey);
-        return maxKey;
+        map.put(max, list);
+        return max;
     }
 }
