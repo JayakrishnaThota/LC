@@ -1,0 +1,53 @@
+class WordFilter {
+    
+    class TrieNode {
+        TrieNode[] children;
+        int weight;
+        public TrieNode() {
+            children = new TrieNode[27];
+            this.weight = weight;
+        }
+    }
+    
+    public void insert(String word, int weight) {
+        TrieNode temp = root;
+        for(int i=0;i<word.length();i++) {
+            char c = word.charAt(i);
+            int index = c-'a';
+            if(temp.children[index]==null) temp.children[index] = new TrieNode();
+            temp = temp.children[index];
+            temp.weight = weight;
+        }
+    }
+    
+    public int startsWith(String word) {
+        TrieNode temp = root;
+        for(int i=0;i<word.length();i++) {
+            char c = word.charAt(i);
+            int index = c-'a';
+            if(temp.children[index]==null) return -1;
+            temp = temp.children[index];
+        }
+        return temp.weight;
+    }
+    
+    TrieNode root;
+    //apple: {apple, e{apple, le{apple, ple{apple, pple{apple, apple{apple
+    //O(n*k) time and space
+    public WordFilter(String[] words) {
+        root = new TrieNode();
+        for(int i=0;i<words.length;i++) {
+            String word = words[i];
+            for(int j=word.length();j>=0;j--) {
+                String key = word.substring(j,word.length())+"{"+word;
+                insert(key, i);
+            }
+        }
+    }
+    
+    //O(n) time and O(1) space
+    public int f(String prefix, String suffix) {
+        String key = suffix+"{"+prefix;
+        return startsWith(key);
+    }
+}
