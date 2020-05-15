@@ -1,0 +1,49 @@
+//O(n*logn) time and space
+class Solution {
+    public String countOfAtoms(String formula) {
+        if(formula==null || formula.length()==0) return formula;
+        int index = 0, n = formula.length();
+        Stack<Map<String, Integer>> stack = new Stack();
+        Map<String, Integer> map = new HashMap();
+        while(index<n) {
+            char c = formula.charAt(index);
+            index++;
+            if(c=='(') {
+                stack.push(map);
+                map = new HashMap();
+            }
+            else if(c==')') {
+                int val = 0;
+                while(index<n && Character.isDigit(formula.charAt(index))) {
+                    val = val*10 + formula.charAt(index++)-'0';
+                }
+                if(val==0) val = 1;
+                Map<String, Integer> temp = map;
+                map = stack.pop();
+                for(String key:temp.keySet()) {
+                    map.put(key, map.getOrDefault(key,0)+temp.get(key)*val);
+                }
+            }
+            else {
+                int start = index-1;
+                while(index<n && Character.isLowerCase(formula.charAt(index))) {
+                    index++;
+                }
+                String element = formula.substring(start, index);
+                int val = 0;
+                while(index<n && Character.isDigit(formula.charAt(index))) {
+                    val = val*10 + formula.charAt(index++)-'0';
+                }
+                if(val==0) val = 1;
+                map.put(element, map.getOrDefault(element,0)+val);
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        List<String> list = new ArrayList(map.keySet());
+        Collections.sort(list);
+        for(String l:list) {
+            sb.append(l+(map.get(l)>1?map.get(l):""));
+        }
+        return sb.toString();
+    }
+}
