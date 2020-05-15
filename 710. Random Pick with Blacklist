@@ -1,0 +1,32 @@
+class Solution {
+    Map<Integer, Integer> map;
+    int M;
+    Random rand;
+    //O(b) time and space
+    public Solution(int N, int[] blacklist) {
+        map = new HashMap();
+        rand = new Random();
+        for(int b:blacklist) {
+            map.put(b, -1);
+        }
+        M = N-map.size();
+        for(int b:blacklist) {
+            if(b<M) {
+                while(map.containsKey(N-1)) {
+                    N--;
+                }
+                map.put(b, N-1);
+                N--;
+            }
+        }
+    }
+    
+    //O(1) time and space
+    public int pick() {
+        int ret = rand.nextInt(M);
+        if(map.containsKey(ret)) {
+            return map.get(ret);
+        }
+        return ret;
+    }
+}
