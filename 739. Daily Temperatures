@@ -1,17 +1,16 @@
-//O(n2) time and O(1) space
+//O(n) time and space 
 class Solution {
-    public int[] dailyTemperatures(int[] temperatures) {
-        //Sanity Check
-        if(temperatures==null || temperatures.length==0) return new int[0];
-        int n = temperatures.length;
-        int[] result = new int[n];
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                if(temperatures[j]>temperatures[i]){
-                    result[i] = j-i;
-                    break;
-                }
+    public int[] dailyTemperatures(int[] T) {
+        Stack<Integer> stack = new Stack();
+        int n = T.length;
+        int[] result = new int[T.length];
+        for(int i=n-1;i>=0;i--) {
+            while(!stack.isEmpty() && T[stack.peek()]<=T[i]) {
+                stack.pop();
             }
+            if(stack.isEmpty()) result[i] = 0;
+            else result[i] = stack.peek()-i;
+            stack.push(i);
         }
         return result;
     }
