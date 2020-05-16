@@ -1,0 +1,35 @@
+//O(n*log(sum-max)) time and O(1) space
+class Solution {
+    
+    public int splitArray(int[] nums, int m) {
+        int max = 0;
+        long sum = 0;
+        for(int num:nums) { sum+=num; max = Math.max(max, num); }
+        long low = (long)max, high = sum;
+        while(low<=high) {
+            long mid = low + (high-low)/2;
+            if(!valid(nums, m, mid)) {
+                low = mid+1;
+            }
+            else {
+                high = mid-1;
+            }
+        }
+        return (int)low;
+    }
+    
+    public boolean valid(int[] nums, int m, long mid) {
+        int count = 1;
+        long sum = 0;
+        for(int num:nums) {
+            sum+=num;
+            if(sum>mid) {
+                sum = num;
+                count++;
+                if(count>m) return false;
+            }
+        }
+        return true;
+    }
+    
+}
