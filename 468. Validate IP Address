@@ -1,0 +1,62 @@
+//O(n) time and space
+class Solution {
+    public String validIPAddress(String IP) {
+        if(validIPv4(IP)) return "IPv4";
+        else if(validIPv6(IP)) return "IPv6";
+        return "Neither";
+    }
+    
+    public boolean validIPv4(String s) {
+        if(s==null || s.length()<7) return false;
+        if(s.charAt(0)=='.') return false;
+        if(s.charAt(s.length()-1)=='.') return false;
+        String[] tokens = s.split("\\.");
+        if(tokens.length!=4) return false;
+        for(String token:tokens) {
+            if(!validIPv4Token(token)) return false;
+        }
+        return true;
+    }
+    
+    public boolean validIPv6(String s) {
+        if(s==null || s.length()<15) return false;
+        if(s.charAt(0)==':') return false;
+        if(s.charAt(s.length()-1)==':') return false;
+        String[] tokens = s.split(":");
+        if(tokens.length!=8) return false;
+        for(String token:tokens) {
+            if(!validIPv6Token(token)) return false;
+        }
+        return true;
+    }
+    
+    public boolean validIPv4Token(String s) {
+        if(s==null) return false;
+        if(s.length()==0 || s.length()>3) return false;
+        if(s.charAt(0)=='0' && s.length()>1) return false;
+        try {
+            Integer val = Integer.parseInt(s);
+            if(val<0 || val>255) return false;
+            //Negative Case Handling
+            if(val==0 && s.charAt(0)!='0') return false;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean validIPv6Token(String s) {
+        if(s==null) return false;
+        if(s.length()==0 || s.length()>4) return false;
+        for(char c:s.toCharArray()) {
+            boolean isDigit = (c>='0'&&c<='9');
+            boolean isUpperLetter = (c>='A'&&c<='F');
+            boolean isLowerLetter = (c>='a'&&c<='f');
+            if(!(isDigit||isUpperLetter||isLowerLetter))
+                return false;
+        }
+        return true;
+    }
+    
+}
