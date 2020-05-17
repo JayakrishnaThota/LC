@@ -1,17 +1,14 @@
-//O(n!) time and space complexity
-class Solution {
+public class Solution {
+    //O(n!) time and space
     public boolean canWin(String s) {
         if(s==null || s.length()<2) return false;
-        int n = s.length();
-        for(int i=1;i<n;i++){
-            char[] ch = s.toCharArray();
-            if(ch[i]=='+'){
-                if(ch[i-1]=='+'){
-                    ch[i] = '-';
-                    ch[i-1] = '-';
-                    String key = String.valueOf(ch);
-                    if(!canWin(key)) return true;
-                }
+        char[] ch = s.toCharArray();
+        for(int i=1;i<s.length();i++) {
+            if(ch[i]=='+' && ch[i-1]=='+') {
+                ch[i] = '-'; ch[i-1] = '-';
+                String key = String.valueOf(ch);
+                if(!canWin(key)) return true;
+                ch[i] = '+'; ch[i-1] = '+';
             }
         }
         return false;
