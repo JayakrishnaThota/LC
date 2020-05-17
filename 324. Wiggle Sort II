@@ -1,0 +1,43 @@
+//O(nlogk) time and O(n) space
+class Solution {
+    public void wiggleSort(int[] nums) {
+        if(nums==null || nums.length==0) return;
+        int n = nums.length;
+        int median = findKthLargestNumber(nums, (n+1)/2);
+        int odd = 1, even = (n%2==0)?n-2:n-1;
+        int[] result = new int[n];
+        for(int i=0;i<n;i++) {
+            if(nums[i]>median) {
+                result[odd] = nums[i];
+                odd+=2;
+                continue;
+            }
+            if(nums[i]<median) {
+                result[even] = nums[i];
+                even-=2;
+                continue;
+            }
+        }
+        while(odd<n) {
+            result[odd] = median;
+            odd+=2;
+        }
+        while(even>=0) {
+            result[even] = median;
+            even-=2;
+        }
+        for(int i=0;i<n;i++) {
+            nums[i] = result[i];
+        }
+    }
+    
+    public int findKthLargestNumber(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue();
+        for(int n:nums){
+            pq.offer(n);
+            if(pq.size()>k) pq.poll();
+        }
+        return pq.peek();
+    }
+    
+}
