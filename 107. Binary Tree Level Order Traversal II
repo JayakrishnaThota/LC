@@ -1,7 +1,7 @@
 //O(n) time and space
 class Solution {
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        List<List<Integer>> list = new ArrayList();
+        LinkedList<List<Integer>> list = new LinkedList();
         if(root==null) return list;
         Queue<TreeNode> q = new LinkedList();
         q.offer(root);
@@ -14,7 +14,7 @@ class Solution {
                 if(temp.left!=null) q.offer(temp.left);
                 if(temp.right!=null) q.offer(temp.right);
             }
-            list.add(0,sublist);
+            list.addFirst(sublist);
         }
         return list;
     }
