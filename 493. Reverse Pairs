@@ -1,0 +1,20 @@
+//O(nlgn) time and O(n) space
+class Solution {
+    public int reversePairs(int[] nums) {
+        return helper(nums, 0, nums.length-1);
+    }
+    
+    public int helper(int[] nums, int low, int high) {
+        if(low>=high) return 0;
+        int mid = low + (high-low)/2;
+        int result = helper(nums,low,mid) + helper(nums, mid+1, high);
+        for(int i=low,j=mid+1;i<=mid;i++) {
+            while(j<=high && nums[i]/2.0>nums[j]) j++;
+            result+=(j-(mid+1));
+        }
+        int[] aux = new int[high+1-mid];
+        Arrays.sort(nums, low, high+1);
+        return result;
+    }
+    
+}
