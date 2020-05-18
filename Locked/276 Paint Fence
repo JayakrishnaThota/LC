@@ -1,33 +1,51 @@
-import java.util.*;
 /*
-There is a fence with n posts, each post can be painted with one of the k colors. You have to paint 
-all the posts such that no more than two adjacent fence posts have the same color. 
+
+There is a fence with n posts, each post can be painted with one of the k colors.
+You have to paint all the posts such that no more than two adjacent fence posts have the same color.
 Return the total number of ways you can paint the fence.
+
+Example
+Example 1:
+
+Input: n=3, k=2  
+Output: 6
+Explanation:
+          post 1,   post 2, post 3
+    way1    0         0       1 
+    way2    0         1       0
+    way3    0         1       1
+    way4    1         0       0
+    way5    1         0       1
+    way6    1         1       0
+Example 2:
+
+Input: n=2, k=2  
+Output: 4
+Explanation:
+          post 1,   post 2
+    way1    0         0       
+    way2    0         1            
+    way3    1         0          
+    way4    1         1       
+Notice
+n and k are non-negative integers.
+
 */
-public class PaintFence {
-    //O(n) and O(1)
-    private int paintfence(int n, int k) throws IllegalArgumentException{
-        if(n<0 || k<0) throw new IllegalArgumentException("Negative arguments are not accepted");
-        //Base cases
-        if(n==0 || k==0) return 0;
+
+
+public class Solution {
+    //O(n) time and O(1) space
+    public int numWays(int n, int k) {
+        if(n<1 || k<1) return 0;
         if(n==1) return k;
         if(n==2) return k*k;
-        int b = k, c = k*k, result = 0;
-        for(int i=3;i<=n;i++){
-            result = (k-1)*(b+c);
-            b=c;
-            c = result;
+        int same = k, diff = k*(k-1);
+        for(int i=3;i<=n;i++) {
+            int curSame = diff;
+            int curDiff = (k-1)*(same+diff);
+            same = curSame;
+            diff = curDiff;
         }
-        return result;
-    }
-
-    public static void main(String[] args){
-        Scanner in = new Scanner(System.in);
-        PaintFence s = new PaintFence();
-        System.out.println("Plaese enter n and k");
-        int n = in.nextInt();
-        int k = in.nextInt();
-        System.out.println("The no of ways to paint are "+s.paintfence(n,k));
-        in.close();
+        return same+diff;
     }
 }
