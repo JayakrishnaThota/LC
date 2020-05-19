@@ -1,0 +1,50 @@
+//O(mn*logm) time and O(m) space
+class Solution {
+    
+    class Tuple {
+        int x;
+        int y;
+        int val;
+        public Tuple(int x, int y, int val) {
+            this.x = x;
+            this.y = y;
+            this.val = val;
+        }
+    }
+    
+    public int[] smallestRange(List<List<Integer>> nums) {
+        if(nums==null || nums.size()==0) return new int[2];
+        int m = nums.size(), n = nums.get(0).size();
+        PriorityQueue<Tuple> pq = new PriorityQueue(1, new Comparator<Tuple>(){
+            public int compare(Tuple a, Tuple b) {
+                return a.val-b.val;
+            }
+        });
+        int i = 0, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        //O(mlogm) time and O(m) space 
+        for(List<Integer> num:nums) {
+            max = Math.max(num.get(0), max);
+            pq.offer(new Tuple(i,0,num.get(0)));
+            i++;
+        }
+        int range = Integer.MAX_VALUE;
+        int start = -1, end = -1;
+        //O(mn*logm) time and O(m) space
+        while(pq.size()==m) {
+            Tuple t = pq.poll();
+            if(range>max-t.val) {
+                range = max-t.val;
+                start = t.val;
+                end = max;
+            }
+            if(t.y<nums.get(t.x).size()-1) {
+                Tuple newTuple = new Tuple(t.x, t.y+1, nums.get(t.x).get(t.y+1));
+                pq.offer(newTuple);
+                max = Math.max(max, nums.get(t.x).get(t.y+1));
+            }
+        }
+        return new int[]{start, end};
+    }
+    
+    
+}
