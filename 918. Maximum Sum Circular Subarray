@@ -1,0 +1,36 @@
+//O(n) time and O(1) space
+class Solution {
+    
+    public int maxSubarraySumCircular(int[] A) {
+        if(A==null || A.length==0) return 0;
+        int n = A.length;
+        int sum = 0;
+        for(int num:A) sum+=num;
+        int max = kadanesMax(A);
+        int min = kadanesMin(A);
+        return (min==sum)?max:Math.max(max, sum-min);
+    }
+    
+    public int kadanesMax(int[] nums) {
+        //Sanity check
+        if(nums==null || nums.length==0) return 0;
+        int maxsofar = nums[0], maxendinghere = nums[0];
+        for(int i=1;i<nums.length;i++){
+            maxsofar = Math.max(maxsofar+nums[i],nums[i]);
+            maxendinghere = Math.max(maxsofar, maxendinghere);
+        }
+        return maxendinghere;
+    }
+    
+    public int kadanesMin(int[] nums) {
+        //Sanity check
+        if(nums==null || nums.length==0) return 0;
+        int minsofar = nums[0], minendinghere = nums[0];
+        for(int i=1;i<nums.length;i++){
+            minsofar = Math.min(minsofar+nums[i],nums[i]);
+            minendinghere = Math.min(minsofar, minendinghere);
+        }
+        return minendinghere;
+    }
+    
+}
