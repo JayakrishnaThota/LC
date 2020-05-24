@@ -1,0 +1,42 @@
+//O(n^2*logn) time and O(n^2) space
+class Solution {
+    
+    class Tuple {
+        int x, y, height;
+        public Tuple(int x, int y, int height) {
+            this.x = x;
+            this.y = y;
+            this.height = height;
+        }
+    }
+    
+    public int swimInWater(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        PriorityQueue<Tuple> pq = new PriorityQueue(1, new Comparator<Tuple>(){
+           public int compare(Tuple a, Tuple b) {
+               return a.height - b.height;
+           } 
+        });
+        int[][] dirs = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+        boolean[][] visited = new boolean[m][n];
+        visited[0][0] = true;
+        pq.offer(new Tuple(0,0,grid[0][0]));
+        while(!pq.isEmpty()) {
+            Tuple t = pq.poll();
+            int i = t.x, j = t.y, height = t.height;
+            for(int[] dir:dirs) {
+                int x = dir[0] + i;
+                int y = dir[1] + j;
+                if(x<0 || x>=m || y<0 || y>=n) continue;
+                if(!visited[x][y]) {
+                    visited[x][y] = true;
+                    int newHeight = Math.max(height, grid[x][y]);
+                    if((x==m-1)&&(y==n-1)) return newHeight;
+                    pq.offer(new Tuple(x,y,newHeight));
+                }
+            }
+        }
+        return 0;
+    }
+}
