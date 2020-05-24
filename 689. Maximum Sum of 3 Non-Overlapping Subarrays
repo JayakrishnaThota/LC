@@ -1,0 +1,47 @@
+//O(n) time and space
+class Solution {
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int maxSum = 0;
+        int[] result = new int[3];
+        int n = nums.length;
+        int[] leftPos = new int[n], rightPos = new int[n];
+        int[] sum = new int[n+1];
+        for(int i=1;i<=n;i++) sum[i] = sum[i-1] + nums[i-1];
+        int leftMax = sum[k];
+        for(int i=k;i<n;i++) {
+            int curSum = sum[i+1]-sum[i+1-k];
+            if(curSum>leftMax) {
+                leftMax = curSum;
+                leftPos[i] = i+1-k;
+            }
+            else {
+                leftPos[i] = leftPos[i-1];
+            }
+        }
+        rightPos[n-k] = n-k;
+        int rightMax = sum[n]-sum[n-k];
+        for(int i=n-k-1;i>=0;i--) {
+            int curSum = sum[i+k]-sum[i];
+            if(curSum>=rightMax) {
+                rightMax = curSum;
+                rightPos[i] = i;
+            }
+            else {
+                rightPos[i] = rightPos[i+1];
+            }
+        }
+        for(int i=k;i<=n-2*k;i++) {
+            int l = leftPos[i-1], r = rightPos[i+k];
+            int a = sum[l+k] - sum[l];
+            int b = sum[i+k] - sum[i];
+            int c = sum[r+k] - sum[r];
+            int curSum = a+b+c;
+            if(curSum>maxSum) {
+                maxSum = curSum;
+                result[0] = l; result[1] = i; result[2] = r;
+            }
+            
+        }
+        return result;
+    }
+}
