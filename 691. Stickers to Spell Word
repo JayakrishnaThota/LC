@@ -1,0 +1,40 @@
+class Solution {
+    public int minStickers(String[] stickers, String target) {
+        Map<String, Integer> dp = new HashMap();
+        int[][] map = new int[stickers.length][26];
+        for(int i=0;i<stickers.length;i++) {
+            fill(map[i], stickers[i]);
+        }
+        dp.put("",0);
+        return helper(dp, map, target);
+    }
+    
+    public int helper(Map<String, Integer> dp, int[][] map, String target) {
+        if(dp.containsKey(target)) return dp.get(target);
+        int min = Integer.MAX_VALUE, n = map.length;
+        int[] targetMap = new int[26];
+        fill(targetMap, target);
+        for(int i=0;i<n;i++) {
+            if(map[i][target.charAt(0)-'a']==0) continue;
+            StringBuffer sb = new StringBuffer();
+            for(int j=0;j<26;j++) {
+                if(targetMap[j]>0) {
+                    for(int k=0;k<Math.max(0, targetMap[j]-map[i][j]);k++) {
+                        sb.append((char)(j+'a'));
+                    }
+                }
+            }
+            int res = helper(dp, map, sb.toString());
+            if(res!=-1) min = Math.min(min, res+1);
+        }
+        dp.put(target, min==Integer.MAX_VALUE ? -1 : min);
+        return dp.get(target);
+    }
+    
+    public void fill(int[] map, String s) {
+        for(char c:s.toCharArray()) {
+            map[c-'a']++;
+        }
+    }
+    
+}
