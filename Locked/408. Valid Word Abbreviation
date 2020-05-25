@@ -1,25 +1,25 @@
-//O(max(m,n)) time and O(1) space
+//O(min(m,n)) time and O(1) space
 class Solution {
     public boolean validWordAbbreviation(String word, String abbr) {
-        int i = 0, j = 0;
+        if(word==null && abbr==null) return true;
+        if(word==null || abbr==null) return true;
+        int i = 0, j = 0, val = 0;
         int m = word.length(), n = abbr.length();
-        while(i<m && j<n){
-            char a = word.charAt(i);
-            char b = abbr.charAt(j);
-            if(a==b){
+        while(i<m && j<n) {
+            if(Character.isDigit(abbr.charAt(j))) {
+                if(abbr.charAt(j)=='0') return false;
+                while(j<n && Character.isDigit(abbr.charAt(j))) {
+                    val = val*10 + abbr.charAt(j)-'0';
+                    j++;
+                }
+                i+=val;
+                val = 0;
+            }
+            else {
+                if(word.charAt(i)!=abbr.charAt(j)) return false;
                 i++;
                 j++;
-                continue;
             }
-            if(b<='0' || b>'9') return false;
-            //If we reach here, this means b is a digit
-            //So just find the num and skip the word pointer by that many times
-            int start = j;
-            while(j<n && Character.isDigit(abbr.charAt(j))){
-                j++;
-            }
-            int sum = Integer.parseInt(abbr.substring(start,j));
-            i+=sum;
         }
         return ((i==m)&&(j==n));
     }
