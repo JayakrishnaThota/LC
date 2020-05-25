@@ -1,0 +1,106 @@
+class AllOne {
+
+    class Bucket {
+        int count;
+        Set<String> keySet;
+        Bucket pre, post;
+        public Bucket(int count) {
+            this.count = count;
+            keySet = new HashSet();
+            pre = null;
+            post = null;
+        }
+    }
+    
+    Map<String, Integer> keyCountMap;
+    Map<Integer, Bucket> countBucketMap;
+    Bucket head, tail;
+    public AllOne() {
+        head = new Bucket(Integer.MIN_VALUE);
+        tail = new Bucket(Integer.MAX_VALUE);
+        keyCountMap = new HashMap();
+        countBucketMap = new HashMap();
+        head.post = tail;
+        tail.pre = head;
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        if(keyCountMap.containsKey(key)) {
+            changeKey(key, 1);
+        }
+        else {
+            keyCountMap.put(key, 1);
+            if(head.post.count!=1) {
+                addBucketAfter(new Bucket(1), head);
+            }
+            head.post.keySet.add(key);
+            countBucketMap.put(1, head.post);
+        }
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        if(!keyCountMap.containsKey(key)) return;
+        int count = keyCountMap.get(key);
+        if(count==1) {
+            keyCountMap.remove(key);
+            removeKeyFromBucket(countBucketMap.get(count), key);
+        }
+        else {
+            changeKey(key, -1);
+        }
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        return (tail.pre==head)?"": tail.pre.keySet.iterator().next();
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        return (head.post==tail)?"": head.post.keySet.iterator().next();
+    }
+    
+    private void changeKey(String key, int offset) {
+        int count = keyCountMap.get(key);
+        keyCountMap.put(key, count+offset);
+        Bucket curBucket = countBucketMap.get(count);
+        Bucket newBucket;
+        if(countBucketMap.containsKey(count+offset)) {
+            newBucket = countBucketMap.get(count+offset);
+        }
+        else {
+            newBucket = new Bucket(count+offset);
+            countBucketMap.put(count+offset, newBucket);
+            Bucket preBucket = (offset==1)?curBucket:curBucket.pre;
+            addBucketAfter(newBucket, preBucket);
+        }
+        newBucket.keySet.add(key);
+        removeKeyFromBucket(curBucket, key);
+    }
+    
+    private void removeKeyFromBucket(Bucket bucket, String key) {
+        bucket.keySet.remove(key);
+        if(bucket.keySet.size()==0) {
+            removeBucket(bucket);
+            countBucketMap.remove(bucket.count);
+        }
+    }
+    
+    private void removeBucket(Bucket bucket) {
+        Bucket pre = bucket.pre;
+        Bucket post = bucket.post;
+        pre.post = post;
+        post.pre = pre;
+    }
+    
+    private void addBucketAfter(Bucket bucket, Bucket head) {
+        bucket.post = head.post;
+        bucket.pre = head;
+        head.post.pre = bucket;
+        head.post = bucket;
+    }
+    
+}
+
