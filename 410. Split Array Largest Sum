@@ -1,10 +1,13 @@
-//O(n*(log(sum-max))) time and O(1) space
+//O(n*(sum-max)) time and O(1) space 
 class Solution {
     public int splitArray(int[] nums, int m) {
-        int max = 0;long sum = 0;
-        for(int num:nums) { max = Math.max(max, num); sum+=num; };
-        long low = (long)max;
-        long high = sum;
+        long sum = 0;
+        int max = 0;
+        for(int num:nums) {
+            sum+=num;
+            max = Math.max(max, num);
+        }
+        long low = (long)max, high = sum;
         while(low<high) {
             long mid = low + (high-low)/2;
             if(!valid(nums, m, mid)) {
@@ -18,16 +21,16 @@ class Solution {
     }
     
     public boolean valid(int[] nums, int m, long mid) {
-        int count = 1;
         long sum = 0;
-        for(int i=0;i<nums.length;i++) {
-            sum+=nums[i];
+        int times = 1;
+        for(int num:nums) {
+            sum+=num;
             if(sum>mid) {
-                count++;
-                sum = (long)nums[i];
+                sum = num;
+                times++;
             }
         }
-        return (count<=m);
+        return (times<=m);
     }
     
 }
