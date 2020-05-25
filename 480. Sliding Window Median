@@ -1,51 +1,55 @@
-//O(nk) time and O(k) space
 class Solution {
-    PriorityQueue<Integer> minpq;
-    PriorityQueue<Integer> maxpq;
+    //O(nk) time and O(k) space
+    PriorityQueue<Long> minpq;
+    PriorityQueue<Long> maxpq;
     public double[] medianSlidingWindow(int[] nums, int k) {
-        if(nums==null || nums.length==0 || k<=0) return null;
+        if(nums==null || nums.length==0 || k<1) return new double[0];
         int n = nums.length;
-        double[] result = new double[n-k+1];
         minpq = new PriorityQueue();
-        maxpq = new PriorityQueue<Integer>(
-        new Comparator<Integer>() {
-            public int compare(Integer i1, Integer i2) {
-                return i2.compareTo(i1);
+        maxpq = new PriorityQueue<Long>(1, new Comparator<Long>(){
+            public int compare(Long a, Long b) {
+                return b.compareTo(a);
             }
-        }
-        );
-        for(int i=0;i<=n;i++){
-            if(i>=k){
-                result[i-k] = Median();
-                remove(nums[i-k]);
+        });
+        double[] result = new double[n-k+1];
+        for(int i=0;i<n;i++) {
+            add(Long.valueOf(nums[i]));
+            if(i>=k-1) {
+                result[i-k+1] = median();
+                remove(Long.valueOf(nums[i-k+1]));
             }
-            if(i==n) continue;
-            add(nums[i]);
         }
         return result;
     }
     
-    public void add(int num){
+    public void add(Long num) {
         maxpq.offer(num);
         minpq.offer(maxpq.poll());
-        if(maxpq.size()<minpq.size()-1){
+        if(minpq.size()-1>maxpq.size()) {
             maxpq.offer(minpq.poll());
         }
     }
     
-    public void remove(int num){
-        double median = Median();
-        if(num<median) maxpq.remove(num);
-        else minpq.remove(num);
-        if(maxpq.size()<minpq.size()-1){
+    public void remove(Long num) {
+        double m = median();
+        if(num>=m) {
+            minpq.remove(num);
+        }
+        else {
+            maxpq.remove(num);
+        }
+        if(minpq.size()-1>maxpq.size()) {
             maxpq.offer(minpq.poll());
         }
-        if(minpq.size()<maxpq.size()) minpq.offer(maxpq.poll());
     }
     
-    public double Median(){
-        if(minpq.isEmpty() && maxpq.isEmpty()) return 0;
-        if(minpq.size()==maxpq.size()) return (((double)minpq.peek()+(double)maxpq.peek())/2.0);
-        return (double)minpq.peek();
+    public double median() {
+        if(minpq.size()==maxpq.size()) {
+            return (minpq.peek() + maxpq.peek())/2.0;
+        }
+        else {
+            return minpq.peek();
+        }
     }
+    
 }
