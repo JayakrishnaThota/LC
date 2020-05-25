@@ -1,13 +1,12 @@
-//O(n) and O(1)
+//O(n) time and O(1) space
 class Solution {
     public int findPoisonedDuration(int[] timeSeries, int duration) {
         if(timeSeries==null || timeSeries.length==0) return 0;
-        int start = timeSeries[0];
         int result = 0;
-        for(int i=0;i<timeSeries.length-1;i++){
-            int next = Math.min(timeSeries[i]+duration,timeSeries[i+1]);
-            result+=(next-timeSeries[i]);
+        for(int i=1;i<timeSeries.length;i++) {
+            int min = Math.min(timeSeries[i]-timeSeries[i-1], duration);
+            result+=min;
         }
-        return result+duration;
+        return result + duration;
     }
 }
