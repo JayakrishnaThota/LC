@@ -1,0 +1,58 @@
+class Solution {
+    
+    class UnionFind {
+        int size;
+        int[] parent;
+        public UnionFind(int size) {
+            parent = new int[size];
+            for(int i=0;i<size;i++) {
+                parent[i] = i;
+            }
+            this.size = size;
+        }
+        
+        public int size() {
+            return this.size;
+        }
+        
+        public int find(int x) {
+            while(x!=parent[x]) {
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+            return x;
+        }
+        
+        public void union (int x, int y) {
+            int pu = find(x);
+            int pv = find(y);
+            if(pu!=pv) {
+                parent[pv] = pu;
+                size--;
+            }
+        }
+        
+    }
+    
+    //O(n^2*n*logn) time and O(n) space
+    public int numSimilarGroups(String[] A) {
+        UnionFind uf = new UnionFind(A.length);
+        for(int i=0; i<A.length; i++){
+            for(int j=i+1; j<A.length; j++){
+                if(isSimilar(A[i],A[j])){
+                    uf.union(i,j);
+                }          
+            }
+        }
+        return uf.size();
+    }
+    
+    public boolean isSimilar(String a, String b) {
+        int res = 0, len = a.length();
+        for (int i = 0; i < len; i++) 
+            if (a.charAt(i) != b.charAt(i) && ++res > 2) 
+                return false;
+        return true;
+    }
+    
+}
