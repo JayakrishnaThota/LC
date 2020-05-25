@@ -1,22 +1,23 @@
 //O(n) time and space
-public class Solution {
-    public List < List < String >> findDuplicate(String[] paths) {
-        HashMap < String, List < String >> map = new HashMap < > ();
-        for (String path: paths) {
-            String[] values = path.split(" ");
-            for (int i = 1; i < values.length; i++) {
-                String[] name_cont = values[i].split("\\(");
-                name_cont[1] = name_cont[1].replace(")", "");
-                List < String > list = map.getOrDefault(name_cont[1], new ArrayList < String > ());
-                list.add(values[0] + "/" + name_cont[0]);
-                map.put(name_cont[1], list);
+class Solution {
+    public List<List<String>> findDuplicate(String[] paths) {
+        List<List<String>> result = new ArrayList();
+        if(paths==null || paths.length==0) return result;
+        Map<String, List<String>> map = new HashMap();
+        for(String path:paths) {
+            String[] tokens = path.split(" ");
+            String dir = tokens[0];
+            for(int i=1;i<tokens.length;i++) {
+                String[] t = tokens[i].split("\\(");
+                String newDir = dir +"/"+t[0];
+                map.putIfAbsent(t[1], new ArrayList());
+                map.get(t[1]).add(newDir);
             }
         }
-        List < List < String >> res = new ArrayList < > ();
-        for (String key: map.keySet()) {
-            if (map.get(key).size() > 1)
-                res.add(map.get(key));
+        for(String key:map.keySet()) {
+            if(map.get(key).size()==1) continue;
+            result.add(map.get(key));
         }
-        return res;
+        return result;
     }
 }
