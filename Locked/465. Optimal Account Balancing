@@ -1,39 +1,25 @@
-//Exponential time and space complexity
-public class Solution {
-     public int balanceGraph(int[][] transactions) {
-        Map<Integer, Long> map = new HashMap<>();
-        for(int[] t : transactions){
-            long val1 = map.getOrDefault(t[0], 0L);//balance
-            long val2 = map.getOrDefault(t[1], 0L);
-            map.put(t[0], val1-t[2]);
-            map.put(t[1], val2+t[2]);
+//Exponential time and space
+class Solution {
+    public int minTransfers(int[][] transactions) {
+        Map<Integer, Integer> m = new HashMap<>();
+        for (int[] t : transactions) {
+            m.put(t[0], m.getOrDefault(t[0], 0) - t[2]);
+            m.put(t[1], m.getOrDefault(t[1], 0) + t[2]);
         }
-        
-        List<Long> list = new ArrayList<>();
-        for(long val : map.values()){
-            if(val!=0) list.add(val);
-        }
-        Long[] debts = new Long[list.size()];
-        debts = list.toArray(debts);
-        HashMap<String, Integer> dp = new HashMap<>();
-        return helper(debts, 0, 0, dp);
+        return settle(0, new ArrayList<>(m.values()));
     }
-    
-    public int helper(Long[] debts, int pos, int count, HashMap<String, Integer> dp){
-        String key = Arrays.toString(debts)+" "+pos+" "+count;
-        if(dp.containsKey(key))
-            return dp.get(key);
-        while(pos<debts.length && debts[pos] == 0) pos++;
-        if(pos>=debts.length) return count;
-        int res = Integer.MAX_VALUE;
-        for(int i=pos+1; i<debts.length; i++){
-            if((debts[pos] ^ debts[i])<0){
-                debts[i] += debts[pos];
-                res = Math.min(res, helper(debts, pos+1, count+1, dp));
-                debts[i] -= debts[pos];//backtracking
+
+    public int settle(int start, List<Integer> debt) {
+        while (start < debt.size() && debt.get(start) == 0)
+            start++;
+        if (start == debt.size()) return 0;
+        int r = Integer.MAX_VALUE;
+        for (int i = start + 1; i < debt.size(); i++)
+            if (debt.get(start) * debt.get(i) < 0) {
+                debt.set(i, debt.get(i) + debt.get(start));
+                r = Math.min(r, 1 + settle(start + 1, debt));
+                debt.set(i, debt.get(i) - debt.get(start));
             }
-        }
-        dp.put(key, res);
-        return res;
+        return r;
     }
 }
