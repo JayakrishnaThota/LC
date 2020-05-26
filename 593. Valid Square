@@ -14,18 +14,17 @@ class Solution {
         map.put(d4, map.getOrDefault(d4,0)+1);
         map.put(d5, map.getOrDefault(d5,0)+1);
         map.put(d6, map.getOrDefault(d6,0)+1);
-        //Exactly 4 distances must be equal and 2 distances must be equal
-        //And the diagonal distance must be greater than the actual distance
         if(map.size()!=2) return false;
-        int normal = 0, diagonal = 0;
-        for(int key:map.keySet()){
-            if(map.get(key)==2) diagonal = key;
-            else if(map.get(key)==4) normal = key;
-            else return false;
+        int diagonal = 0;
+        for(int key:map.keySet()) {
+            diagonal = Math.max(diagonal, key);
         }
-        return (diagonal>normal);
+        if(map.get(diagonal)!=2) return false;
+        return true;
     }
+    
     public int distance(int[] p1, int[] p2){
         return (p2[0]-p1[0])*(p2[0]-p1[0]) + (p2[1]-p1[1])*(p2[1]-p1[1]);
     }
+    
 }
