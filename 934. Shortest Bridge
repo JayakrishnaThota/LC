@@ -6,49 +6,50 @@ class Solution {
         int m = A.length, n = A[0].length;
         Queue<int[]> queue = new LinkedList();
         boolean[][] visited = new boolean[m][n];
-        boolean found = false;
-        for(int i=0;i<m;i++){
-            if(found) break;
-            for(int j=0;j<n;j++){
-                if(A[i][j]==1){
-                    dfs(A, i, j, m, n, queue, visited);
-                    found = true;
+        boolean flag = false;
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(A[i][j]==1) {
+                    dfs(A,i,j,m,n,queue,visited);
+                    flag = true;
                     break;
                 }
             }
+            if(flag) break;
         }
-        return bfs(A, m, n, queue, visited);
+        return bfs(A,m,n,queue,visited);
     }
     
-    public void dfs(int[][] A, int i, int j, int m, int n, Queue<int[]> queue, boolean[][] visited)     {
-        if(i<0 || j<0 || i>=m || j>=n || A[i][j]==0 || visited[i][j]) return;
+    public void dfs(int[][] A, int i, int j, int m, int n, Queue<int[]> queue, boolean[][] visited) {
+        if(i<0 || j<0 || i>=m || j>=n || visited[i][j] || A[i][j]==0) return;
         visited[i][j] = true;
         queue.offer(new int[]{i,j});
-        for(int[] dir:dirs){
-            int x = i + dir[0];
-            int y = j + dir[1];
+        for(int[] dir:dirs) {
+            int x = dir[0] + i;
+            int y = dir[1] + j;
             dfs(A,x,y,m,n,queue,visited);
         }
     }
     
-    public int bfs(int[][] A, int m, int n, Queue<int[]> queue, boolean[][] visited){
-        int ret = 0;
-        while(!queue.isEmpty()){
+    public int bfs(int[][] A, int m, int n, Queue<int[]> queue, boolean[][] visited) {
+        int level = 0;
+        while(!queue.isEmpty()) {
             int size = queue.size();
-            for(int k=0;k<size;k++){
-                int[] temp = queue.poll();
-                int i = temp[0], j = temp[1];
-                for(int[] dir:dirs){
+            for(int k=0;k<size;k++) {
+                int[] cell = queue.poll();
+                int i = cell[0], j = cell[1];
+                for(int[] dir:dirs) {
                     int x = i + dir[0];
                     int y = j + dir[1];
                     if(x<0 || y<0 || x>=m || y>=n || visited[x][y]) continue;
-                    if(A[x][y]==1) return ret;
-                    queue.offer(new int[]{x,y});
                     visited[x][y] = true;
+                    queue.offer(new int[]{x,y});
+                    if(A[x][y]==1) return level;
                 }
             }
-            ret++;
+            level++;
         }
-        return ret;
+        return -1;
     }
+    
 }
