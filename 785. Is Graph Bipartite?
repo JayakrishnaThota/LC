@@ -1,20 +1,40 @@
-//O(V+E) time and O(V) space
+//O(V+E) time and space
 class Solution {
-    public boolean isBipartite(int[][] g) {
-        int[] colors = new int[g.length];
-        for (int i = 0; i < g.length; i++)
-            if (colors[i] == 0 && !validColor(g, colors, 1, i))
-                return false;
+    Map<Integer, Set<Integer>> adjlist;
+    int[] colors;
+    public boolean isBipartite(int[][] graph) {
+        construct(graph);
+        for(int i=0;i<graph.length;i++) {
+            if(colors[i]==0) {
+                if(!assign(i, 1)) return false;
+            }
+        }
         return true;
     }
-
-    public boolean validColor(int[][] g, int[] colors, int color, int node) {
-        if (colors[node] != 0)
-            return colors[node] == color;
-        colors[node] = color;
-        for (int adjacent : g[node])
-            if (!validColor(g, colors, -color, adjacent))
-                return false;
+    
+    public void construct(int[][] graph) {
+        adjlist = new HashMap();
+        colors = new int[graph.length];
+        for(int u=0;u<graph.length;u++) {
+            for(int v:graph[u]) {
+                adjlist.putIfAbsent(u, new HashSet());
+                adjlist.putIfAbsent(v, new HashSet());
+                adjlist.get(u).add(v);
+                adjlist.get(v).add(u);
+            }
+        }
+    }
+    
+    public boolean assign(int source, int color) {
+        if(colors[source]==color) return true;
+        if(colors[source]==-color) return false;
+        colors[source] = color;
+        if(adjlist.get(source)==null) return true;
+        for(int v:adjlist.get(source)) {
+            if(!assign(v,-color)) return false;
+        }
         return true;
     }
+    
+    
 }
