@@ -31,36 +31,36 @@ directory.check(2); */
 
 class PhoneDirectory {
 
-    /** Initialize your data structure here
-        @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
-    Map<Integer, Boolean> map;
+    Queue<Integer> queue;
+    Set<Integer> set;
     int max;
     public PhoneDirectory(int maxNumbers) {
-        map = new HashMap();
+        queue = new LinkedList();
+        set = new HashSet();
         max = maxNumbers;
-        for(int i=0;i<max;i++)
-            map.put(i,false);
-    }
-    
-    /** Provide a number which is not assigned to anyone.
-        @return - Return an available number. Return -1 if none is available. */
-    public int get() {
-        for(int i=0;i<max;i++){
-            if(map.get(i)==false){
-                map.put(i,true);
-                return i;
-            }
+        for(int i=0;i<max;i++) {
+            queue.add(i);
         }
-        return -1;
     }
     
-    /** Check if a number is available or not. */
+    //O(1) time and O(1) space
+    public int get() {
+        if(queue.isEmpty()) return -1;
+        int ret = queue.poll();
+        set.add(ret);
+        return ret;
+    }
+    
+    //O(1) time and O(1) space
     public boolean check(int number) {
-        return (map.get(number)==false);
+        if(number<0 || number>=max) return false;
+        return !set.contains(number);
     }
     
-    /** Recycle or release a number. */
+    //O(1) time and O(1) space
     public void release(int number) {
-        map.put(number,false);
+        if(set.remove(number)) {
+            queue.offer(number);
+        }
     }
 }
