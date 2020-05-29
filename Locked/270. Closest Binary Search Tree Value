@@ -1,31 +1,21 @@
-//O(n) time and space
+//O(h) time and O(1) space
 class Solution {
     public int closestValue(TreeNode root, double target) {
-        if(root==null) return 0;
-        List<Integer> list = inorder(root);
-        double min = root.val;
-        for(Integer l:list){
-            if(Math.abs(min-target)>Math.abs(l-target))
-                min = l;
-        }
-        return (int)min;
-    }
-    public List<Integer> inorder(TreeNode root){
-        List<Integer> list = new ArrayList<Integer>();
-        Stack<TreeNode> stack = new Stack();
-        TreeNode curr = root;
-        boolean done = false;
-        while(!done)
-        {
-            if(curr!=null) { stack.push(curr); curr = curr.left; }
-            else if(stack.isEmpty()) done = true;
-            else
-            {
-                curr = stack.pop();
-                list.add(curr.val);
-                curr = curr.right;
+        int result = 0;
+        double min = Double.MAX_VALUE;
+        TreeNode iter = root;
+        while(iter!=null) {
+            if(Math.abs(iter.val-target)<min) {
+                min = Math.abs(iter.val-target);
+                result = iter.val;
+            }
+            if(iter.val<target) {
+                iter = iter.right;
+            }
+            else {
+                iter = iter.left;
             }
         }
-        return list;
+        return result;
     }
 }
