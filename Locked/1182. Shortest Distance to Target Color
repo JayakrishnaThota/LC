@@ -1,0 +1,57 @@
+//O(n+q) time and O(n) space
+class Solution {
+    public List<Integer> shortestDistanceColor(int[] colors, int[][] queries) {
+        List<Integer> result = new ArrayList();
+        int[][] leftDp = computeLeft(colors);
+        int[][] rightDp = computeRight(colors);
+        for(int[] query:queries) {
+            int index = query[0], color = query[1];
+            if(leftDp[color][index]==-1 || rightDp[color][index]==-1) {
+                result.add(Math.max(leftDp[color][index], rightDp[color][index]));
+            }
+            else {
+                result.add(Math.min(leftDp[color][index], rightDp[color][index]));
+            }
+        }
+        return result;
+    }
+    
+    public int[][] computeLeft(int[] colors) {
+        int[][] dp = new int[4][colors.length];
+        for(int i=1;i<4;i++) {
+            Arrays.fill(dp[i], -1);
+            for(int j=0;j<colors.length;j++) {
+                if(colors[j]==i) {
+                    dp[i][j] = 0;
+                }
+                else {
+                    if(j==0 || dp[i][j-1]==-1)
+                        dp[i][j] = -1;
+                    else
+                        dp[i][j] = dp[i][j-1] + 1;
+                }
+            }
+        }
+        return dp;
+    }
+    
+    public int[][] computeRight(int[] colors) {
+        int[][] dp = new int[4][colors.length];
+        for(int i=1;i<4;i++) {
+            Arrays.fill(dp[i], -1);
+            for(int j=colors.length-1;j>=0;j--) {
+                if(colors[j]==i) {
+                    dp[i][j] = 0;
+                }
+                else {
+                    if(j==colors.length-1 || dp[i][j+1]==-1)
+                        dp[i][j] = -1;
+                    else
+                        dp[i][j] = dp[i][j+1] + 1;
+                }
+            }
+        }
+        return dp;
+    }
+    
+}
