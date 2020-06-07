@@ -1,48 +1,22 @@
-/*
-
-Given a sorted integer array nums, where the range of elements are in the inclusive range [lower, upper],
-return its missing ranges.
-
-Example:
-Input: nums = [0, 1, 3, 50, 75], lower = 0 and upper = 99,
-Output: ["2", "4->49", "51->74", "76->99"]
-
-*/
-
-
 //O(n) time and O(1) space
 class Solution {
     public List<String> findMissingRanges(int[] nums, int lower, int upper) {
-        List<String> list = new ArrayList();
-        //Sanity check
-        if(nums==null || nums.length==0){
-            if(lower==upper)
-                list.add(lower+"");
-            else
-                list.add(lower+"->"+upper);
-            return list;
-        }
-        if(nums[0]!=lower){
-            if(lower+1==nums[0])
-                list.add(lower+"");
-            else
-                list.add(lower+"->"+(nums[0]-1));
-        }
-        for(int i=1;i<nums.length;i++){
-            if(nums[i-1]+1==nums[i] || nums[i-1]==nums[i]) continue;
-            else{
-                if(nums[i-1]+2==nums[i])
-                    list.add((nums[i]-1)+"");
-                else
-                    list.add((nums[i-1]+1)+"->"+(nums[i]-1));
+        List<String> result = new ArrayList();
+        long next = lower;
+        for(int num:nums) {
+            if(num<next) continue;
+            if(num==next) {
+                next++;
+                continue;
             }
+            result.add(getRange(next, ((long)num)-1));
+            next = ((long)num)+1;
         }
-        if(nums[nums.length-1]!=upper){
-            if(nums[nums.length-1]==upper-1)
-                list.add(upper+"");
-            else
-                list.add((nums[nums.length-1]+1) +"->" + upper);
-        }
-        return list;
+        if(next<=upper) result.add(getRange(next, (long)upper));
+        return result;
+    }
+    
+    public String getRange(long low, long high) {
+        return (low==high)?""+low:low+"->"+high;
     }
 }
