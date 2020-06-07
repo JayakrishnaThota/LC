@@ -1,31 +1,54 @@
 class TwoSum {
 
-    List<Integer> list;
+    Map<Integer, Integer> map;
     public TwoSum() {
-        list = new ArrayList();
+        map = new HashMap();
     }
     
-    /** Add the number to an internal data structure.. */
+    //O(1) time and space
     public void add(int number) {
-        list.add(number);
+        map.put(number, map.getOrDefault(number,0)+1);
     }
     
-    /** Find if there exists any pair of numbers which sum is equal to the value. */
-    public boolean find(int target) {
-       Map<Integer, Integer> map = new HashMap(); 
-       for(int i=0;i<list.size();i++){
-           if(map.containsKey(target-list.get(i))){
-               return true;
-           }
-           map.put(list.get(i),i);
-       } 
+    //O(n) time and O(1) space
+    public boolean find(int value) {
+        for(int key:map.keySet()) {
+            if(key==value-key) {
+                if(map.get(key)>1) return true;
+            }
+            else {
+                if(map.containsKey(value-key)) return true;
+            }
+        }
         return false;
     }
 }
 
-/**
- * Your TwoSum object will be instantiated and called as such:
- * TwoSum obj = new TwoSum();
- * obj.add(number);
- * boolean param_2 = obj.find(value);
- */
+
+class TwoSum {
+
+    Set<Integer> set;
+    Set<Integer> sum;
+    public TwoSum() {
+        set = new HashSet();
+        sum = new HashSet();
+    }
+    
+    //O(n) time and space
+    public void add(int number) {
+        if(set.contains(number)) {
+            sum.add(number*2);
+        }
+        else {
+            for(int s:set) {
+                sum.add(iter.next()+number);
+            } 
+        }
+        set.add(number);
+    }
+    
+    //O(1) time and O(1) space
+    public boolean find(int value) {
+        return sum.contains(value);
+    }
+}
