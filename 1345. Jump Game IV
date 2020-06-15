@@ -1,0 +1,35 @@
+//O(n) time and space
+class Solution {
+    public int minJumps(int[] arr) {
+        if(arr==null || arr.length<2) return 0;
+        int n = arr.length;
+        Map<Integer, List<Integer>> map = new HashMap();
+        for(int i=0;i<n;i++) {
+            map.putIfAbsent(arr[i], new ArrayList());
+            map.get(arr[i]).add(i);
+        }
+        Queue<Integer> queue = new LinkedList();
+        queue.offer(0);
+        boolean[] visited = new boolean[n];
+        visited[0] = true;
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int index = queue.poll();
+                if(index==n-1) return level;
+                List<Integer> list = map.get(arr[index]);
+                list.add(index-1);
+                list.add(index+1);
+                for(int next:list) {
+                    if(next<0 || next>=n || visited[next]) continue;
+                    queue.offer(next);
+                    visited[next] = true;
+                }
+                list.clear();
+            }
+            level++;
+        }
+        return 0;
+    }
+}
