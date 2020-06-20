@@ -1,0 +1,19 @@
+//O(n) time and space
+//Find the minsubarray of length cardPoints.length-k and delete it from total sum
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        if(cardPoints==null || cardPoints.length==0) return 0;
+        int n = cardPoints.length;
+        int len = n - k;
+        int sum = 0, left = 0, right = 0, min = Integer.MAX_VALUE, total = 0;
+        while(right<n) {
+            total+=cardPoints[right];
+            sum+=cardPoints[right++];
+            if(right-left==len) {
+                min = Math.min(sum, min);
+                sum-=cardPoints[left++];
+            }
+        }
+        return (min==Integer.MAX_VALUE)?total:total-min;
+    }
+}
