@@ -1,41 +1,42 @@
+//Exponential time and space
 class Solution {
     public String[] expand(String S) {
-        if(S==null || S.length()==0){
-            return new String[]{""};
-        }
-        if(S.length()==1){
-            return new String[]{S};
-        }
-        TreeSet<String> set = new TreeSet();
-        if(S.charAt(0)=='{'){
+        int n = S.length();
+        if(n==0) return new String[]{""};
+        if(n==1) return new String[]{S};
+        List<String> list = new ArrayList();
+        if(S.charAt(0)=='{') {
+            int count = 0;
             int i = 0;
-            while(S.charAt(i)!='}'){
+            while(i<n) {
+                if(S.charAt(i)=='}') break;
                 i++;
             }
-            String key = S.substring(1,i);
-            String[] tokens = key.split(",");
-            String[] result = expand(S.substring(i+1));
-            for(String token:tokens){
-                for(String r:result){
-                    set.add(token+r);
+            String[] lResult = S.substring(1, i).split(",");
+            String[] rResult = expand(S.substring(i + 1));
+            for(String l:lResult) {
+                for(String r:rResult) {
+                    list.add(l+""+r);
                 }
             }
         }
-        else{
-            String[] result = expand(S.substring(1));
-            for(String r:result){
-                set.add(S.charAt(0)+r);
+        else {
+            String[] rResult = expand(S.substring(1));
+            for(String r:rResult) {
+                list.add(S.charAt(0)+""+r);
             }
         }
-        return toArray(set);
+        Collections.sort(list);
+        return array(list);
     }
     
-    public String[] toArray(TreeSet<String> set){
-        String[] result = new String[set.size()];
-        int i = 0;
-        for(String s:set){
-            result[i++] = s;
+    public String[] array(List<String> list) {
+        String[] res = new String[list.size()];
+        int index = 0;
+        for(String l:list) {
+            res[index++] = l;
         }
-        return result;
+        return res;
     }
+    
 }
