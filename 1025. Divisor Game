@@ -1,0 +1,6 @@
+//O(1) time and space
+class Solution {
+    public boolean divisorGame(int N) {
+        return (N%2==0);
+    }
+}
