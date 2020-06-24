@@ -1,0 +1,33 @@
+//Exponential time and space
+class Solution {
+    int count = 0, empty = 1;
+    public int uniquePathsIII(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        int sx = 0, sy = 0;
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(grid[i][j]==0) empty++;
+                if(grid[i][j]==1) {
+                    sx = i;
+                    sy = j;
+                }
+            }
+        }
+        dfs(grid,sx,sy,m,n,empty);
+        return count;
+    }
+    
+    public void dfs(int[][] grid, int i, int j, int m, int n, int empty) {
+        if(i<0 || j<0 || i>=m || j>=n || grid[i][j]<0) return;
+        if(grid[i][j]==2) { if(empty==0) count++; return; }
+        empty--;
+        grid[i][j] = -2;
+        dfs(grid,i+1,j,m,n,empty);
+        dfs(grid,i,j+1,m,n,empty);
+        dfs(grid,i-1,j,m,n,empty);
+        dfs(grid,i,j-1,m,n,empty);
+        empty++;
+        grid[i][j] = 0;
+    }
+}
