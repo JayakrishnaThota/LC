@@ -1,0 +1,25 @@
+//O(mn) time and O(1) space
+class Solution {
+    public List<Boolean> camelMatch(String[] queries, String pattern) {
+        List<Boolean> result = new ArrayList();
+        for(int i=0;i<queries.length;i++) {
+            Boolean r = helper(queries[i].toCharArray(), pattern.toCharArray());
+            result.add(r);
+        }
+        return result;
+    }
+    
+    public Boolean helper(char[] s, char[] t) {
+        int j = 0;
+        for(int i=0;i<s.length;i++) {
+            if(j<t.length && t[j]==s[i]) {
+                j++;
+            }
+            else if(s[i]>='A' && s[i]<='Z') {
+                return false;
+            }
+        }
+        return (j==t.length);
+    }
+    
+}
