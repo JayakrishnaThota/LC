@@ -1,0 +1,25 @@
+class MajorityChecker {
+
+    int[] nums;
+    public MajorityChecker(int[] arr) {
+        nums = new int[arr.length];
+        nums = arr;
+    }
+    
+    //O(n) time and O(1) space
+    public int query(int left, int right, int threshold) {
+        int maj = nums[left], count = 1;
+        for(int i=left+1;i<=right;i++) {
+            if(nums[i]==maj) count++;
+            else {
+                count--;
+                if(count==0) { maj = nums[i]; count = 1; }
+            }
+        }
+        count = 0;
+        for(int i=left;i<=right;i++) {
+            if(maj==nums[i]) count++;
+        }
+        return (count>=threshold)?maj:-1;
+    }
+}
