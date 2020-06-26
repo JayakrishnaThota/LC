@@ -1,0 +1,14 @@
+//O(1) time and space
+class Solution {
+    public int subtractProductAndSum(int n) {
+        long mul = 1;
+        long sum = 0;
+        while(n!=0) {
+            int y = n%10;
+            mul = mul*y;
+            sum = sum + y;
+            n/=10;
+        }
+        return (int)(mul-sum);
+    }
+}
