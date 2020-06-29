@@ -1,0 +1,19 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        int result = 0, sIndex = 0;
+        long curDistance = startFuel;
+        boolean done = false;
+        PriorityQueue<Integer> pq = new PriorityQueue(Collections.reverseOrder());
+        while(!done) {
+            while(sIndex<stations.length && stations[sIndex][0]<=curDistance) {
+                pq.offer(stations[sIndex++][1]);
+            }
+            if(curDistance>=target) return result;
+            if(pq.isEmpty()) { done = true; break; }
+            curDistance+=pq.poll();
+            result++;
+        }
+        return -1;
+    }
+}
