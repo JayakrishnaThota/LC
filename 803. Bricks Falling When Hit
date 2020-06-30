@@ -1,0 +1,77 @@
+class Solution {
+    
+    int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    
+    public int[] hitBricks(int[][] grid, int[][] hits) {
+        int m = grid.length, n = grid[0].length;
+        DisjointSet ds = new DisjointSet(m*n + 1);
+        for (int[] hit : hits) {
+            if (grid[hit[0]][hit[1]] == 1) grid[hit[0]][hit[1]] = 2;
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j ++) {
+                if (grid[i][j] == 1) unionAround(grid, i, j, m, n, ds);
+            }
+        }
+        int cur = ds.size[ds.find(0)];
+        int rIndex = hits.length - 1;
+        int[] result = new int[hits.length];
+        while (rIndex >= 0) {
+            int x = hits[rIndex][0];
+            int y = hits[rIndex][1];
+            if (grid[x][y] == 2) {
+                grid[x][y] = 1;
+                unionAround(grid, x, y, m, n, ds);
+                int next = ds.size[ds.find(0)];
+                result[rIndex] = Math.max(next - cur - 1, 0);
+                cur = next;
+            }
+            rIndex--;
+        }
+        
+        return result;
+    }
+    
+    private void unionAround(int[][] grid, int i, int j, int m, int n, DisjointSet ds) {   
+        int index = getIndex(i, j, n);
+        for (int[] dir : dirs) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
+                ds.union(index, getIndex(x, y, n));
+            }
+        }
+        if(i==0) ds.union(0, index);
+    }
+    
+    private int getIndex(int x, int y, int n) {
+        return x * n + y + 1;
+    }
+    
+    class DisjointSet {
+        int[] parent, size;
+        
+        public DisjointSet(int n) {
+            parent = new int[n];
+            size = new int[n];
+            Arrays.fill(size, 1);
+            for (int i = 0; i < n; i++) { // 0 indicates top of the grid.
+                parent[i] = i;
+            }
+        }
+        
+        public int find(int x) {
+            if (x == parent[x]) return x;
+            return parent[x] = find(parent[x]);
+        }
+        
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX != rootY) {
+                parent[rootX] = rootY;
+                size[rootY] += size[rootX];
+            }
+        }
+    }
+}
