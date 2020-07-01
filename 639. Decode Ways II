@@ -1,0 +1,44 @@
+//O(n) time and space
+class Solution {
+    public static long MOD = 1000000007;
+    public int numDecodings(String s) {
+        if(s==null || s.length()==0) return 0;
+        int n = s.length();
+        if(s.charAt(0)=='0') return 0;
+        long[] dp = new long[n+1];
+        dp[0] = 1;
+        dp[1] = (s.charAt(0)=='*')?9:1;
+        for(int i=2;i<=n;i++) {
+            char firstPrev = s.charAt(i-1);
+            char secondPrev = s.charAt(i-2);
+            //dp[i-1]
+            if(firstPrev == '*') {
+                dp[i] += 9*dp[i-1];
+            } else if(firstPrev > '0'){
+                dp[i] += dp[i-1];
+            }
+            //dp[i-2]
+            if(secondPrev == '*') {
+                if(firstPrev == '*') {
+                    dp[i] += 15*dp[i-2];
+                } else if(firstPrev<='6') {
+                    dp[i] += 2*dp[i-2];
+                } else {
+                    dp[i] += dp[i-2];
+                }
+            } else if(secondPrev == '1' || secondPrev == '2') {
+                if(firstPrev == '*') {
+                    if(secondPrev == '1') {
+                        dp[i] += 9*dp[i-2];
+                    } else {
+                        dp[i] += 6*dp[i-2];
+                    }
+                } else if(((secondPrev-'0')*10 + (firstPrev-'0')) <= 26) {
+                    dp[i] += dp[i-2];
+                }
+            }
+            dp[i] %= MOD;
+        }
+        return (int)dp[n];
+    }
+}
