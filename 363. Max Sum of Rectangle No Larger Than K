@@ -1,27 +1,33 @@
+//O(n^2*mlogm) time and O(m) space
 class Solution {
-    public int maxSumSubmatrix(int[][] matrix, int k) {
-        if(matrix==null||matrix.length==0||matrix[0].length==0) return 0;
-        int row = matrix.length;
-        int col = matrix[0].length;
-        int maxSum = Integer.MIN_VALUE;
-        for(int left=0;left<col;left++)
-        {
-            int[] array = new int[row];
-            for(int right = left;right<col;right++){
-                for(int i=0;i<row;i++){
-                    array[i] = array[i] + matrix[i][right];
+    public int maxSumSubmatrix(int[][] matrix, int K) {
+        if(matrix==null || matrix.length==0) return 0;
+        int m = matrix.length, n = matrix[0].length, max = Integer.MIN_VALUE;
+        for(int i=0;i<n;i++) {
+            int[] array = new int[m];
+            for(int j=i;j<n;j++) {
+                for(int k=0;k<m;k++) {
+                    array[k]+=matrix[k][j];
                 }
-                TreeSet<Integer> set = new TreeSet();
-                set.add(0);
-                int cursum = 0;
-                for(int num: array){
-                    cursum = cursum + num; 
-                    Integer temp = set.ceiling(cursum - k);
-                    if(temp!=null) maxSum = Math.max(maxSum, cursum-temp);
-                    set.add(cursum);
-                }
+                max = Math.max(max, helper(array, K));
             }
         }
-        return maxSum;
+        return max;
     }
+    
+    //Given an array, find the largest substring sum no larger than k
+    //O(nlogn) time and O(n) space
+    public int helper(int[] nums, int k) {
+        TreeSet<Integer> set = new TreeSet();
+        set.add(0);
+        int sum = 0, max = Integer.MIN_VALUE;
+        for(int num:nums) {
+            sum+=num;
+            Integer ceiling = set.ceiling(sum-k);
+            if(ceiling!=null) max = Math.max(max, sum-ceiling);
+            set.add(sum);
+        }
+        return max;
+    }
+    
 }
