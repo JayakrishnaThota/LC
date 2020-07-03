@@ -33,3 +33,24 @@ class Solution {
         return dp[1][n];
     }
 }
+
+//O(n^3) time and O(n^2) space
+class Solution {
+    public int getMoneyAmount(int n) {
+        Integer[][] dp = new Integer[n+1][n+1];
+        return helper(1, n, dp);
+    }
+    
+    public int helper(int low, int high, Integer[][] dp) {
+        if(low>=high) return 0;
+        if(low==high-1) return low;
+        if(dp[low][high]!=null) return dp[low][high];
+        int min = Integer.MAX_VALUE;
+        for(int i=low;i<=high;i++) {
+            min = Math.min(min, i + Math.max(helper(low, i-1, dp), helper(i+1, high, dp)));
+        }
+        dp[low][high] = min;
+        return min;
+    }
+    
+}
