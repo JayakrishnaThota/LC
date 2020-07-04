@@ -1,16 +1,15 @@
 //O(nlogn) time and O(n) space
 class Solution {
     public boolean isNStraightHand(int[] hand, int W) {
-        int n = hand.length;
-        if(n%W!=0) return false;
         TreeMap<Integer, Integer> map = new TreeMap();
-        for(int h:hand) map.put(h, map.getOrDefault(h,0)+1);
-        while(map.size()>0){
-            int key = map.firstKey();
-            for(int i=key;i<key+W;i++){
-                if(!map.containsKey(i)) return false;
-                map.put(i, map.get(i)-1);
-                if(map.get(i)==0) map.remove(i);
+        for(int h:hand) {
+            map.put(h, map.getOrDefault(h,0)+1);
+        }
+        for(Integer key:map.keySet()) {
+            if(map.get(key)<1) continue;
+            for(int i=W-1;i>=0;i--) {
+                if(map.getOrDefault((key+i), 0)<map.get(key)) return false;
+                map.put(key+i, map.get(key+i)-map.get(key));
             }
         }
         return true;
