@@ -23,3 +23,16 @@ class Solution {
         return true;
     }
 }
+
+//O(n) time and O(h) space
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return helper(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+    
+    public boolean helper(TreeNode root, Long min, Long max) {
+        if(root==null) return true;
+        if(root.val>=max || root.val<=min) return false;
+        return helper(root.left, min, (long)root.val) && helper(root.right, (long)root.val, max);
+    }
+}
