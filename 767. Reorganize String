@@ -1,31 +1,48 @@
-//O(n) and O(1)
+//O(nlogn) time and O(n) space
 class Solution {
-    public String reorganizeString(String S) {
-        Map<Character, Integer> map = new HashMap<>();
-        for (char c : S.toCharArray()) {
-            int count = map.getOrDefault(c, 0) + 1;
-            if (count > (S.length() + 1) / 2) return "";
-            map.put(c, count);
+    
+    class Tuple {
+        Character c;
+        Integer count;
+        public Tuple(Character c, Integer count) {
+            this.c = c;
+            this.count = count;
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[1] - a[1]);
-        for (char c : map.keySet()) {
-            pq.add(new int[] {c, map.get(c)});
+    }
+    
+    public String reorganizeString(String s) {
+        if(s==null || s.length()==0) return s;
+        int n = s.length();
+        Map<Character, Integer> map = new HashMap();
+        for(char c:s.toCharArray()) {
+            map.put(c, map.getOrDefault(c,0)+1);
+            int val = map.get(c);
+            if(val>((n+1)/2)) return "";
         }
-        StringBuilder sb = new StringBuilder();
-        while (!pq.isEmpty()) {
-            int[] first = pq.poll();
-            if (sb.length() == 0 || first[0] != sb.charAt(sb.length() - 1)) {
-                sb.append((char) first[0]);
-                if (--first[1] > 0) {
-                    pq.add(first);
-                }
-            } else {
-                int[] second = pq.poll();
-                sb.append((char) second[0]);
-                if (--second[1] > 0) {
-                    pq.add(second);
-                }
-                pq.add(first);
+        PriorityQueue<Tuple> pq = new PriorityQueue(1, new Comparator<Tuple>(){
+            public int compare(Tuple a, Tuple b) {
+                return b.count - a.count;
+            }
+        });
+        for(Character key:map.keySet()) {
+            pq.offer(new Tuple(key, map.get(key)));
+        }
+        StringBuffer sb = new StringBuffer();
+        while(!pq.isEmpty()) {
+            Tuple first = pq.poll();
+            if(sb.length()==0 || sb.charAt(sb.length()-1)!=first.c) {
+                sb.append(first.c);
+                first.count--;
+                if(first.count==0) continue;
+                pq.offer(first);
+            }
+            else {
+                Tuple second = pq.poll();
+                sb.append(second.c);
+                second.count--;
+                pq.offer(first);
+                if(second.count==0) continue;
+                pq.offer(second);
             }
         }
         return sb.toString();
