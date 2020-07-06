@@ -1,24 +1,25 @@
 //O(n) time and O(1) space
 class Solution {
     public boolean isLongPressedName(String name, String typed) {
+        int m = name.length(), n = typed.length();
         int i = 0, j = 0;
-        while(i<name.length() && j<typed.length()){
-            if(typed.charAt(j)==name.charAt(i)){
-                if((i<name.length()-1)&&(name.charAt(i)==name.charAt(i+1))){
-                    i++;
-                    j++;
-                }
-                else{
-                    while(j<typed.length() && typed.charAt(j)==name.charAt(i)){
-                    j++;
-                    }
-                    i++;
-                }
-            }
-            else{
-                return false;
-            }
+        while(i<m && j<n) {
+            if(name.charAt(i)!=typed.charAt(j)) return false;
+            int len1 = getRepeatedLength(name, i);
+            int len2 = getRepeatedLength(typed, j);
+            if((len2<2 && len2!=len1)||(len2>1 && len2<len1)) return false;
+            i+=len1;
+            j+=len2;
         }
-        return (i==name.length())&&(j==typed.length());
+        return ((i==m)&&(j==n));
+    }
+    
+    public int getRepeatedLength(String s, int i) {
+        int count = 1;
+        while(i<s.length()-1 && s.charAt(i+1)==s.charAt(i)) {
+            i++;
+            count++;
+        }
+        return count;
     }
 }
