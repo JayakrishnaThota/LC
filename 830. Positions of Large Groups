@@ -1,34 +1,27 @@
 //O(n) time and O(1) space
 class Solution {
-    public List<List<Integer>> largeGroupPositions(String s) {
-        List<List<Integer>> list = new ArrayList();
-        //Sanity check
-        if(s==null || s.length()==0) return list;
-        int n = s.length();
-        int left = 0, count = 0;
-        int right = 0;
-        while(right<n){
-            if(s.charAt(right)==s.charAt(left)){
+    public List<List<Integer>> largeGroupPositions(String S) {
+        List<List<Integer>> result = new ArrayList();
+        if(S==null || S.length()==0) return result;
+        int n = S.length();
+        int left = 0, count = 1;
+        for(int right=1;right<n;right++) {
+            if(S.charAt(right)==S.charAt(right-1)) {
                 count++;
-                right++;
             }
-            else{
-                if(count>2){
-                    List<Integer> tempList = new ArrayList();
-                    tempList.add(left);
-                    tempList.add(right-1);
-                    list.add(tempList);
+            else {
+                if(count>=3) {
+                    List<Integer> list = Arrays.asList(left, right-1);
+                    result.add(list);
                 }
                 left = right;
-                count = 0;
+                count = 1;
             }
         }
-        if(count>2){
-            List<Integer> tempList = new ArrayList();
-            tempList.add(left);
-            tempList.add(right-1);
-            list.add(tempList);
+        if(count>=3) {
+            List<Integer> list = Arrays.asList(left, n-1);
+            result.add(list);
         }
-        return list;
+        return result;
     }
 }
