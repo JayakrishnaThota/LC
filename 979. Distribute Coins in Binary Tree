@@ -1,18 +1,18 @@
 //O(n) time and space
 class Solution {
-    int result = 0;
+    int sum = 0;
     public int distributeCoins(TreeNode root) {
         if(root==null) return 0;
         helper(root);
-        return result;
+        return sum;
     }
     
-    public int[] helper(TreeNode root) {
-        if(root==null) return new int[]{0,0};
-        int[] left = helper(root.left);
-        int[] right = helper(root.right);
-        result+=Math.abs(left[0]-left[1]) + Math.abs(right[0]-right[1]);
-        return new int[]{left[0]+right[0]+1, right[1]+left[1]+root.val};
+    public int helper(TreeNode root) {
+        if(root==null) return 0;
+        int left = helper(root.left);
+        int right = helper(root.right);
+        sum+=Math.abs(left) + Math.abs(right);
+        return root.val + left + right - 1;
     }
-    
+
 }
