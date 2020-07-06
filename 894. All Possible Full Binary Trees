@@ -1,0 +1,29 @@
+//O(2^n) time and space
+class Solution {
+    Map<Integer, List<TreeNode>> map = new HashMap();
+    public List<TreeNode> allPossibleFBT(int N) {
+        List<TreeNode> result = new ArrayList();
+        if(N==1) {
+            result.add(new TreeNode(0));
+            return result;
+        }
+        if(map.containsKey(N)) {
+            return map.get(N);
+        }
+        N = N-1;
+        for(int i=1;i<N;i+=2) {
+            List<TreeNode> left = allPossibleFBT(i);
+            List<TreeNode> right = allPossibleFBT(N-i);
+            for(TreeNode l:left) {
+                for(TreeNode r:right) {
+                    TreeNode root = new TreeNode(0);
+                    root.left = l;
+                    root.right = r;
+                    result.add(root);
+                }
+            }
+        }
+        map.put(N, result);
+        return result;
+    }
+}
