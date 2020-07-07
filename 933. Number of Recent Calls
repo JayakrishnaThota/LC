@@ -1,31 +1,33 @@
 class RecentCounter {
+
+    int[] buckets;
+    int[] flag;
     
-    long[] count;
-    long[] buckets;
     public RecentCounter() {
-        count = new long[3001];
-        buckets = new long[3001];
+        buckets = new int[3001];
+        flag = new int[3001];
     }
     
     //O(1) time and space
     public int ping(int t) {
+        int result = 0;
         int index = t%3001;
-        if(buckets[index]==t){
-            count[index]++;
+        if(flag[index]==t) {
+            buckets[index]++;
         }
-        else{
-            count[index] = 1;
-            buckets[index]=t;
+        else {
+            buckets[index] = 1;
+            flag[index] = t;
         }
-        return sum(t);
-    }
-    
-    public int sum(int t){
-        int sum = 0;
-        for(int i=0;i<3001;i++){
-            long cur = buckets[i];
-            if(t-cur<=3000) sum+=count[i];
+        for(int i=0;i<3001;i++) {
+            if(t-flag[i]<=3000) result+=buckets[i];
         }
-        return sum;
+        return result;
     }
 }
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter obj = new RecentCounter();
+ * int param_1 = obj.ping(t);
+ */
