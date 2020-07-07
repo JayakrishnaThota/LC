@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] nums) {
+        int[] buckets = new int[101];
+        for(int num:nums) {
+            buckets[num]++;
+        }
+        int[] count = new int[101];
+        for(int i=1;i<buckets.length;i++) {
+            count[i] = buckets[i-1] + count[i-1];
+        }
+        int index = 0;
+        int[] result = new int[nums.length];
+        for(int num:nums) {
+            result[index++] = count[num];
+        }
+        return result;
+    }
+}
