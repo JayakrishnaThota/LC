@@ -1,0 +1,11 @@
+//O(nk) time and space
+class Solution {
+    public boolean hasAllCodes(String s, int k) {
+        int n = s.length();
+        Set<String> set = new HashSet();
+        for(int i=k;i<=n;i++) {
+            set.add(s.substring(i-k, i));
+        }
+        return (set.size()==(1<<k));
+    }
+}
