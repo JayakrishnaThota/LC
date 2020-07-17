@@ -1,0 +1,22 @@
+//O(n^2*m) time and O(n) space 
+class Solution {
+    public int minDeletionSize(String[] A) {
+        if(A==null || A.length==0) return 0;
+        int m = A.length, n = A[0].length(), min = Integer.MAX_VALUE;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<i;j++) {
+                int k = 0;
+                for(;k<m;k++) {
+                    if(A[k].charAt(i)<A[k].charAt(j)) break;
+                }
+                if(k==m && dp[i]<1+dp[j]) {
+                    dp[i] = 1 + dp[j];
+                }
+            }
+            min = Math.min(min, n-dp[i]);
+        }
+        return min;
+    }
+}
