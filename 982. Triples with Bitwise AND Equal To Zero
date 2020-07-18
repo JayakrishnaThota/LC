@@ -1,0 +1,21 @@
+//O(n^2) time and space
+class Solution {
+    public int countTriplets(int[] A) {
+        int ans = 0;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i = 0;i<A.length;i++){
+            for(int j = 0;j<A.length;j++){
+                int num = A[i] & A[j];
+                map.put(num,map.getOrDefault(num,0)+1);
+            }
+        }
+        for(int i = 0;i<A.length;i++){
+            for(int num : map.keySet()){
+                if((A[i] & num) == 0){
+                    ans += map.get(num);
+                }
+            }
+        }
+        return ans;
+    }
+}
