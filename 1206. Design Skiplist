@@ -1,0 +1,101 @@
+class Skiplist {
+    
+    class Node {
+        int val;
+        Node left, right, up, down;
+        public Node(int val) {
+            this.val = val;
+        }
+    }
+
+    Random rand;
+    List<Node> sentinels;
+    
+    public Skiplist() {
+        rand = new Random();
+        sentinels = new ArrayList();
+        sentinels.add(new Node(Integer.MIN_VALUE));
+    }
+    
+    //O(logn) time
+    public boolean search(int target) {
+        Node less = getLesserOrEqual(target);
+        if(less!=null && less.val==target) return true;
+        return false;
+    }
+    
+    //O(logn) time
+    public void add(int num) {
+        Node less = getLesserOrEqual(num);
+        Node newNode = new Node(num);
+        insert(less, newNode);
+        moveUpLevel(newNode);
+    }
+    
+    //O(logn) time
+    public void moveUpLevel(Node node) {
+        Node prev = node.left, cur = node;
+        while(flipCoin()) {
+            while(prev.left!=null && prev.up==null) {
+                prev = prev.left;
+            }
+            if(prev.up==null) {
+                Node sentinel = new Node(Integer.MIN_VALUE);
+                sentinel.down = prev;
+                prev.up = sentinel;
+                sentinels.add(sentinel);
+            }
+            prev = prev.up;
+            Node curUp = new Node(cur.val);
+            cur.up = curUp;
+            curUp.down = cur;
+            cur = curUp;
+            prev.right = cur;
+            cur.left = prev;
+        }
+    }
+    
+    public boolean flipCoin() {
+        return (rand.nextInt(2)==0);
+    }
+    
+    public void insert(Node prev, Node cur) {
+        Node right = prev.right;
+        prev.right = cur;
+        cur.left = prev;
+        if(right!=null) {
+            right.left = cur;
+            cur.right = right;
+        }
+        
+    }
+    
+    public boolean erase(int num) {
+        Node node = getLesserOrEqual(num);
+        if(node.val!=num) return false;
+        while(node!=null) {
+            Node prev = node.left, next = node.right;
+            prev.right = next;
+            if(next!=null)
+                next.left = prev;
+            node = node.up;
+        }
+        return true;
+    }
+    
+    public Node getLesserOrEqual(int target) {
+        Node node = sentinels.get(sentinels.size()-1);
+        while(node!=null) {
+            if(node.right==null || node.right.val>target) {
+                if(node.down==null) break;
+                node = node.down;
+            }
+            else {
+                node = node.right;
+            }
+        }
+        return node;
+    }
+    
+    
+}
