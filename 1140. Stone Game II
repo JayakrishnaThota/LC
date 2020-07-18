@@ -1,0 +1,29 @@
+//O(n^2) time and space
+class Solution {
+    Integer[][] dp;
+    int[] sum;
+    public int stoneGameII(int[] piles) {
+        if(piles==null || piles.length==0) return 0;
+        int n = piles.length;
+        dp = new Integer[n][n];
+        sum = new int[n];
+        sum[n-1] = piles[n-1];
+        for(int i=n-2;i>=0;i--) {
+            sum[i] = sum[i+1] + piles[i];
+        }
+        return helper(piles, 0, 1);
+    }
+    
+    public int helper(int[] piles, int index, int M) {
+        if(index==piles.length) return 0;
+        if(index+2*M>=piles.length) return sum[index];
+        if(dp[index][M]!=null) return dp[index][M];
+        int min = Integer.MAX_VALUE;
+        for(int x=1;x<=2*M;x++) {
+            min = Math.min(min, helper(piles, index+x, Math.max(M, x)));
+        }
+        dp[index][M] = sum[index]-min;
+        return dp[index][M];
+    }
+    
+}
