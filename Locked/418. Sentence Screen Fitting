@@ -62,8 +62,8 @@ The character '-' signifies an empty space on the screen.
 
 */
 
-//O(n) time and O(1) space
-//Where n is the number of words in the sentence
+//O(m * n/(length of smallest word)) time and O(1) space
+//Where m is no.of rows, n is no.of cols
 class Solution {
     public int wordsTyping(String[] sentence, int rows, int cols) {
         int line = 0, index=0, sindex=0, result=0;
