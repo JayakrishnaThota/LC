@@ -1,0 +1,30 @@
+//O(n) time and space
+class Solution {
+    int diff = 0;
+    public String stoneGameIII(int[] stones) {
+        if(stones==null || stones.length==0) return "Tie";
+        int n = stones.length;
+        int[] sum = new int[n+1];
+        Integer[] dp = new Integer[n+1];
+        for(int i=n-1;i>=0;i--) {
+            sum[i] = stones[i] + sum[i+1];
+        }
+        helper(stones, 0, dp, sum);
+        return (diff==0)?"Tie":(diff>0 ? "Alice": "Bob");
+    }
+    
+    public int helper(int[] stones, int index, Integer[] dp, int[] sum) {
+        if(index>=stones.length) return 0;
+        if(dp[index]!=null) return dp[index];
+        int score2 = Integer.MAX_VALUE;
+        for(int x=1;x<=3;x++) {
+            score2 = Math.min(score2, helper(stones, index+x, dp, sum));
+        }
+        dp[index] = sum[index]-score2;
+        if(index==0) {
+            diff = dp[index] - score2;
+        }
+        return dp[index];
+    }
+    
+}
