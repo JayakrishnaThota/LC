@@ -1,0 +1,23 @@
+//O(n) time and space
+class Solution {
+    public int subarraysWithKDistinct(int[] A, int K) {
+        return atMost(A,K)-atMost(A,K-1);
+    }
+    
+    public int atMost(int[] A, int k) {
+        int left =0, result = 0, n = A.length;
+        Map<Integer, Integer> map = new HashMap();
+        for(int right=0;right<n;right++) {
+            if(map.getOrDefault(A[right],0)==0) k--;
+            map.put(A[right], map.getOrDefault(A[right],0)+1);
+            while(k<0) {
+                map.put(A[left], map.get(A[left])-1);
+                if(map.get(A[left])==0) k++;
+                left++;
+            }
+            result += (right+1-left);
+        }
+        return result;
+    }
+    
+}
