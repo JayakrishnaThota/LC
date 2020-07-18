@@ -1,0 +1,29 @@
+//O(n) time and space
+class Solution {
+    Integer[][][] dp;
+    public int minimumDistance(String word) {
+        if(word==null || word.length()==0) return 0;
+        int n = word.length();
+        dp = new Integer[27][27][300];
+        return minDistance(word, 0, null, null);
+    }
+    
+    public int minDistance(String word, int index, Character c1, Character c2) {
+        if(index>=word.length()) return 0;
+        int index1 = (c1==null)?0:c1-'A'+1;
+        int index2 = (c2==null)?0:c2-'A'+1;
+        if(dp[index1][index2][index]!=null) return dp[index1][index2][index];
+        char c = word.charAt(index);
+        int a = getDistance(c1, c) + minDistance(word, index+1, c, c2);
+        int b = getDistance(c, c2) + minDistance(word, index+1, c1, c);
+        return dp[index1][index2][index] = Math.min(a, b);
+    }
+    
+    public int getDistance(Character c1, Character c2) {
+        if (c1 == null || c2 == null) return 0;
+        int d1 = c1 - 'A', d2 = c2 - 'A';
+        int x1 = d1 / 6, y1 = d1 % 6;
+        int x2 = d2 / 6, y2 = d2 % 6;
+        return Math.abs(x1-x2) + Math.abs(y1-y2);
+    }
+}
