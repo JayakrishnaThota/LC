@@ -28,3 +28,44 @@ class Solution {
         return count;
     }
 }
+
+
+//O(sw)time and O(w) space
+class Solution {
+    class Item {
+        String word;
+        int index;
+        Item(String word, int index)
+        {
+            this.word = word;
+            this.index = index;
+        }
+    }
+    public int numMatchingSubseq(String S, String[] words) {
+        HashMap<Character, Queue<Item>> map = new HashMap();
+        for(char ch='a'; ch<='z'; ch++)
+        {
+            map.putIfAbsent(ch, new LinkedList());
+        }
+        for(String word: words)
+        {
+            map.get(word.charAt(0)).offer(new Item(word, 0));
+        }
+        int res = 0;
+        for(char ch: S.toCharArray())
+        {
+            Queue<Item> queue = map.get(ch);
+            int size = queue.size();
+            for(int i=0; i<size; i++)
+            {
+                Item item = queue.poll();
+                item.index++;
+                if(item.index == item.word.length())
+                    res++;
+                else
+                    map.get(item.word.charAt(item.index)).offer(item);
+            }
+        }
+        return res;
+    }
+}
