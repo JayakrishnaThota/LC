@@ -1,0 +1,36 @@
+//O(n*2^n) time and O(n) space
+class Solution {
+    public int kSimilarity(String A, String B) {
+        if (A.equals(B)) return 0;
+        Queue<String> queue = new LinkedList();
+        Set<String> set = new HashSet();
+        queue.offer(A);
+        set.add(A);
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                String s = queue.poll();
+                int i = 0;
+                while(i<s.length() && s.charAt(i)==B.charAt(i)) i++;
+                for(int j=i+1;j<s.length();j++) {
+                    if(s.charAt(j)==B.charAt(j) || s.charAt(j)!=B.charAt(i)) continue;
+                    String key = swap(s,i,j);
+                    if(key.equals(B)) return level+1;
+                    if(set.add(key)) queue.offer(key);
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+    
+    public String swap(String s, int i, int j){
+        char[] ca=s.toCharArray();
+        char temp=ca[i];
+        ca[i]=ca[j];
+        ca[j]=temp;
+        return new String(ca);
+    }
+    
+}
