@@ -1,0 +1,44 @@
+//O(n^2) time and O(n) space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        construct(routes);
+        return bfs(routes, S, T);
+    }
+    
+    public void construct(int[][] routes) {
+        adjlist = new HashMap();
+        if(routes==null || routes.length==0) return;
+        for(int i=0;i<routes.length;i++) {
+            for(int j=0;j<routes[i].length;j++) {
+                int u = routes[i][j];
+                adjlist.putIfAbsent(u, new HashSet());
+                adjlist.get(u).add(i);
+            }
+        }
+    }
+    
+    public int bfs(int[][] routes, int source, int destination) {
+        if(source==destination) return 0;
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> set = new HashSet();
+        queue.offer(source);
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int u = queue.poll();
+                for(int v:adjlist.get(u)) {
+                    if(set.contains(v)) continue;
+                    set.add(v);
+                    for(int i=0;i<routes[v].length;i++) {
+                        queue.offer(routes[v][i]);
+                        if(routes[v][i]==destination) return level+1;
+                    }
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+}
