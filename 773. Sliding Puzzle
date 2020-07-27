@@ -1,32 +1,33 @@
-//Needs to update: O(3^6) time and space
+//O(mn*(mn)!) time and space
 class Solution {
-    
     public int slidingPuzzle(int[][] board) {
         String target = "123450";
-        String start = "";
-        for(int i=0;i<2;i++) {
-            for(int j=0;j<3;j++) {
-                start+=board[i][j];
-            }
+        int[][] map = new int[][]{{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{2,4}};
+        String source = "";
+        for(int[] b:board) {
+            for(int a:b) source+=a;
         }
-        if(start.equals(target)) return 0;
+        if(source.equals(target)) return 0;
+        int level = 0;
         Queue<String> queue = new LinkedList();
         Set<String> set = new HashSet();
-        int[][] dirs = new int[][]{{1,3},{0,2,4},{1,5},{0,4},{3,5,1},{2,4}};
-        queue.offer(start);
-        int level = 0;
+        queue.offer(source);
+        set.add(source);
         while(!queue.isEmpty()) {
             int size = queue.size();
             for(int k=0;k<size;k++) {
-                String cur = queue.poll();
-                int index = cur.indexOf('0');
-                for(int dir:dirs[index]) {
-                    String next = swap(cur, index, dir);
-                    if(!set.contains(next)) {
-                        if(next.equals(target)) return level+1;
-                        set.add(next);
-                        queue.offer(next);
-                    } 
+                String key = queue.poll();
+                char[] ch = key.toCharArray();
+                int index = key.indexOf('0');
+                for(int m:map[index]) {
+                    swap(ch,index,m);
+                    String newKey = String.valueOf(ch);
+                    if(!set.contains(newKey)) {
+                        set.add(newKey);
+                        queue.offer(newKey);
+                        if(newKey.equals(target)) return level+1;
+                    }
+                    swap(ch,index,m);
                 }
             }
             level++;
@@ -34,10 +35,9 @@ class Solution {
         return -1;
     }
     
-    private String swap(String str, int i, int j) {
-        StringBuilder sb = new StringBuilder(str);
-        sb.setCharAt(i, str.charAt(j));
-        sb.setCharAt(j, str.charAt(i));
-        return sb.toString();
+    public void swap(char[] ch, int i, int j) {
+        char temp = ch[i];
+        ch[i] = ch[j];
+        ch[j] = temp;
     }
 }
