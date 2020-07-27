@@ -1,0 +1,32 @@
+class TreeAncestor {
+
+    int[][] dp;
+    int height;
+    //O(nlogn) time and O(n^2) space
+    public TreeAncestor(int n, int[] parent) {
+        height = (int)(Math.log(n)/Math.log(2)) + 1;
+        dp = new int[height][n];
+        dp[0] = parent;
+        for(int i=1;i<height;i++) {
+            for(int j=0;j<n;j++) {
+                int pre = dp[i-1][j];
+                dp[i][j] = (pre==-1)?-1:dp[i-1][pre];
+            }
+        }
+    }
+    
+    //O(logn) time and O(1) space
+    public int getKthAncestor(int node, int k) {
+        int height = this.height;
+        while(k>0 && node>-1) {
+            if(k>=1<<height) {
+                node = dp[height][node];
+                k-=(1<<height);
+            }
+            else {
+                height--;
+            }
+        }
+        return node;
+    }
+}
