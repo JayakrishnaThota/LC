@@ -1,0 +1,70 @@
+//O(N*sqrt(max(A))) time and O(N) space
+class Solution {
+    
+    class DisjointSet {
+        int[] parent, size;
+        int max;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            size = new int[n];
+            max = 1;
+            for(int i=0;i<n;i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+        }
+        
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if(rootX!=rootY) {
+                if(size[y]>size[x]) {
+                    parent[rootX] = rootY;
+                    size[rootY]+=size[rootX];
+                    max = Math.max(max, size[rootY]);
+                }
+                else {
+                    parent[rootY] = rootX;
+                    size[rootX]+=size[rootY];
+                    max = Math.max(max, size[rootX]);
+                }
+            }
+        }
+        
+        public int find(int x) {
+            if(x==parent[x]) return x;
+            parent[x] = find(parent[x]);
+            return parent[x];
+        }
+    }
+    
+    public int largestComponentSize(int[] A) {
+        int n = A.length;
+        Map<Integer, Integer> map = new HashMap();
+        DisjointSet ds = new DisjointSet(n);
+        for(int i=0;i<n;i++) {
+            int a = A[i];
+            for(int j=2;j*j<=a;j++) {
+                if(a%j!=0) continue;
+                if(!map.containsKey(j)) {
+                    map.put(j, i);
+                }
+                else {
+                    ds.union(i, map.get(j));
+                }
+                if(!map.containsKey(a/j)) {
+                    map.put(a/j, i);
+                }
+                else {
+                    ds.union(i, map.get(a/j));
+                }
+            }
+            if (!map.containsKey(a)){//a could be factor too. Don't miss this
+            map.put(a, i);
+            }else{
+                ds.union(i, map.get(a));
+            }
+        }
+        return ds.max;
+    }
+}
