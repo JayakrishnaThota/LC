@@ -1,35 +1,40 @@
+// Java Iterator interface reference:
+// https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
+
 class PeekingIterator implements Iterator<Integer> {
-    Integer next;
-    boolean flag;
+    Integer top;
     Iterator<Integer> iter;
 	public PeekingIterator(Iterator<Integer> iterator) {
 	    iter = iterator;
-	    helper();
+	    if(iter.hasNext()) {
+            top = iter.next();
+        }
+        else {
+            top = null;
+        }
 	}
-
+	
     // Returns the next element in the iteration without advancing the iterator.
 	public Integer peek() {
-        return next;
+        return top;
 	}
-
+	
 	// hasNext() and next() should behave the same as in the Iterator interface.
 	// Override them if needed.
 	@Override
 	public Integer next() {
-	    Integer res = next;
-        helper();
-        return res;
+        Integer ret = top;
+	    if(iter.hasNext()) {
+            top = iter.next();
+        }
+        else {
+            top = null;
+        }
+        return ret;
 	}
-
+	
 	@Override
 	public boolean hasNext() {
-	    return !flag;
+	    return top!=null;
 	}
-    
-    public void helper(){
-        if(iter.hasNext())
-            next = iter.next();
-        else
-            flag = true;
-    }
 }
