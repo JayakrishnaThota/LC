@@ -1,0 +1,44 @@
+//O(mn) time and space
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        if(board==null || board.length==0) return 0;
+        int n = board.length, index = 0, i = n-1, j = 0, inc = 1;
+        int[] array = new int[n*n];
+        while(index<n*n) {
+            array[index++] = board[i][j];
+            if(inc==1 && j==n-1) {
+                inc = -1;
+                i--;
+            }
+            else if(inc==-1 && j==0) {
+                inc = 1;
+                i--;
+            }
+            else {
+                j+=inc;
+            }
+        }
+        boolean[] visited = new boolean[n*n];
+        Queue<Integer> queue = new LinkedList();
+        int start = (array[0]>-1)?array[0]-1:0;
+        queue.offer(start);
+        visited[start] = true;
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int cur = queue.poll();
+                for(int next=cur+1;next<=Math.min(n*n-1, cur+6);next++) {
+                    int dest = (array[next]>-1)?array[next]-1:next;
+                    if(!visited[dest]) {
+                        visited[dest] = true;
+                        queue.offer(dest);
+                        if(dest==n*n-1) return level+1;
+                    }
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+}
