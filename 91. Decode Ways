@@ -1,15 +1,69 @@
-//O(n) time and space
+//O(2^n) time and space
 class Solution {
     public int numDecodings(String s) {
-        //Sanity check
+        if(s==null || s.length()==0) return 0;
+        return recursive(s, 0);
+    }
+    
+    public int recursive(String s, int index) {
+        if(index==s.length()) return 1;
+        if(s.charAt(index)=='0') return 0;
+        int res = recursive(s, index+1);
+        if(index<s.length()-1) {
+            String key = s.substring(index, index+2);
+            Integer val = Integer.parseInt(key);
+            if(val<=26) {
+                res+=recursive(s, index+2);
+            }
+        }
+        return res;
+    }
+    
+}
+
+//O(n) time and O(n) space
+class Solution {
+    public int numDecodings(String s) {
+        if(s==null || s.length()==0) return 0;
+        Integer[] dp = new Integer[s.length()];
+        return recursive(s, 0, dp);
+    }
+    
+    public int recursive(String s, int index, Integer[] dp) {
+        if(index==s.length()) return 1;
+        if(s.charAt(index)=='0') return 0;
+        if(dp[index]!=null) return dp[index];
+        int res = recursive(s, index+1, dp);
+        if(index<s.length()-1) {
+            String key = s.substring(index, index+2);
+            Integer val = Integer.parseInt(key);
+            if(val<=26) {
+                res+=recursive(s, index+2, dp);
+            }
+        }
+        dp[index] = res;
+        return res;
+    }
+    
+}
+
+//O(n) time and O(n) space
+class Solution {
+    public int numDecodings(String s) {
         if(s==null || s.length()==0) return 0;
         int n = s.length();
         int[] dp = new int[n+1];
         dp[n] = 1;
         dp[n-1] = (s.charAt(n-1)=='0')?0:1;
-        for(int i=n-2;i>=0;i--){
+        for(int i=n-2;i>=0;i--) {
             if(s.charAt(i)=='0') continue;
-            dp[i] = (Integer.parseInt(s.substring(i,i+2))<=26)?dp[i+1]+dp[i+2]:dp[i+1];
+            Integer val = Integer.parseInt(s.substring(i, i+2));
+            if(val<=26) {
+                dp[i] = dp[i+1]+dp[i+2];
+            }
+            else {
+                dp[i] = dp[i+1];
+            }
         }
         return dp[0];
     }
