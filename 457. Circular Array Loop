@@ -1,0 +1,36 @@
+//O(n) time and space
+class Solution {
+    public boolean circularArrayLoop(int[] nums) {
+        if (nums == null || nums.length < 2) return false;
+        int n = nums.length;
+        for(int i=0;i<n;i++) {
+            if(nums[i]==0) continue;
+            int slow = i, fast = advance(nums, slow);
+            while(nums[i]*nums[fast]>0 && nums[i]*nums[advance(nums, fast)]>0) {
+                if(slow==fast) {
+                    if(slow==advance(nums, slow)) break;
+                    return true;
+                }
+                slow = advance(nums, slow);
+                fast = advance(nums, advance(nums, fast));
+            }
+            slow = i;
+            int cur = nums[slow];
+            while(cur*nums[slow]>0) {
+                int temp = advance(nums, slow);
+                nums[slow] = 0;
+                slow = temp;
+            }
+        }
+        return false;
+    }
+    
+    private int advance(int[] nums, int i) {
+        int n = nums.length;
+        i += (nums[i]%n);
+        if (i < 0) i += n;
+        else if (i > n - 1) i %= n;
+        return i;
+    }
+    
+}
