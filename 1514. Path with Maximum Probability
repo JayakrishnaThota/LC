@@ -1,0 +1,57 @@
+//O(VE) time and O(V+E) space
+class Solution {
+    
+    class Cell {
+        int u;
+        double p;
+        public Cell(int u, double p) {
+            this.u = u;
+            this.p = p;
+        }
+    }
+    
+    Map<Integer, Map<Integer, Double>> adjlist;
+    double[] max;
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        if(start==end) {
+            return 1.0;
+        }
+        construct(edges, succProb, n);
+        bfs(start, end);
+        return max[end];
+    }
+    
+    public void construct(int[][] edges, double[] succProb, int n) {
+        adjlist = new HashMap();
+        max = new double[n];
+        for(int i=0;i<n;i++) {
+            adjlist.put(i, new HashMap());
+        }
+        int index = 0;
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            adjlist.get(u).put(v, succProb[index]);
+            adjlist.get(v).put(u, succProb[index++]);
+        }
+    }
+    
+    public void bfs(int start, int end) {
+        Queue<Cell> queue = new LinkedList();
+        queue.offer(new Cell(start, 1.0));
+        while(!queue.isEmpty()) {
+            Cell cell = queue.poll();
+            int u = cell.u;
+            double p = cell.p;
+            Map<Integer, Double> map = adjlist.get(u);
+            for(Integer v:map.keySet()) {
+                double curP = map.get(v);
+                double newP = curP*p;
+                if(newP>max[v]) {
+                    max[v] = newP;
+                    queue.offer(new Cell(v, newP));
+                }
+            }
+        }
+    }
+    
+}
