@@ -56,3 +56,25 @@ class Solution {
         }
     }
 }
+
+
+//O(VE) time and O(V+E) space
+class Solution {
+    public int networkDelayTime(int[][] edges, int N, int K) {
+        double[] minDistance = new double[N];
+        Arrays.fill(minDistance, Double.MAX_VALUE);
+        minDistance[K-1] = 0.0;
+        for(int i=1;i<N;i++) {
+            for(int[] edge:edges) {
+                int u = edge[0]-1, v = edge[1]-1, w = edge[2];
+                minDistance[v] = Math.min(minDistance[v], minDistance[u]+w);
+            }
+        }
+        double res = Double.MIN_VALUE;
+        for(double d:minDistance) {
+            res = Math.max(res, d);
+        }
+        return (res==Double.MAX_VALUE)?-1:(int)res;
+    }
+}
+
