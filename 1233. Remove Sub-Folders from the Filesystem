@@ -1,0 +1,49 @@
+class Solution {
+    
+    class TrieNode {
+        TrieNode[] children;
+        int index;
+        public TrieNode() {
+            children = new TrieNode[27];
+            index = -1;
+        }
+    }
+    
+    public void insert(TrieNode root, String word, int j) {
+     TrieNode temp = root;
+     for(int i=0;i<word.length();i++){
+         char c = word.charAt(i);
+         int index = c=='/'?26:c-'a';
+         if(temp.children[index]==null)
+             temp.children[index] = new TrieNode();
+         temp = temp.children[index];
+     }
+        temp.index = j;
+    }
+    
+    public List<String> removeSubfolders(String[] folder) {
+        TrieNode root = new TrieNode();
+        int i = 0;
+        for(String f:folder) insert(root, f, i++);
+        return bfs(root, folder);
+    }
+    
+    public List<String> bfs(TrieNode root, String[] folder) {
+        List<String> result = new ArrayList();
+        Queue<TrieNode> queue = new LinkedList();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            TrieNode node = queue.poll();
+            if(node.index>=0) {
+                result.add(folder[node.index]);
+            }
+            for(int i=0;i<27;i++) {
+                if(node.children[i]!=null && !(i==26 && node.index>=0)) {
+                    queue.offer(node.children[i]);
+                }
+            }
+        }
+        return result;
+    }
+    
+}
