@@ -4,17 +4,15 @@ class Solution {
         if(head==null || head.next==null) return head;
         ListNode dummy = new ListNode(0);
         ListNode iter = dummy;
+        iter.next = head;
         ListNode cur = head;
         while(cur!=null) {
-            int val = cur.val;
-            while(cur.next!=null && cur.next.val==val) {
+            while(cur.next!=null && cur.next.val==cur.val) {
                 cur = cur.next;
             }
-            ListNode next = cur.next;
-            cur.next = null;
             iter.next = cur;
             iter = iter.next;
-            cur = next;
+            cur = cur.next;
         }
         return dummy.next;
     }
