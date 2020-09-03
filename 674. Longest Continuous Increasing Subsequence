@@ -1,15 +1,11 @@
-//O(n) time and O(1) space
+//O(n) time and space
 class Solution {
-    public int findLengthOfLCIS(int[] nums) {
-        int left=0,max=0,right=0;
-        for(right=0;right<nums.length;right++){
-            if(right==0 || nums[right]>nums[right-1]) continue;
-            else{
-                max = Math.max(max, right-left);
-                left++;
-                right = left;
-            }
+   public int findLengthOfLCIS(int[] nums) {
+        int res = 0, cnt = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(i == 0 || nums[i-1] < nums[i]) res = Math.max(res, ++cnt);
+            else cnt = 1;
         }
-        return Math.max(max, right-left);
+        return res;
     }
 }
