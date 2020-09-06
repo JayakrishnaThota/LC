@@ -1,0 +1,59 @@
+class Leaderboard {
+
+    Map<Integer, Integer> map;
+    TreeMap<Integer, Integer> tmap;
+    public Leaderboard() {
+        map = new HashMap();
+        tmap = new TreeMap(Collections.reverseOrder());
+    }
+    
+    //O(logn) time and O(1) space
+    public void addScore(int playerId, int score) {
+        if(map.containsKey(playerId)) {
+            int prevScore = map.get(playerId);
+            int newScore = score + prevScore;
+            map.put(playerId, newScore);
+            tmap.put(prevScore, tmap.get(prevScore)-1);
+            if(tmap.get(prevScore)==0) {
+                tmap.remove(prevScore);
+            }
+            tmap.put(newScore, tmap.getOrDefault(newScore,0)+1);
+        }
+        else {
+            map.put(playerId, score);
+            tmap.put(score, tmap.getOrDefault(score,0)+1);
+        }
+    }
+    
+    //O(k) time and O(1) space
+    public int top(int K) {
+        int sum = 0, size = 0;
+        for(Integer key:tmap.keySet()) {
+            int times = tmap.get(key);
+            for(int j=0;j<times;j++) {
+                sum+=key;
+                size++;
+                if(size==K) return sum;
+            }
+        }
+        return sum;
+    }
+    
+    //O(logn) time and O(1) space
+    public void reset(int playerId) {
+        int score = map.get(playerId);
+        tmap.put(score, tmap.get(score)-1);
+        if(tmap.get(score)==0) {
+            tmap.remove(score);
+        }
+        map.remove(playerId);
+    }
+}
+
+/**
+ * Your Leaderboard object will be instantiated and called as such:
+ * Leaderboard obj = new Leaderboard();
+ * obj.addScore(playerId,score);
+ * int param_2 = obj.top(K);
+ * obj.reset(playerId);
+ */
