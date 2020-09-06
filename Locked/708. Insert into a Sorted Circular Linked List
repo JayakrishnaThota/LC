@@ -1,0 +1,25 @@
+//O(n) time and O(1) space
+class Solution {
+    public Node insert(Node head, int val) {
+        if (head == null) {
+            Node res = new Node(val);
+            res.next = res;
+            return res;
+        }
+        Node max = head;
+        while (max.val <= max.next.val && max.next != head) max = max.next;
+        Node min = max.next, cur = min;
+        if (val <= min.val || val >= max.val) {
+            max.next = new Node(val);
+            max.next.next = min;
+        }
+        else {
+            while (cur.next != null && cur.next.val < val) cur = cur.next;
+            Node next = cur.next;
+            cur.next = new Node(val);
+            cur.next.next = next;
+        }
+        return head;
+        
+    }
+}
