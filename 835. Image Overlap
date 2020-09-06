@@ -1,0 +1,25 @@
+//O(mn^2) time and O(mn) space
+class Solution {
+    public int largestOverlap(int[][] A, int[][] B) {
+        if(A==null || A.length==0) return 0;
+        int m = A.length, n = A[0].length, max = 0;
+        List<int[]> list1 = new ArrayList();
+        List<int[]> list2 = new ArrayList();
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(A[i][j]==1) list1.add(new int[]{i,j});
+                if(B[i][j]==1) list2.add(new int[]{i,j});
+            }
+        }
+        Map<String, Integer> map = new HashMap();
+        for(int[] l1:list1) {
+            for(int[] l2:list2) {
+                String key = (l1[0]-l2[0])+","+(l1[1]-l2[1]);
+                int val = map.getOrDefault(key,0)+1;
+                max = Math.max(max, val);
+                map.put(key, val);
+            }
+        }
+        return max;
+    }
+}
