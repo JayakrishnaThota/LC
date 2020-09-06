@@ -1,0 +1,33 @@
+class Solution {
+    public String crackSafe(int n, int k) {
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<n;i++) {
+            sb.append("0");
+        }
+        int combinations = (int)(Math.pow(k,n));
+        Set<String> set = new HashSet();
+        set.add(sb.toString());
+        backtrack(sb, set, n, k, combinations);
+        return sb.toString();
+    }
+    
+    public boolean backtrack(StringBuffer sb, Set<String> set, int n, int k, int target) {
+        if(set.size()==target) {
+            return true;
+        }
+        //Get the last n-1 digits of sb
+        int len = sb.length();
+        String lastDigits = sb.toString().substring(len-n+1);
+        for(char c='0';c<'0'+k;c++) {
+            String key = lastDigits + c;
+            if(set.contains(key)) continue;
+            set.add(key);
+            sb.append(c);
+            if(backtrack(sb,set,n,k,target)) return true;
+            set.remove(key);
+            sb.deleteCharAt(sb.length()-1);
+        }
+        return false;
+    }
+    
+}
