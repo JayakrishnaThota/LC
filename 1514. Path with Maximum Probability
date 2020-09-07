@@ -1,4 +1,4 @@
-//O(VE) time and O(V+E) space
+//O(E+VlogV) time and O(V+E) space
 class Solution {
     
     class Cell {
@@ -11,47 +11,48 @@ class Solution {
     }
     
     Map<Integer, Map<Integer, Double>> adjlist;
-    double[] max;
     public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
-        if(start==end) {
-            return 1.0;
-        }
-        construct(edges, succProb, n);
-        bfs(start, end);
-        return max[end];
+        construct(n, edges, succProb);
+        return dijkstras(start, end);
     }
     
-    public void construct(int[][] edges, double[] succProb, int n) {
+    public void construct(int n, int[][] edges, double[] succProb) {
         adjlist = new HashMap();
-        max = new double[n];
+        int index = 0;
         for(int i=0;i<n;i++) {
             adjlist.put(i, new HashMap());
         }
-        int index = 0;
         for(int[] edge:edges) {
             int u = edge[0], v = edge[1];
-            adjlist.get(u).put(v, succProb[index]);
-            adjlist.get(v).put(u, succProb[index++]);
+            double w = succProb[index++];
+            adjlist.get(u).put(v, w);
+            adjlist.get(v).put(u,w);
         }
     }
     
-    public void bfs(int start, int end) {
-        Queue<Cell> queue = new LinkedList();
-        queue.offer(new Cell(start, 1.0));
-        while(!queue.isEmpty()) {
-            Cell cell = queue.poll();
+    public double dijkstras(int start, int end) {
+        Map<Integer, Double> pMap = new HashMap();
+        PriorityQueue<Cell> pq = new PriorityQueue(1, new Comparator<Cell>(){
+            public int compare(Cell a, Cell b) {
+                return Double.compare(b.p, a.p);
+            }
+        });
+        pq.offer(new Cell(start, 1.0));
+        while(!pq.isEmpty()) {
+            Cell cell = pq.poll();
             int u = cell.u;
             double p = cell.p;
+            if(pMap.containsKey(u)) continue;
+            pMap.put(u, p);
+            if(u==end) return p;
             Map<Integer, Double> map = adjlist.get(u);
             for(Integer v:map.keySet()) {
-                double curP = map.get(v);
-                double newP = curP*p;
-                if(newP>max[v]) {
-                    max[v] = newP;
-                    queue.offer(new Cell(v, newP));
-                }
+                if(pMap.containsKey(v)) continue;
+                double uvp = map.get(v);
+                pq.offer(new Cell(v, p*uvp));
             }
         }
+        return 0.0;
     }
     
 }
