@@ -1,0 +1,77 @@
+class Solution {
+    public int rectangleArea(int[][] rectangles) {
+        if(rectangles==null || rectangles.length==0) return 0;
+        int n = rectangles.length, mod = (int)1e9 + 7;
+        List<int[]> list = new ArrayList();
+        for(int[] r:rectangles) {
+            addRectangle(list, r, 0);
+        }
+        long sum = 0;
+        for(int[] l:list) {
+            sum = (sum + (long)(l[2]-l[0])*(long)(l[3]-l[1]))%mod;
+        }
+        return (int)(sum%mod);
+    }
+    
+    public void addRectangle(List<int[]> list, int[] rect, int index) {
+        if(index>=list.size()) {
+            list.add(rect);
+            return;
+        }
+        int x1 = rect[0], x2 = rect[2], y1 = rect[1], y2 = rect[3];
+        int[] cur = list.get(index);
+        //Case 0: No Overlap
+        if(x1>=cur[2] || x2<=cur[0] || y1>=cur[3] || y2<=cur[1]) {
+            addRectangle(list, rect, index+1);
+        }
+        //Case 1: Left Overlap
+        if(x1<cur[0]) {
+            int[] leftRect = new int[]{x1, y1, cur[0], y2};
+            addRectangle(list, leftRect, index+1);
+        }
+        //Case 2: Right Overlap
+        if(x2>cur[2]) {
+            int[] rightRect = new int[]{cur[2], y1, x2, y2};
+            addRectangle(list, rightRect, index+1);
+        }
+        //Case 3: Bottom Overlap
+        if(y1<cur[1]) {
+            int[] bottomRect = new int[]{Math.max(x1, cur[0]), y1, Math.min(x2, cur[2]), cur[1]};
+            addRectangle(list, bottomRect, index+1);
+        }
+        //Case 4: Top Overlap
+        if(y2>cur[3]) {
+            int[] topRect = new int[]{Math.max(x1, cur[0]), cur[3], Math.min(x2, cur[2]), y2};
+            addRectangle(list, topRect, index+1);
+        }
+    }
+    
+    public void addRectangle(List<int[]> recList, int[] curRec, int start){
+        if(start>=recList.size()){
+            recList.add(curRec);
+            return;
+        }
+        
+        int[] r = recList.get(start);
+        
+        // No overlap
+        if(curRec[2]<=r[0] || curRec[3]<=r[1] || curRec[0]>=r[2] || curRec[1]>=r[3]){
+            addRectangle(recList, curRec, start+1);
+            return;
+        }
+
+        if( curRec[0]<r[0])
+            addRectangle(recList, new int[]{curRec[0],curRec[1],r[0],curRec[3]},start+1);
+
+        if(curRec[2]>r[2])
+            addRectangle(recList, new int[]{r[2],curRec[1],curRec[2],curRec[3]},start+1);
+        
+        if(curRec[1]<r[1])
+            addRectangle(recList, new int[]{Math.max(r[0],curRec[0]),curRec[1],Math.min(r[2],curRec[2]),r[1]},start+1);
+        
+        if(curRec[3]>r[3])
+            addRectangle(recList, new int[]{Math.max(r[0],curRec[0]),r[3],Math.min(r[2],curRec[2]),curRec[3]},start+1);
+    }
+    
+    
+}
