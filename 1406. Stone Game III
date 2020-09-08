@@ -1,30 +1,25 @@
 //O(n) time and space
 class Solution {
-    int diff = 0;
-    public String stoneGameIII(int[] stones) {
-        if(stones==null || stones.length==0) return "Tie";
-        int n = stones.length;
-        int[] sum = new int[n+1];
-        Integer[] dp = new Integer[n+1];
-        for(int i=n-1;i>=0;i--) {
-            sum[i] = stones[i] + sum[i+1];
-        }
-        helper(stones, 0, dp, sum);
-        return (diff==0)?"Tie":(diff>0 ? "Alice": "Bob");
+    public String stoneGameIII(int[] arr) {
+        int score = minimax(arr, 0, 1, new Integer[arr.length][2]);
+        if (score > 0) return "Alice";
+        if (score < 0) return "Bob";
+        return "Tie";
     }
-    
-    public int helper(int[] stones, int index, Integer[] dp, int[] sum) {
-        if(index>=stones.length) return 0;
-        if(dp[index]!=null) return dp[index];
-        int score2 = Integer.MAX_VALUE;
-        for(int x=1;x<=3;x++) {
-            score2 = Math.min(score2, helper(stones, index+x, dp, sum));
+    int minimax(int[] arr, int i, int maxPlayer, Integer[][] dp) {
+        if (i >= arr.length) return 0;
+        if (dp[i][maxPlayer] != null) return dp[i][maxPlayer];
+        int ans = maxPlayer == 1 ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        int score = 0;
+        for (int j = i; j < Math.min(arr.length, i + 3); j++) {
+            if (maxPlayer == 1) {
+                score += arr[j];
+                ans = Math.max(ans, score + minimax(arr, j + 1, 0, dp));
+            } else {
+                score -= arr[j];
+                ans = Math.min(ans, score + minimax(arr, j + 1, 1, dp));
+            }
         }
-        dp[index] = sum[index]-score2;
-        if(index==0) {
-            diff = dp[index] - score2;
-        }
-        return dp[index];
+        return dp[i][maxPlayer] = ans;
     }
-    
 }
