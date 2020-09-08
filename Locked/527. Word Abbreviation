@@ -1,0 +1,38 @@
+//O(m^2*n^2) time and O(n) space
+class Solution {
+    public List<String> wordsAbbreviation(List<String> dict) {
+        if(dict==null || dict.size()==0) return new ArrayList();
+        int n = dict.size();
+        String[] result = new String[n];
+        int[] prefix = new int[n];
+        for(int i=0;i<n;i++) {
+            prefix[i] = 1;
+            result[i] = helper(dict.get(i), prefix[i]);
+        }
+        for(int i=0;i<n;i++) {
+            while(true) {
+                Set<Integer> set = new HashSet();
+                for(int j=i+1;j<n;j++) {
+                    if(result[i].equals(result[j]))
+                        set.add(j); 
+                }
+                if(set.isEmpty()) break;
+                set.add(i);
+                for(int k:set) {
+                    result[k] = helper(dict.get(k), ++prefix[k]);
+                }
+            }
+        }
+        return Arrays.asList(result);
+    }
+    
+    private String helper(String s, int k) {
+        if (k>=s.length()-2) return s;
+        StringBuilder builder=new StringBuilder();
+        builder.append(s.substring(0, k));
+        builder.append(s.length()-1-k);
+        builder.append(s.charAt(s.length()-1));
+        return builder.toString();
+    }
+    
+}
