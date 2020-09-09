@@ -1,0 +1,40 @@
+class Solution {
+    boolean res = false;
+    double eps = 0.001;
+    public boolean judgePoint24(int[] nums) {
+        List<Double> list = new ArrayList();
+        for(int n:nums) {
+            list.add((double)n);
+        }
+        helper(list);
+        return res;
+    }
+    
+    public void helper(List<Double> list) {
+        if(res) return;
+        if(list.size()==1) {
+            if(Math.abs(list.get(0) - 24.0) < eps)
+                res = true;
+            return;
+        }
+        int n = list.size();
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<i;j++) {
+                Double d1 = list.get(i), d2 = list.get(j);
+                List<Double> temp = new ArrayList(Arrays.asList(d1+d2, d1-d2, d1*d2, d2-d1));
+                if(Math.abs(d2) > eps)  temp.add(d1/d2);
+                if(Math.abs(d1) > eps)  temp.add(d2/d1);
+                list.remove(i);
+                list.remove(j);
+                for(Double t:temp) {
+                    list.add(t);
+                    helper(list);
+                    list.remove(list.size()-1);
+                }
+                list.add(j, d2);
+                list.add(i, d1);
+            }
+        }
+    } 
+    
+}
