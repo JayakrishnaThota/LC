@@ -1,3 +1,6 @@
+//O(n^2) time and space
+class Solution {
+
 public int evaluate(String expression) {
     return eval(expression, new HashMap<>());
 }
@@ -39,4 +42,6 @@ private List<String> parse(String str) {
     }
     if (sb.length() > 0) res.add(new String(sb));
     return res;
+}
+
 }
