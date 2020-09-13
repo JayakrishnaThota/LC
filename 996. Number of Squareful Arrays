@@ -1,0 +1,41 @@
+
+class Solution {
+    Map<Integer, Integer> map;
+    Map<Integer, Set<Integer>> sqMap;
+    int res = 0;
+    public int numSquarefulPerms(int[] A) {
+        map = new HashMap();
+        sqMap = new HashMap();
+        for(int a:A) {
+            map.put(a,map.getOrDefault(a,0)+1);
+            sqMap.putIfAbsent(a, new HashSet());
+        }
+        for(int m1:map.keySet()) {
+            for(int m2:map.keySet()) {
+                double c = Math.sqrt(m1 + m2);
+                if(c==Math.floor(c)) {
+                    sqMap.get(m1).add(m2);
+                    sqMap.get(m2).add(m1);
+                }
+            }
+        }
+        for(int num:map.keySet()) {
+            helper(num, A.length-1);
+        }
+        return res;
+    }
+    
+    public void helper(int num, int index) {
+        map.put(num, map.getOrDefault(num,0)-1);
+        if(index==0) { res++; }
+        else {
+            for(int next:sqMap.get(num)) {
+                if(map.get(next)!=0) {
+                    helper(next, index-1);
+                }
+            }
+        }
+        map.put(num, map.getOrDefault(num,0)+1);
+    }
+    
+}
