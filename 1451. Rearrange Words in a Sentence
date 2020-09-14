@@ -1,0 +1,27 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public String arrangeWords(String text) {
+        String[] tokens = text.split(" ");
+        Arrays.sort(tokens, new Comparator<String>(){
+           public int compare(String a, String b) {
+               return a.length()-b.length();
+           }
+        });
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<tokens.length;i++) {
+            if(i==0) {
+                sb.append(Character.toUpperCase(tokens[i].charAt(0)));
+                for(int j=1;j<tokens[i].length();j++) {
+                    sb.append(Character.toLowerCase(tokens[i].charAt(j)));
+                }
+            }
+            else {
+                for(int j=0;j<tokens[i].length();j++) {
+                    sb.append(Character.toLowerCase(tokens[i].charAt(j)));
+                }
+            }
+            if(i<tokens.length-1) sb.append(" ");
+        }
+        return sb.toString();
+    }
+}
