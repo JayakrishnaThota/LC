@@ -1,0 +1,41 @@
+//O(n^2) time and space
+class Solution {
+    int res;
+    public int pseudoPalindromicPaths (TreeNode root) {
+        List<List<Integer>> paths = new ArrayList();
+        List<Integer> path = new ArrayList();
+        helper(root, paths, path);
+        for(List<Integer> p:paths) {
+            if(valid(p)) res++;
+        }
+        return res;
+    }
+    
+    public boolean valid(List<Integer> path) {
+        Map<Integer, Integer> map = new HashMap();
+        for(Integer p:path) {
+            map.put(p, map.getOrDefault(p,0)+1);
+        }
+        int odd = 0;
+        for(Integer key:map.keySet()) {
+            int val = map.get(key);
+            if(val%2==0) continue;
+            else odd++;
+        }
+        return (odd<=1);
+    }
+    
+    public void helper(TreeNode root, List<List<Integer>> paths, List<Integer> path) {
+        if(root==null) return;
+        path.add(root.val);
+        if(root.left==null && root.right==null) {
+            paths.add(new ArrayList(path));
+        }
+        else {
+            helper(root.left, paths, path);
+            helper(root.right, paths, path);
+        }
+        path.remove(path.size()-1);
+    }
+    
+}
