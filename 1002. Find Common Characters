@@ -1,0 +1,31 @@
+//O(n) time and O(1) space
+class Solution {
+    public List<String> commonChars(String[] A) {
+        int[] uni = new int[26];
+        Arrays.fill(uni, Integer.MAX_VALUE);
+        for(int i=0;i<A.length;i++) {
+            int[] map = map(A[i]);
+            for(int j=0;j<26;j++) {
+                uni[j] = Math.min(uni[j], map[j]);
+            }
+        }
+        List<String> result = new ArrayList();
+        for(int i=0;i<26;i++) {
+            if(uni[i]==Integer.MAX_VALUE) continue;
+            for(int j=0;j<uni[i];j++) {
+                char c = (char)(i + 97);
+                result.add(c+"");
+            }
+        }
+        return result;
+    }
+    
+    public int[] map(String s) {
+        int[] map = new int[26];
+        for(char c:s.toCharArray()) {
+            map[c-'a']++;
+        }
+        return map;
+    }
+    
+}
