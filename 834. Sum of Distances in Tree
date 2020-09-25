@@ -1,0 +1,38 @@
+//O(n) time and space
+class Solution {
+    public int[] sumOfDistancesInTree(int N, int[][] edges) {
+        int[] result = new int[N];
+        int[] count = new int[N];
+        Map<Integer, Set<Integer>> adjlist = new HashMap();
+        for(int i=0;i<N;i++) {
+            adjlist.put(i, new HashSet());
+        }
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(u);
+        }
+        postOrder(0, -1, adjlist, result, count);
+        preOrder(0, -1, adjlist, result, count);
+        return result;
+    }
+    
+    public void postOrder(int root, int parent, Map<Integer, Set<Integer>> adjlist, int[] result, int[] count) {
+        for(int child:adjlist.get(root)) {
+            if(parent==child) continue;
+            postOrder(child, root, adjlist, result, count);
+            count[root]+=count[child];
+            result[root] += count[child]+result[child];
+        }
+        count[root]++;
+    }
+    
+    public void preOrder(int root, int parent, Map<Integer, Set<Integer>> adjlist, int[] result, int[] count) {
+        for (int child : adjlist.get(root)) {
+            if (child == parent) continue;
+            result[child] = result[root] - count[child] + count.length - count[child];
+            preOrder(child, root, adjlist, result, count);
+        }
+    }
+    
+}
