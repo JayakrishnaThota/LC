@@ -1,41 +1,34 @@
-//O(n^2) time and space
+//O(n) time and space
 class Solution {
-    int res;
+    int res = 0;
     public int pseudoPalindromicPaths (TreeNode root) {
-        List<List<Integer>> paths = new ArrayList();
-        List<Integer> path = new ArrayList();
-        helper(root, paths, path);
-        for(List<Integer> p:paths) {
-            if(valid(p)) res++;
-        }
+        int[] count = new int[10];
+        backtrack(root, count);
         return res;
     }
     
-    public boolean valid(List<Integer> path) {
-        Map<Integer, Integer> map = new HashMap();
-        for(Integer p:path) {
-            map.put(p, map.getOrDefault(p,0)+1);
+    public void backtrack(TreeNode root, int[] count) {
+        if(root==null) return;
+        count[root.val]++;
+        if(root.left==null && root.right==null) {
+            if(isPalindrome(count)) {
+                res++;
+            }
         }
+        else {
+            backtrack(root.left, count);
+            backtrack(root.right, count);
+        }
+        count[root.val]--;
+    }
+    
+    public boolean isPalindrome(int[] count) {
         int odd = 0;
-        for(Integer key:map.keySet()) {
-            int val = map.get(key);
-            if(val%2==0) continue;
+        for(int i=0;i<10;i++) {
+            if(count[i]%2==0) continue;
             else odd++;
         }
         return (odd<=1);
-    }
-    
-    public void helper(TreeNode root, List<List<Integer>> paths, List<Integer> path) {
-        if(root==null) return;
-        path.add(root.val);
-        if(root.left==null && root.right==null) {
-            paths.add(new ArrayList(path));
-        }
-        else {
-            helper(root.left, paths, path);
-            helper(root.right, paths, path);
-        }
-        path.remove(path.size()-1);
     }
     
 }
