@@ -1,0 +1,21 @@
+//O(n) time and space
+class Solution {
+    int sum = 0;
+    public int sumEvenGrandparent(TreeNode root) {
+        if(root==null) return 0;
+        preorder(root.left, root, null);
+        preorder(root.right, root, null);
+        return sum;
+    }
+    
+    public void preorder(TreeNode cur, TreeNode parent, TreeNode grandParent) {
+        if(cur==null) return;
+        if(grandParent!=null && grandParent.val%2==0) {
+            sum+=cur.val;
+        }
+        preorder(cur.left, cur, parent);
+        preorder(cur.right, cur, parent);
+    }
+    
+    
+}
