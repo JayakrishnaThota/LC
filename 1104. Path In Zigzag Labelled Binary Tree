@@ -1,0 +1,14 @@
+//O(logn) time and O(1) space
+class Solution {
+    public List<Integer> pathInZigZagTree(int label) {
+        LinkedList<Integer> result = new LinkedList();
+        result.addFirst(label);
+        while(label!=1) {
+            int depth = (int)(Math.log(label)/Math.log(2));
+            int offset = (int)(Math.pow(2,depth+1)) - label - 1;
+            label = (int)(Math.pow(2,depth)+offset)/2;
+            result.addFirst(label);
+        }
+        return result;
+    }
+}
