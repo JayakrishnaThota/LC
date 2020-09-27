@@ -27,37 +27,59 @@ class Solution {
 }
 
 class Solution {
-    public int[] findRedundantConnection(int[][] edges) {
-        int[] parents = new int[2001]; 
-        for (int i = 0; i < parents.length; i++) {
-            parents[i] = i;
-        }
-
-        for (int[] edge : edges) {
-            int from = edge[0], to = edge[1];
-            if(find(from, parents) == find(to, parents)) {
-                return edge;
+    
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
             }
-
-            union(from, to, parents);
+            size = n;
         }
-
-        return null;
-
-    }
-
-    private int find(int node, int[] parents) {
-        while(node != parents[node]) {
-            node = parents[node];
+        
+        //O(1) amortized
+        public boolean union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return false;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+            return true;
         }
-        return node;
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
     }
-
-    private void union(int a, int b, int[] parents) {
-        int aRoot = find(a, parents);
-        int bRoot = find(b, parents);
-        if(aRoot == bRoot) return;
-        parents[aRoot] = bRoot;
+    
+    //O(n) time and space
+    public int[] findRedundantConnection(int[][] edges) {
+        if(edges==null || edges.length==0) return new int[2];
+        int n = edges.length;
+        int[] result = new int[2];
+        DisjointSet ds = new DisjointSet(n+1);
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            if(!ds.union(u, v)) {
+                result = edge;
+            }
+        }
+        return result;
     }
 }
-
