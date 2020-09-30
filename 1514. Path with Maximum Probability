@@ -2,57 +2,82 @@
 class Solution {
     
     class Cell {
-        int u;
+        int c;
         double p;
-        public Cell(int u, double p) {
-            this.u = u;
+        public Cell(int c, double p) {
+            this.c = c;
             this.p = p;
         }
     }
     
     Map<Integer, Map<Integer, Double>> adjlist;
+    Map<Integer, Double> probMap;
     public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
         construct(n, edges, succProb);
-        return dijkstras(start, end);
+        dijkstras(start, end);
+        return probMap.getOrDefault(end,0.0);
     }
     
     public void construct(int n, int[][] edges, double[] succProb) {
         adjlist = new HashMap();
-        int index = 0;
+        probMap = new HashMap();
         for(int i=0;i<n;i++) {
             adjlist.put(i, new HashMap());
         }
+        int index = 0;
         for(int[] edge:edges) {
             int u = edge[0], v = edge[1];
             double w = succProb[index++];
-            adjlist.get(u).put(v, w);
+            adjlist.get(u).put(v,w);
             adjlist.get(v).put(u,w);
         }
     }
     
-    public double dijkstras(int start, int end) {
-        Map<Integer, Double> pMap = new HashMap();
+    public void dijkstras(int start, int end) {
+        probMap.put(start, 1.0);
         PriorityQueue<Cell> pq = new PriorityQueue(1, new Comparator<Cell>(){
             public int compare(Cell a, Cell b) {
-                return Double.compare(b.p, a.p);
+                return Double.compare(b.p,a.p);
             }
         });
         pq.offer(new Cell(start, 1.0));
         while(!pq.isEmpty()) {
             Cell cell = pq.poll();
-            int u = cell.u;
+            int u = cell.c;
             double p = cell.p;
-            if(pMap.containsKey(u)) continue;
-            pMap.put(u, p);
-            if(u==end) return p;
-            Map<Integer, Double> map = adjlist.get(u);
-            for(Integer v:map.keySet()) {
-                if(pMap.containsKey(v)) continue;
-                double uvp = map.get(v);
-                pq.offer(new Cell(v, p*uvp));
+            Map<Integer, Double> neighborMap = adjlist.get(u);
+            for(int v:neighborMap.keySet()) {
+                double uvP = neighborMap.get(v);
+                if(!probMap.containsKey(v) || probMap.get(v)<p*uvP) {
+                    probMap.put(v, p*uvP);
+                    pq.offer(new Cell(v, p*uvP));
+                }
             }
         }
-        return 0.0;
     }
     
+}
+
+
+
+//O(VE) time and O(V) space
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        double[] dp = new double[n];
+        dp[start] = 1.0;
+        for(int i=0;i<n;i++) {
+            int index = 0;
+            for(int[] edge:edges) {
+                int u = edge[0], v = edge[1];
+                double w = succProb[index++];
+                if(dp[v]<dp[u]*w) {
+                    dp[v] = w*dp[u];
+                }
+                else if(dp[u]<dp[v]*w) {
+                    dp[u] = w*dp[v];
+                }
+            }
+        }
+        return dp[end];
+    }
 }
