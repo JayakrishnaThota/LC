@@ -1,0 +1,70 @@
+//O(V+E*log(V+E)) time and space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    Map<Integer, List<String>> videoMap;
+    public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends, int id, int level) {
+        construct(watchedVideos, friends);
+        return bfs(id, level);
+    }
+    
+    public void construct(List<List<String>> watchedVideos, int[][] friends) {
+        adjlist = new HashMap();
+        videoMap = new HashMap();
+        for(int u=0;u<friends.length;u++) {
+            videoMap.put(u, watchedVideos.get(u));
+            for(int v:friends[u]) {
+                adjlist.putIfAbsent(u, new HashSet());
+                adjlist.putIfAbsent(v, new HashSet());
+                adjlist.get(u).add(v);
+                adjlist.get(v).add(u);
+            }
+        }
+    }
+    
+    public List<String> bfs(int source, int desiredLevel) {
+        Set<String> result = new HashSet();
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> visited = new HashSet();
+        int level = 0;
+        queue.offer(source);
+        visited.add(source);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int u = queue.poll();
+                if(adjlist.get(u)==null) continue;
+                for(int v:adjlist.get(u)) {
+                    if(visited.add(v)) {
+                        queue.offer(v);    
+                    }
+                }
+            }
+            level++;
+            if(level==desiredLevel) break;
+        }
+        TreeMap<String, Integer> tmap = new TreeMap(Collections.reverseOrder());
+        TreeMap<Integer, Set<String>> map = new TreeMap();
+        while(!queue.isEmpty()) {
+            int u = queue.poll();
+            for(String video:videoMap.get(u)) {
+                tmap.put(video, tmap.getOrDefault(video,0)+1);
+            }
+        }
+        for(String key:tmap.keySet()) {
+            int val = tmap.get(key);
+            map.putIfAbsent(val, new HashSet());
+            map.get(val).add(key);
+        }
+        List<String> list = new ArrayList();
+        for(Integer key:map.keySet()) {
+            System.out.println(key+","+map.get(key));
+            List<String> tempSet = new ArrayList(map.get(key));
+            Collections.sort(tempSet);
+            for(String t:tempSet) {
+                list.add(t);
+            }
+        }
+        return list;
+    }
+    
+}
