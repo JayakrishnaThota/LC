@@ -54,3 +54,43 @@ class Solution {
         return (ds.size==1)?res:-1;
     }
 }
+
+//O(E+VlogV) time and O(V) space
+class Solution {
+    Map<Integer, List<int[]>> adjlist;
+    public int minimumCost(int N, int[][] connections) {
+        construct(N, connections);
+        return prims(1, N);
+    }
+    
+    public void construct(int N, int[][] connections) {
+        adjlist = new HashMap();
+        for(int[] connection:connections) {
+            int u = connection[0], v = connection[1], w = connection[2];
+            adjlist.putIfAbsent(u, new ArrayList());
+            adjlist.putIfAbsent(v, new ArrayList());
+            adjlist.get(u).add(new int[]{v, w});
+            adjlist.get(v).add(new int[]{u, w});
+        }
+    }
+    
+    public int prims(int source, int n) {
+        int res = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        Set<Integer> visited = new HashSet<>();
+        pq.offer(new int[]{source, source, 0});
+        while(!pq.isEmpty()) {
+            int[] cell = pq.poll();
+            int u = cell[0], v = cell[1], w = cell[2];
+            if(!visited.contains(v)) {
+                res+=w;
+                visited.add(v);
+                for(int[] next:adjlist.get(v)) {
+                    pq.offer(new int[]{v, next[0], next[1]});
+                }
+            }
+        }
+        return (visited.size()==n) ? res : -1;
+    }
+    
+}
