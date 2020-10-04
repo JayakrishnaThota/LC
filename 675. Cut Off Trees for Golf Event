@@ -1,0 +1,54 @@
+//O((mn)^2) time and O(mn) space 
+class Solution {
+    public int cutOffTree(List<List<Integer>> forest) {
+        if(forest==null || forest.size()==0) return 0;
+        int m = forest.size(), n = forest.get(0).size();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(forest.get(i).get(j)>1) {
+                    pq.offer(new int[]{i,j,forest.get(i).get(j)});
+                }
+            }
+        }
+        int res = 0;
+        int[] cur = new int[2];
+        while(!pq.isEmpty()) {
+            int[] cell = pq.poll();
+            int i = cell[0], j = cell[1];
+            int minSteps = minSteps(forest, cur, cell, m, n);
+            if(minSteps==-1) return -1;
+            cur[0] = i;
+            cur[1] = j;
+            res+=minSteps;
+        }
+        return res;
+    }
+    
+    private int minSteps(List<List<Integer>> forest, int[] cur, int[] cell, int m, int n) {
+        int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+        Queue<int[]> queue = new LinkedList();
+        boolean[][] visited = new boolean[m][n];
+        queue.offer(cur);
+        visited[cur[0]][cur[1]] = true;
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int[] temp = queue.poll();
+                int i = temp[0], j = temp[1];
+                if(i==cell[0] && j==cell[1]) return level;
+                for(int[] dir:dirs) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    if(x<0 || y<0 || x>=m || y>=n || forest.get(x).get(y)==0 || visited[x][y]) continue;
+                    visited[x][y] = true;
+                    queue.offer(new int[]{x,y});
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+    
+}
