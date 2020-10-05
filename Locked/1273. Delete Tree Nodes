@@ -1,0 +1,34 @@
+//O(n) time and space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    int res;
+    public int deleteTreeNodes(int nodes, int[] parent, int[] value) {
+        construct(nodes, parent, value);
+        return dfs(value, 0)[1];
+    }
+    
+    public void construct(int nodes, int[] parent, int[] value) {
+        adjlist = new HashMap();
+        for(int i=0;i<nodes;i++) {
+            adjlist.put(i, new HashSet());
+        }
+        for(int i=0;i<parent.length;i++) {
+            int p = parent[i];
+            if(p==-1) continue;
+            adjlist.get(p).add(i);
+        }
+    }
+    
+    public int[] dfs(int[] value, int u) {
+        int sum = value[u];
+        int count = 1;
+        for(int v:adjlist.get(u)) {
+            int[] temp = dfs(value, v);
+            sum+=temp[0];
+            count+=temp[1];
+        }
+        if(sum==0) count=0;
+        return new int[]{sum, count};
+    }
+    
+}
