@@ -1,0 +1,28 @@
+//O(n^2) time and O(n) space
+class Solution {
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> visited = new HashSet();
+        Set<Integer> found = new HashSet();
+        for(int i:initialBoxes) {
+            queue.offer(i);
+            found.add(i);
+        }
+        int res = 0;
+        while(!queue.isEmpty()) {
+            int u = queue.poll();
+            if(visited.contains(u) || status[u]==0) continue;
+            res+=candies[u];
+            visited.add(u);
+            for(int key:keys[u]) {
+                status[key] = 1;
+                if(found.contains(key)) queue.offer(key);
+            }
+            for(int box:containedBoxes[u]) {
+                found.add(box);
+                queue.offer(box);
+            }
+        }
+        return res;
+    }
+}
