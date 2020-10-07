@@ -1,28 +1,27 @@
 //O(n) time and space
 class Solution {
-    public int findSecondMinimumValue(TreeNode root) 
-{
-    int rootVal = root.val;
-    int secondSmall =Integer.MAX_VALUE;
-    boolean diffFound = false;
-    Queue<TreeNode> Q= new LinkedList<TreeNode>();
-    Q.add(root);
-
-    while(!Q.isEmpty())
-    {
-        TreeNode curr=Q.poll();
-        if(curr.val!=rootVal && curr.val < secondSmall)
-        {
-            secondSmall=curr.val;
-            diffFound=true;
+    public int findSecondMinimumValue(TreeNode root) {
+        Set<Integer> set = new HashSet();
+        dfs(root, set);
+        Integer m1 = null, m2 = null;
+        for(Integer s:set) {
+            if(m1!=null && m1==s || m2!=null && m2==s) continue;
+            if(m1==null || m1>s) {
+                m2 = m1;
+                m1 = s;
+            }
+            else if(m2==null || m2>s) {
+                m2 = s;
+            }
         }
-        if(curr.left!=null)
-        {
-            Q.add(curr.left);
-            Q.add(curr.right);
-        }
+        return (m2==null) ? -1 : m2;
     }
-
-    return (secondSmall == Integer.MAX_VALUE && !diffFound) ? -1 : secondSmall;
-} 
+    
+    public void dfs(TreeNode root, Set<Integer> set) {
+        if(root==null) return;
+        set.add(root.val);
+        dfs(root.left, set);
+        dfs(root.right, set);
+    }
+    
 }
