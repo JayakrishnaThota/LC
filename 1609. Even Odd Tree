@@ -1,0 +1,33 @@
+//O(n) time and space
+class Solution {
+    public boolean isEvenOddTree(TreeNode root) {
+        if(root==null) return true;
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        boolean inc = true;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            TreeNode prev = null;
+            for(int k=0;k<size;k++) {
+                TreeNode node = queue.poll();
+                System.out.print(node.val+",");
+                if(inc && node.val%2==0) return false;
+                if(!inc && node.val%2!=0) return false;
+                if(prev!=null) {
+                    if(inc) {
+                        if(prev.val>=node.val) return false;
+                    }
+                    else {
+                        if(prev.val<=node.val) return false;
+                    }
+                }
+                prev = node;
+                if(node.left!=null) queue.offer(node.left);
+                if(node.right!=null) queue.offer(node.right);
+            }
+            System.out.println(queue.size());
+            inc = !inc;
+        }
+        return true;
+    }
+}
