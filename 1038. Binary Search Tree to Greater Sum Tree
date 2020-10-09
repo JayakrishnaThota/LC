@@ -1,0 +1,18 @@
+//O(n) time and space
+class Solution {
+    int sum = 0;
+    public TreeNode bstToGst(TreeNode root) {
+        if(root==null) return root;
+        dfs(root);
+        return root;
+    }
+    
+    public void dfs(TreeNode root) {
+        if(root==null) return;
+        dfs(root.right);
+        root.val += sum;
+        sum = root.val;
+        dfs(root.left);
+    }
+    
+}
