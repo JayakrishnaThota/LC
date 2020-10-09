@@ -28,3 +28,64 @@ class Solution {
     }
     
 }
+
+
+class Solution {
+    
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+    
+    //O(n^2) time and O(n) space
+    public int removeStones(int[][] stones) {
+        if(stones==null || stones.length==0) return 0;
+        int n = stones.length;
+        DisjointSet ds = new DisjointSet(n);
+        for (int i=0;i<n;i++) {
+            int[] s1 = stones[i];
+            for (int j=i+1;j<n;j++) {
+                int[] s2 = stones[j];
+                if (s1[0] == s2[0] || s1[1] == s2[1]) {
+                    ds.union(i, j);
+                }
+            }
+        }
+        int count = 0;
+        for(int i=0;i<n;i++) {
+            if(ds.parent[i]==i) count++;
+        }
+        return stones.length-count;
+    }
+}
