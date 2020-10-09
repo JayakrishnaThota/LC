@@ -41,7 +41,7 @@ class Solution {
                 String path = position.path;
 
                 // Explore current direction until hitting a wall or the hole
-                while (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) {
+                while (x+dirs[i][0] >= 0 && x+dirs[i][0] < m && y+dirs[i][1] >= 0 && y+dirs[i][1] < n && maze[x+dirs[i][0]][y+dirs[i][1]] == 0) {
                         x += dirs[i][0];
                         y += dirs[i][1];
                         dis += 1;
