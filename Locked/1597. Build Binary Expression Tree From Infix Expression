@@ -1,0 +1,69 @@
+//O(n) time and space
+class Solution {
+    public Node expTree(String s) {
+        if(s==null || s.length()==0) return null;
+        Queue<Character> postFixQueue = getPostFixQueue(s);
+        Stack<Node> resultStack = new Stack<Node>();
+        while(!postFixQueue.isEmpty())
+        {
+            Character c = postFixQueue.poll();
+            if(isOperator(c))
+            {
+                Node right = resultStack.pop();
+                Node left = resultStack.pop();
+                resultStack.push(new Node(c, left, right));
+            }
+            else
+                resultStack.push(new Node(c));
+        }
+        
+        return resultStack.peek();
+    }
+    
+    private Queue<Character> getPostFixQueue(String s) {
+        if(s==null || s.length()==0) return new LinkedList();
+        Stack<Character> stack = new Stack(); 
+        Queue<Character> queue = new LinkedList();
+        for(char c:s.toCharArray()) {
+            if(Character.isDigit(c)) {
+                queue.add(c);
+            }
+            else {
+                if(isOperator(c)) {
+                    while(!stack.isEmpty() && precedence(stack.peek())>=precedence(c)) {
+                        queue.offer(stack.pop());
+                    }
+                    stack.push(c);
+                }
+                else {
+                    if(c=='(') stack.push(c);
+                    else {
+                        while(!stack.isEmpty() && stack.peek()!='(') {
+                            queue.offer(stack.pop());
+                        }
+                        stack.pop();
+                    }
+                }
+            }
+        }
+        while(!stack.isEmpty()) {
+            queue.offer(stack.pop());
+        }
+        return queue;
+    }
+    
+    private int precedence(char c) {
+        switch(c) {
+            case '+': return 1;
+            case '-': return 1;
+            case '*': return 2;
+            case '/': return 3;
+        }
+        return -1;
+    }
+    
+    private boolean isOperator(char c) {
+        return (c=='+' || c=='-' || c=='*' || c=='/');
+    }
+    
+}
