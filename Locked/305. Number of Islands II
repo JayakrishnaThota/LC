@@ -1,42 +1,64 @@
-//O(mn+klogmn) time and O(mn) space
+//O(p+mn) time and O(mn) space
 class Solution {
-    int[][] dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 0;
+                parent[i] = -1;
+            }
+            size = 0;
+        }
+
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+        }
+
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+
+    }
+    
     public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        DisjointSet ds = new DisjointSet(m*n);
         List<Integer> result = new ArrayList();
-        if(positions==null || positions.length==0) return result;
-        int count = 0;
-        int[] parent = new int[m*n];
-        Arrays.fill(parent, -1);
+        int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
         for(int[] position:positions) {
-            int index = n*position[0] + position[1];
-            if (parent[index] != -1) {
-                result.add(count);
-                continue;
-            }
-            parent[index] = index;
-            count++;
+            int i = position[0], j = position[1];
+            int index = i*n + j;
+            if(ds.parent[index]!=-1) { result.add(ds.size); continue; }
+            ds.parent[index] = index;
+            ds.size++;
             for(int[] dir:dirs) {
-                int x = dir[0] + position[0];
-                int y = dir[1] + position[1];
-                int newIndex = n*x + y;
-                if(x<0 || y<0 || x>=m || y>=n || parent[newIndex]==-1) continue;
-                int parentnewIndex = find(parent, newIndex);
-                if(index!=parentnewIndex) {
-                    parent[parentnewIndex] = index;
-                    count--;
-                }
+                int x = dir[0] + i;
+                int y = dir[1] + j;
+                int newIndex = x*n + y;
+                if(x<0 || y<0 || x>=m || y>=n || ds.parent[newIndex]==-1) continue;
+                ds.union(newIndex, index);
             }
-            result.add(count);
+            result.add(ds.size);
         }
         return result;
     }
-    
-    public int find(int[] parent, int index) {
-        while(index!=parent[index]) {
-            parent[index] = parent[parent[index]];
-            index = parent[index];
-        }
-        return index;
-    }
-    
 }
