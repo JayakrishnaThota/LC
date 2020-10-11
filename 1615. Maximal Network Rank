@@ -1,0 +1,21 @@
+//O(n^2) time and space
+class Solution {
+    public int maximalNetworkRank(int n, int[][] roads) {
+        if(roads==null || roads.length==0) return 0;
+        boolean[][] connected = new boolean[n][n];
+        int[] degree = new int[n];
+        int max = 0;
+        for(int[] road:roads) {
+            int u = road[0], v = road[1];
+            degree[u]++;
+            degree[v]++;
+            connected[u][v] = connected[v][u] = true;
+        }
+        for(int i=0;i<n;i++) {
+            for(int j=i+1;j<n;j++) {
+                max = Math.max(max, degree[i]+degree[j]-(connected[i][j]?1:0));
+            }
+        }
+        return max;
+    }
+}
