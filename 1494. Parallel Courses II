@@ -1,4 +1,4 @@
-//Exponential time and space
+//O(2^n*n^2) time and O(2^n) space
 class Solution {
     public int minNumberOfSemesters(int n, int[][] deps, int k) {
         int[] preq = new int[n];
