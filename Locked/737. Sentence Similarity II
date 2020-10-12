@@ -44,3 +44,47 @@ class Solution {
     }
     
 }
+
+//O(V+E) time and space
+class Solution {
+    Map<String, Set<String>> adjlist;
+    public boolean areSentencesSimilarTwo(String[] words1, String[] words2, List<List<String>> pairs) {
+        construct(pairs);
+        if(words1.length!=words2.length) return false;
+        for(int i=0;i<words1.length;i++) {
+            if(words1[i].equals(words2[i])) continue;
+            if(!dfs(words1[i], words2[i])) return false;
+        }
+        return true;
+    }
+    
+    public void construct(List<List<String>> pairs) {
+        adjlist = new HashMap();
+        for(List<String> pair:pairs) {
+            String u = pair.get(0), v = pair.get(1);
+            adjlist.putIfAbsent(u, new HashSet());
+            adjlist.putIfAbsent(v, new HashSet());
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(u);
+        }
+    }   
+    
+    public boolean dfs(String s, String t) {
+        Set<String> set = new HashSet();
+        Stack<String> stack = new Stack();
+        stack.push(s);
+        set.add(s);
+        while(!stack.isEmpty()) {
+            String u = stack.pop();
+            if(adjlist.get(u)==null) continue;
+            for(String v:adjlist.get(u)) {
+                if(v.equals(t)) return true;
+                if(set.add(v)) {
+                    stack.push(v);
+                }
+            }
+        }
+        return false;
+    }
+    
+}
