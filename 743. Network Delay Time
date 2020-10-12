@@ -1,62 +1,49 @@
-//O(V+ElogE) time and O(V+E) space
+//O(E+VlogE) time and O(V+E) space
 class Solution {
-    Map<Integer, List<int[]>> adjlist;//Adjacency list representation
-    Map<Integer, Integer> map;//Distance table to record the shortest distances from source to all other nodes
+    Map<Integer, Map<Integer, Integer>> adjlist;
     public int networkDelayTime(int[][] times, int N, int K) {
-        initialise(times, N);
-        dijkstras(K, N);
-        //Return the max 
-        if (map.size() != N) return -1;
-        int ans = 0;
-        for (int val: map.values())
-            ans = Math.max(ans, val);
-        return ans;
+        construct(times, N);
+        return dijkstras(K, N);
     }
     
-    //Method to construct adjacency list for the given directed graph
-    public void initialise(int[][] times, int N){
+    public void construct(int[][] times, int N) {
         adjlist = new HashMap();
-        map = new HashMap();
-        for(int i=1;i<=N;i++){
-            adjlist.put(i, new ArrayList<int[]>());
+        for(int i=1;i<=N;i++) {
+            adjlist.put(i, new HashMap());
         }
-        for(int[] time:times){
-            int u = time[0];
-            int v = time[1];
-            int weight = time[2];
-            adjlist.get(u).add(new int[]{v, weight});
+        for(int[] time:times) {
+            int u = time[0], v = time[1], w = time[2];
+            adjlist.get(u).put(v,w);
         }
     }
     
-    //Method to implement dijkstras to update the distance table
-    public void dijkstras(int source, int N){
-        //Min heap based on weights
-        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(N, new Comparator<int[]>(){
-           public int compare(int[] a, int[] b){
-               if(a[1]!=b[1])
-                   return a[1]-b[1];
-               else 
-                   return a[0]-b[0];
-           } 
+    public int dijkstras(int source, int N) {
+        Map<Integer, Integer> map = new HashMap();
+        PriorityQueue<int[]> pq = new PriorityQueue(1, new Comparator<int[]>(){
+            public int compare(int[] a,int[] b) {
+                return a[1]-b[1];
+            }
         });
         pq.offer(new int[]{source, 0});
-        while(!pq.isEmpty()){
+        while(!pq.isEmpty()) {
             int[] cell = pq.poll();
-            int u = cell[0];
-            int distance = cell[1];
+            int u = cell[0], t = cell[1];
             if(map.containsKey(u)) continue;
-            map.put(u, distance);
+            map.put(u, t);
             if(adjlist.get(u)==null) continue;
-            for(int[] neighbor:adjlist.get(u)){
-                int v = neighbor[0];
-                int uvdist = neighbor[1];
-                if(map.containsKey(v)) continue;
-                pq.offer(new int[]{v, distance+uvdist});
+            for(int v:adjlist.get(u).keySet()) {
+                pq.offer(new int[]{v, t+adjlist.get(u).get(v)});
             }
         }
+        int max = Integer.MIN_VALUE;
+        if(map.size()!=N) return -1;
+        for(Integer key:map.keySet()) {
+            max = Math.max(max, map.get(key));
+        }
+        return max;
     }
+    
 }
-
 
 //O(VE) time and O(V+E) space
 class Solution {
