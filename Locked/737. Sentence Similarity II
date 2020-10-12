@@ -1,4 +1,4 @@
-//O(V+E) time and space
+//O(VE) time and O(V+E) space
 class Solution {
     Map<String, Set<String>> adjlist;
     public boolean areSentencesSimilarTwo(String[] words1, String[] words2, List<List<String>> pairs) {
@@ -45,7 +45,7 @@ class Solution {
     
 }
 
-//O(V+E) time and space
+//O(VE) time and O(V+E) space
 class Solution {
     Map<String, Set<String>> adjlist;
     public boolean areSentencesSimilarTwo(String[] words1, String[] words2, List<List<String>> pairs) {
