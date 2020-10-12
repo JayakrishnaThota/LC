@@ -1,40 +1,39 @@
+//O(q*(v+e)) time and O(v+e) space
 class Solution {
     Map<String, Map<String, Double>> adjlist;
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        if(queries==null || queries.size()==0) return new double[0];
-        double[] result = new double[queries.size()];
         construct(equations, values);
-        print();
-        int index = 0;
-        for(List<String> query:queries){
-            result[index++] = dfs(query.get(0), query.get(1), 1, new HashSet<String>());
+        double[] result = new double[queries.size()];
+        for(int i=0;i<queries.size();i++) {
+            result[i] = dfs(queries.get(i).get(0), queries.get(i).get(1), 1.0, new HashSet());
         }
         return result;
     }
-        
     
-    public void construct(List<List<String>> equations, double[] values){
+    public void construct(List<List<String>> equations, double[] values) {
         adjlist = new HashMap();
         int index = 0;
-        for(List<String> equation:equations){
+        for(List<String> equation:equations) {
             String u = equation.get(0), v = equation.get(1);
             double w = values[index++];
-            if(adjlist.get(u)==null) adjlist.put(u, new HashMap<String, Double>());
-            if(adjlist.get(v)==null) adjlist.put(v, new HashMap<String, Double>());
+            adjlist.putIfAbsent(u, new HashMap());
+            adjlist.putIfAbsent(v, new HashMap());
             adjlist.get(u).put(v, w);
-            adjlist.get(v).put(u, 1/w);
+            adjlist.get(v).put(u,1/w);
         }
     }
     
-    public double dfs(String s, String d, double result, Set<String> visited){
-        if(!adjlist.containsKey(s) || !visited.add(s)) return -1;
-        if(s.equals(d)) return result;
-        Map<String, Double> map = adjlist.get(s);
-        for(String v:map.keySet()){
-            Double w = map.get(v);
-            double cur = dfs(v, d, result*w, visited);
-            if(cur!=-1) return cur;
+    public double dfs(String source, String destination, double result, Set<String> visited) {
+        if(visited.contains(source) || !adjlist.containsKey(source)) return -1.0;
+        visited.add(source);
+        if(source.equals(destination)) return result;
+        Map<String, Double> neighborMap = adjlist.get(source);
+        for(String neighbor:neighborMap.keySet()) {
+            double r = dfs(neighbor, destination, result*neighborMap.get(neighbor), visited);
+            if(r!=-1.0) return r;
         }
-        return -1;
+        return -1.0;
+        
     }
+    
 }
