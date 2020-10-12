@@ -16,10 +16,10 @@ class Solution {
         }
         
         //O(1) amortized
-        public void union(int a, int b) {
+        public boolean union(int a, int b) {
             int parentA = find(a);
             int parentB = find(b);
-            if(parentA==parentB) return;
+            if(parentA==parentB) return false;
             if(rank[parentA]>rank[parentB]) {
                 parent[parentB] = parentA;
                 rank[parentA]+=rank[parentB];
@@ -29,6 +29,7 @@ class Solution {
                 rank[parentB]+=rank[parentA];
             }
             size--;
+            return true;
         }
         
         //O(1) amortized
@@ -68,19 +69,19 @@ class Solution {
     }
     
     private int buildMST(int n, int[][] edges, int[] pick, int[] skip){
-        UnionFind uf = new UnionFind(n);
+        DisjointSet ds = new DisjointSet(n);
         int cost = 0;
         if(pick != null){
-            uf.union(pick[0], pick[1]);
+            ds.union(pick[0], pick[1]);
             cost += pick[2];
         }
         
         for(int[] edge : edges){
-            if(edge != skip && uf.union(edge[0], edge[1])){
+            if(edge != skip && ds.union(edge[0], edge[1])){
                 cost += edge[2];
             }
         }
-        return uf.count == 1? cost : Integer.MAX_VALUE;
+        return ds.size == 1? cost : Integer.MAX_VALUE;
     }
     
 }
