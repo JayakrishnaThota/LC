@@ -22,3 +22,36 @@ class Solution {
     }
     
 }
+
+
+//O(n^2) time and O(n) space
+class Solution {
+    public int sumNumbers(TreeNode root) {
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> list = new ArrayList();
+        backtrack(result, list, root);
+        int sum = 0;
+        for(List<Integer> r:result) {
+            String s = "";
+            for(Integer l:r) {
+                s+=l;
+            }
+            sum+=Integer.parseInt(s);
+        }
+        return sum;
+    }
+    
+    public void backtrack(List<List<Integer>> result, List<Integer> list, TreeNode root) {
+        if(root==null) return;
+        list.add(root.val);
+        if(root.left==null && root.right==null) {
+            result.add(new ArrayList(list));
+        }
+        else {
+            backtrack(result, list, root.left);
+            backtrack(result, list, root.right);
+        }
+        list.remove(list.size()-1);
+    }
+    
+}
