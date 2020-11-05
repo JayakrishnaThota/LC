@@ -1,32 +1,23 @@
-//O(nlogn) time and space
+//O(n^2) time and O(n) space
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        List<String> list = new ArrayList();
         List<List<Integer>> result = new ArrayList();
-        backtrack(list, "", root);
-        for(String s:list){
-            String[] tokens = s.split(",");
-            List<Integer> sublist = new ArrayList();
-            int cur = 0;
-            for(String token:tokens){
-                cur+=Integer.parseInt(token);
-                sublist.add(Integer.parseInt(token));
-            }
-            if(cur==sum) result.add(new ArrayList(sublist));
-        }
+        List<Integer> list = new ArrayList();
+        helper(result, list, root, sum);
         return result;
     }
     
-    public void backtrack(List<String> list, String s, TreeNode root) {
+    public void helper(List<List<Integer>> result, List<Integer> list, TreeNode root, int sum) {
         if(root==null) return;
-        if(root.left==null && root.right==null){
-            s+=root.val;
-            list.add(s);
-            return;
+        list.add(root.val);
+        if(root.val==sum && root.left==null && root.right==null) {
+            result.add(new ArrayList(list));
         }
-        s+=root.val+",";
-        backtrack(list, s, root.left);
-        backtrack(list, s, root.right);
+        else {
+            helper(result, list, root.left, sum-root.val);
+            helper(result, list, root.right, sum-root.val);
+        }
+        list.remove(list.size()-1);
     }
     
 }
