@@ -27,6 +27,9 @@ class Solution {
 //O(n) time and O(1) space
 class Solution {
     public int longestMountain(int[] A) {
+        //I'll have two variables instead of two arrays
+        //Whenever consecutive elements are equal, I'll reset left and right to 0
+        //If we saw downward trend(indicated by down>0) and we saw upward trend(curElement>prevElement), I'll reset left and right to 0
         int res = 0, up = 0, down = 0;
         for (int i = 1; i < A.length; ++i) {
             if (down > 0 && A[i - 1] < A[i] || A[i - 1] == A[i]) up = down = 0;
