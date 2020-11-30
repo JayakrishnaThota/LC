@@ -53,3 +53,103 @@ class Solution {
         return ans;
     }
 }
+
+
+//Union Find Solution
+class UnionFind {
+        int[] parent;
+        int[] rank;
+        UnionFind(int n)
+        {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0; i<n; i++)
+            {
+                parent[i] = i;
+                rank[i] = 1;
+            }
+        }
+        
+        public void union(int nodeA, int nodeB) 
+        {
+            if(nodeA == nodeB)
+                return;
+            int parentA = find(nodeA);
+            int parentB = find(nodeB);
+            if(parentA == parentB)
+                return;
+            if(rank[parentA] < rank[parentB])
+            {
+                parent[parentA] = parentB;
+                rank[parentB] += rank[parentA];
+            }
+            else
+            {
+                parent[parentB] = parentA;
+                rank[parentA] += rank[parentB];
+            }
+        }
+        
+        public int find(int nodeA)
+        {
+            if(parent[nodeA] == nodeA)
+                return nodeA;
+            
+            parent[nodeA] = find(parent[nodeA]);
+            return parent[nodeA];
+        }
+    }
+    
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        List<List<String>> res = new ArrayList();
+        
+        if(accounts == null || accounts.size() == 0)
+            return res;
+        
+        HashMap<String, Integer> emailMap = new HashMap();  
+        
+        int n = accounts.size();
+        UnionFind uf = new UnionFind(n);
+        
+        //Union Accounts Based on Email
+        for(int i=0; i<n; i++)
+        {
+            List<String> account = accounts.get(i);
+            for(int j=1; j<account.size(); j++)
+            {
+                String email = account.get(j);
+                if(emailMap.containsKey(email))
+                {
+                    int prevIdx = emailMap.get(email);
+                    uf.union(prevIdx, i);
+                }
+                else
+                {
+                    emailMap.put(email, i);
+                }
+            }
+        }
+        
+        //Map each email to particular parentAccountClusterIndex
+        HashMap<Integer, HashSet<String>> mergedAccMap = new HashMap();
+        for(String key: emailMap.keySet())
+        {
+            int idx = uf.find(emailMap.get(key));
+            mergedAccMap.putIfAbsent(idx, new HashSet());
+            mergedAccMap.get(idx).add(key);
+        }
+        
+        //Rearrange values in Map, 
+        // Sort it, 
+        // append UserName and add to result
+        for(int index: mergedAccMap.keySet())
+        {
+            HashSet<String> emails = mergedAccMap.get(index);
+            LinkedList<String> mergedMails = new LinkedList(emails);
+            Collections.sort(mergedMails);
+            mergedMails.addFirst(accounts.get(index).get(0));
+            res.add(mergedMails);
+        }
+        
+        return res;
+    }
