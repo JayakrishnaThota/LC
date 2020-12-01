@@ -1,0 +1,13 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean canConstruct(String s, int k) {
+        int n = s.length(), count = 0;
+        if(k>n) return false;
+        int[] map = new int[26];
+        for(char c:s.toCharArray()) {
+            map[c-'a']++;
+        }
+        for(int m:map) if(m%2!=0) count++;
+        return (count<=k);
+    }
+}
