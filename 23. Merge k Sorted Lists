@@ -24,4 +24,58 @@ class Solution {
         }
         return dummy.next;
     }
+    
+    /*O(nlogk) time */
+     public ListNode mergeKLists(ListNode[] lists) {
+        if(lists == null || lists.length == 0)
+            return null;
+        int low = 0, high = lists.length-1;
+        return partition(lists, low, high);
+    }
+    
+    public ListNode partition(ListNode[] lists, int low, int high)
+    {
+        if(low == high)
+            return lists[low];
+        int mid = low+(high - low)/2;
+        ListNode left = partition(lists, low, mid);
+        ListNode right = partition(lists, mid+1, high);
+        return merge(left, right);
+    }
+    
+    public ListNode merge(ListNode node1, ListNode node2)
+    {
+        ListNode dummy = new ListNode(-1);
+        ListNode iter = dummy;
+        while(node1 != null && node2 != null)
+        {
+            if(node2.val < node1.val)
+            {
+                ListNode next = node2.next;
+                iter.next = node2;
+                node2.next = null;
+                node2 = next;
+            }
+            else
+            {
+                ListNode next = node1.next;
+                iter.next = node1;
+                node1.next = null;
+                node1 = next;
+            }
+            iter = iter.next;
+        }
+        
+        if(node2 != null)
+        {
+            iter.next = node2;
+        }
+        
+        if(node1 != null)
+        {
+            iter.next = node1;
+        }
+        
+        return dummy.next;
+    }
 }
