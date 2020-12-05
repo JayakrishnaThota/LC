@@ -1,0 +1,57 @@
+//O(nlogn) time and O(n) space 
+class Solution {
+    public int countRangeSum(int[] nums, int lower, int upper) {
+        if(nums==null || nums.length==0) return 0;
+        int n = nums.length;
+        long[] sum = new long[n+1];
+        for(int i=1;i<sum.length;i++) {
+            sum[i] = sum[i-1] + nums[i-1];
+        }
+        return mergeSort(sum, 0, n, lower, upper);
+    }
+    
+    
+    public int mergeSort(long[] nums, int low, int high, int lower, int upper) {
+        if(low>=high) return 0;
+        int mid = low + (high-low)/2;
+        int res = mergeSort(nums, low, mid, lower, upper) + mergeSort(nums, mid+1, high, lower, upper);
+        int i = mid+1, j = mid+1;
+        for(int k=low;k<=mid;k++) {
+            while(i<=high && nums[i]-nums[k]<lower) i++;
+            while(j<=high && nums[j]-nums[k]<=upper) j++;
+            res+=(j-i);
+        }
+        mergeCountRangeSum(nums, low, high);
+        return res;
+    }
+    
+    private void mergeCountRangeSum(long[] sums, int low, int high){
+		int mid = low + (high - low) / 2;
+		int i = low, j = mid+1, k = 0;
+		long[] arr = new long[high-low+1];
+		
+		while (k < arr.length){
+			long num1 = i <= mid ? sums[i] : Long.MAX_VALUE;
+			long num2 = j <= high ? sums[j] : Long.MAX_VALUE;
+			
+			arr[k++] = num1 <= num2 ? sums[i++] : sums[j++];
+		}
+		
+		for (int p = 0; p < arr.length; p++) sums[p+low] = arr[p];
+	}
+    
+    public void merge(long[] nums, int low, int high) {
+        long[] auxIndex = new long[high+1-low];
+        int mid = low + (high-low)/2;
+        int i = low, j = mid+1, k = 0;
+        while(k<auxIndex.length) {
+            long num1 = (i<=mid)?nums[i]:Long.MAX_VALUE;
+            long num2 = (j<=high)?nums[j]:Long.MAX_VALUE;
+            auxIndex[k++] = (num1<=num2) ? nums[i++] : nums[j++];
+        }
+        for(int p=0;p<auxIndex.length;p++) {
+            nums[p+low] = auxIndex[p];
+        }
+    }
+    
+}
