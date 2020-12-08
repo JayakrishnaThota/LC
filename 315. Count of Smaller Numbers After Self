@@ -13,7 +13,7 @@ class Solution {
         }
     }
     
-    //O(nlogn) time and O(n) space
+    //O(n^2) time and O(n) space
     public List<Integer> countSmaller(int[] nums) {
         if(nums==null || nums.length==0) return new ArrayList();
         int n = nums.length;
@@ -42,6 +42,63 @@ class Solution {
         }
         root.repeat++;
         return sum+root.leftSum;
+    }
+    
+}
+
+
+//O(nlogn) time and O(n) space
+class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> result = new ArrayList();
+        if(nums==null || nums.length==0) return result;
+        int n = nums.length;
+        int[] indexes = new int[n];
+        int[] count = new int[n];
+        for(int i=0;i<n;i++) {
+            indexes[i] = i;
+        }
+        mergeSort(nums, 0, nums.length-1, count, indexes);
+        for(int c:count) result.add(c);
+        return result;
+    }
+    
+    public void mergeSort(int[] nums, int low, int high, int[] count, int[] indexes) {
+        if(low>=high) return;
+        int mid = low + (high-low)/2;
+        mergeSort(nums, low, mid, count, indexes);
+        mergeSort(nums, mid+1, high, count, indexes);
+        int i = low, j = mid+1;
+        int rightCount = 0;
+        while(i<=mid && j<=high) {
+            if(nums[indexes[i]]>nums[indexes[j]]) {
+                rightCount++;
+                j++;
+            }
+            else {
+                count[indexes[i]]+=rightCount;
+                i++;
+            }
+        }
+        while(i<=mid) {
+            count[indexes[i]]+=rightCount;
+            i++;
+        }
+        merge(nums, low, high, indexes);
+    }
+    
+    public void merge(int[] nums, int low, int high, int[] indexes) {
+        if(low>=high) return;
+        int mid = low + (high-low)/2;
+        int[] aux = new int[high-low+1];
+        int i = low, j = mid+1, k = 0;
+        while(k<aux.length) {
+            int a = (i<=mid)?nums[indexes[i]]:Integer.MAX_VALUE;
+            int b = (j<=high)?nums[indexes[j]]:Integer.MAX_VALUE;
+            aux[k++] = (a<=b)?indexes[i++]:indexes[j++];
+        }
+        int p = 0;
+        while(p<aux.length) { indexes[p+low] = aux[p]; p++; } 
     }
     
 }
