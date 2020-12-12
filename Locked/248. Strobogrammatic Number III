@@ -1,35 +1,47 @@
-public class Solution{
-
-
-	public int strobogrammaticInRange(String low, String high){
-		int count = 0;
-		List<String> rst = new ArrayList<String>();
-		for(int n = low.length(); n <= high.length(); n++){
-			rst.addAll(helper(n, n));
-		}
-		for(String num : rst){
-		    
-			if((num.length() == low.length()&&num.compareTo(low) < 0 ) ||(num.length() == high.length() && num.compareTo(high) > 0)) continue;
-				count++;
-		}
-		return count;
-	}
-
-	private List<String> helper(int cur, int max){
-		if(cur == 0) return new ArrayList<String>(Arrays.asList(""));
-		if(cur == 1) return new ArrayList<String>(Arrays.asList("1", "8", "0"));
-
-		List<String> rst = new ArrayList<String>();
-		List<String> center = helper(cur - 2, max);
-
-		for(int i = 0; i < center.size(); i++){
-			String tmp = center.get(i);
-			if(cur != max) rst.add("0" + tmp + "0");
-			rst.add("1" + tmp + "1");
-			rst.add("6" + tmp + "9");
-			rst.add("8" + tmp + "8");
-			rst.add("9" + tmp + "6");
-		}
-		return rst;
-	}
+//O((high.length-low.length)*5^n) time and space
+class Solution {
+    public int strobogrammaticInRange(String low, String high) {
+        int m = low.length(), n = high.length(), result = 0;
+        for(int i=m;i<=n;i++) {
+            List<String> list = findStrobogrammatic(i);
+            if(i>m && i<n) {
+                result+=list.size();
+            }
+            else {
+                for(String l:list) {
+                    Long cur = Long.parseLong(l);
+                    Long li = Long.parseLong(low);
+                    Long hi = Long.parseLong(high);
+                    if(cur>=li && hi>=cur) {
+                        result++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    public List<String> findStrobogrammatic(int n) {
+        return helper(n, n);
+    }
+    
+    public List<String> helper(int m, int n) {
+        List<String> result = new ArrayList();
+        if(m==0) {
+            return new ArrayList(Arrays.asList(""));
+        }
+        if(m==1) {
+            return new ArrayList(Arrays.asList("0","1","8"));
+        }
+        List<String> list = helper(m-2, n);
+        for(String l:list) {
+            if(m!=n) result.add("0"+l+"0");
+            result.add("1"+l+"1");
+            result.add("6"+l+"9");
+            result.add("9"+l+"6");
+            result.add("8"+l+"8");
+        }
+        return result;
+    }
+    
 }
