@@ -1,22 +1,27 @@
 //O(n^2) time and O(n) space
 class Solution {
     public int minAreaRect(int[][] points) {
-        if(points==null || points.length<2) return 0;
-        Map<Integer, Set<Integer>> map = new HashMap();
-        int n = points.length;
-        for(int[] p:points){
-            map.putIfAbsent(p[0], new HashSet());
-            map.get(p[0]).add(p[1]);
+        if(points==null || points.length<4) return 0;
+        int n = points.length, min = Integer.MAX_VALUE;
+        Set<String> set = new HashSet();
+        for(int i=0;i<n;i++) {
+            set.add(points[i][0]+","+points[i][1]);
         }
-        int min = Integer.MAX_VALUE;
-        for(int[] p1:points) {
-            for(int[] p2:points) {
-                if((p1[0]==p2[0])||(p1[1]==p2[1])) continue;
-                if((map.get(p1[0]).contains(p2[1])) && (map.get(p2[0]).contains(p1[1]))) {
-                    min = Math.min(min, Math.abs(p1[0]-p2[0])*Math.abs(p1[1]-p2[1]));
+        for(int i=0;i<n;i++) {
+            for(int j=i+1;j<n;j++) {
+                if((points[i][0]==points[j][0])||(points[i][1]==points[j][1])) continue;
+                String B = points[i][0]+","+points[j][1];
+                String D = points[j][0]+","+points[i][1];
+                if(set.contains(B) && set.contains(D)) {
+                    min = Math.min(min, area(points[i], points[j]));
                 }
             }
         }
-        return min==Integer.MAX_VALUE?0:min;
+        return (min==Integer.MAX_VALUE)?0:min;
     }
+    
+    public int area(int[] A, int[] B) {
+        return Math.abs(A[0]-B[0])*Math.abs(A[1]-B[1]);
+    }
+    
 }
