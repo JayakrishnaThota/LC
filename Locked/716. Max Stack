@@ -1,6 +1,7 @@
 class MaxStack {
     class DLNode {
         int val;
+        boolean flag;
         DLNode pre, post;
         public DLNode(int val) {
             this.val = val;
@@ -11,10 +12,12 @@ class MaxStack {
     }
     
     DLNode head, tail;
-    TreeMap<Integer, List<DLNode>> map;
+    TreeMap<Integer, LinkedList<DLNode>> map;
     public MaxStack() {
         head = new DLNode();
         tail = new DLNode();
+        head.flag = true;
+        tail.flag = true;
         head.post = tail;
         tail.pre = head;
         map = new TreeMap();
@@ -40,45 +43,46 @@ class MaxStack {
         return ret;
     }
       
+    //O(logn) time and O(1) space
     public void push(int x) {
         DLNode node = new DLNode(x);
         insertAtHead(node);
-        map.putIfAbsent(x, new ArrayList());
+        map.putIfAbsent(x, new LinkedList());
         map.get(x).add(node);
     }
 
+    //O(logn) time and O(1) space
     public int pop() {
+        if(head.post.flag) return 0;
         DLNode pop = popHead();
-        List<DLNode> list = map.get(pop.val);
-        list.remove(list.size()-1);
-        map.put(pop.val, list);
+        LinkedList<DLNode> list = map.get(pop.val);
+        list.removeLast();
+        if(list.isEmpty()) map.remove(pop.val);
+        else map.put(pop.val, list);
         return pop.val;
     }
 
-    /*
-     * @return: An integer
-     */    
+    //O(1) time and space   
     public int top() {
         return head.post.val;
     }
 
-    /*
-     * @return: An integer
-     */    
+    //O(logn) time and O(1) space  
     public int peekMax() {
         int max = map.lastKey();
         return max;
     }
 
-    /*
-     * @return: An integer
-     */    
+    //O(logn) time and O(1) space  
     public int popMax() {
+        if(head.post.flag) return 0;
         int max = map.lastKey();
-        List<DLNode> list = map.get(max);
-        delete(list.get(list.size()-1));
-        list.remove(list.size()-1);
-        map.put(max, list);
+        LinkedList<DLNode> list = map.get(max);
+        DLNode rem = list.getLast();
+        list.removeLast();
+        delete(rem);
+        if(list.isEmpty()) map.remove(max);
+        else map.put(max, list);
         return max;
     }
 }
