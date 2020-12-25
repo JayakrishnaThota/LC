@@ -1,47 +1,52 @@
-public class LFUCache {
-    HashMap<Integer, Integer> vals;
-    HashMap<Integer, Integer> counts;
-    HashMap<Integer, LinkedHashSet<Integer>> lists;
-    int cap;
-    int min = -1;
+class LFUCache {
+
+    Map<Integer, Integer> map;
+    Map<Integer, Integer> freqMap;
+    Map<Integer, LinkedHashSet<Integer>> locsMap;
+    int min;
+    int capacity;
     public LFUCache(int capacity) {
-        cap = capacity;
-        vals = new HashMap<>();
-        counts = new HashMap<>();
-        lists = new HashMap<>();
-        lists.put(1, new LinkedHashSet<>());
+        map = new HashMap();
+        freqMap = new HashMap();
+        locsMap = new HashMap();
+        this.min = 0;
+        this.capacity = capacity;
     }
     
+    //O(1) time
     public int get(int key) {
-        if(!vals.containsKey(key))
-            return -1;
-        int count = counts.get(key);
-        counts.put(key, count+1);
-        lists.get(count).remove(key);
-        if(count==min && lists.get(count).size()==0)
-            min++;
-        if(!lists.containsKey(count+1))
-            lists.put(count+1, new LinkedHashSet<>());
-        lists.get(count+1).add(key);
-        return vals.get(key);
+        if(!map.containsKey(key)) return -1;
+        int freq = freqMap.get(key);
+        int ret = map.get(key);
+        int newFreq = freq+1;
+        freqMap.put(key, newFreq);
+        locsMap.get(freq).remove(key);
+        if(locsMap.get(freq).size()==0 && min==freq) {
+            min = newFreq;
+        }
+        locsMap.putIfAbsent(newFreq, new LinkedHashSet());
+        locsMap.get(newFreq).add(key);
+        return ret;
     }
     
+    //O(1) time
     public void put(int key, int value) {
-        if(cap<=0)
-            return;
-        if(vals.containsKey(key)) {
-            vals.put(key, value);
+        if(capacity<=0) return;
+        if(map.containsKey(key)) {
+            map.put(key, value);
             get(key);
             return;
-        } 
-        if(vals.size() >= cap) {
-            int evit = lists.get(min).iterator().next();
-            lists.get(min).remove(evit);
-            vals.remove(evit);
         }
-        vals.put(key, value);
-        counts.put(key, 1);
+        map.put(key, value);
+        freqMap.put(key, 1);
+        if(map.size()>capacity) {
+            int rem = locsMap.get(min).iterator().next();
+            locsMap.get(min).remove(rem);
+            map.remove(rem);
+            freqMap.remove(rem);
+        }
+        locsMap.putIfAbsent(1, new LinkedHashSet());
+        locsMap.get(1).add(key);
         min = 1;
-        lists.get(1).add(key);
     }
 }
