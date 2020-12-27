@@ -5,10 +5,7 @@ class Solution {
         if(points==null || points.length==0) return 0;
         Arrays.sort(points, new Comparator<int[]>(){
            public int compare(int[] p1, int[] p2){
-               if(p1[1]!=p2[1])
-                   return p1[1]-p2[1];
-               else
-                   return p2[0]-p2[0];
+               return Integer.compare(p1[0], p2[0]);
            } 
         });
         int start = points[0][0];
