@@ -1,4 +1,4 @@
-//O(mnlogmn) time and  O(mn)space
+//O(mn) time and O(mn)space
 class Solution {
     public int minTotalDistance(int[][] grid) {
         List<Integer> rows = new ArrayList();
@@ -11,14 +11,11 @@ class Solution {
                 }
             }
         }
-        Collections.sort(rows);
         Collections.sort(cols);
         int rMedian = 0, cMedian = 0;
-        if(rows.size()==0 && cols.size()==0) return 0;
-        if(rows.size()!=0)
-            rMedian = rows.get(rows.size()/2);
-        if(cols.size()!=0)
-            cMedian = cols.get(cols.size()/2);
+        if(rows.size()==0 || cols.size()==0) return 0;
+        rMedian = rows.get(rows.size()/2);
+        cMedian = cols.get(cols.size()/2);
         int result = 0;
         for(Integer r:rows) result+=Math.abs(r-rMedian);
         for(Integer c:cols) result+=Math.abs(c-cMedian);
