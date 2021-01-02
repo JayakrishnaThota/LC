@@ -1,0 +1,40 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public String[] reorderLogFiles(String[] logs) {
+        String[] result = new String[logs.length];
+        int n = logs.length, ri = 0;
+        List<String> digitLogs = new ArrayList();
+        List<String> letterLogs = new ArrayList();
+        for(int i=0;i<logs.length;i++) {
+            String[] tokens = logs[i].split(" ");
+            if(Character.isDigit(tokens[1].charAt(0))) digitLogs.add(logs[i]);
+            else {
+                letterLogs.add(logs[i]);
+            }
+        }
+        Collections.sort(letterLogs, new Comparator<String>(){
+            public int compare(String a, String b) {
+                String[] tokens1 = a.split(" ");
+                String[] tokens2 = b.split(" ");
+                for(int i=1;i<Math.min(tokens1.length, tokens2.length);i++) {
+                    String s = tokens1[i], t = tokens2[i];
+                    if(s.equals(t)) continue;
+                    return s.compareTo(t);
+                }
+                if(tokens1.length==tokens2.length) {
+                    return tokens1[0].compareTo(tokens2[0]);
+                }
+                else {
+                    return tokens1.length-tokens2.length;
+                }
+            }
+        });
+        for(String letterLog:letterLogs) {
+            result[ri++] = letterLog;
+        }
+        for(String digitLog:digitLogs) {
+            result[ri++] = digitLog;
+        }
+        return result;
+    }
+}
