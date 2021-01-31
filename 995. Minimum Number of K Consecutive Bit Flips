@@ -1,0 +1,21 @@
+//O(n) time and space
+class Solution {
+    public int minKBitFlips(int[] A, int k) {
+        if(A==null || A.length==0) return 0;
+        int res = 0, flip = 0, n = A.length;
+        int[] flipCount = new int[n];
+        for(int i=0;i<n;i++) {
+            if(i>=k) {
+                flip ^= flipCount[i-k];
+            }
+            if(flip==A[i]) {
+                if(i+k>n) return -1;
+                flipCount[i] = 1;
+                flip^=1;
+                res++;
+            }
+        }
+        return res;
+    }
+}
+
