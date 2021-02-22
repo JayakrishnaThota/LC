@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public int[] findBuildings(int[] heights) {
+        if(heights==null || heights.length==0) return new int[0];
+        Stack<Integer> stack = new Stack();
+        List<Integer> result = new ArrayList();
+        for(int i=0;i<heights.length;i++) {
+            while(!stack.isEmpty() && heights[stack.peek()]<=heights[i]) {
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        while(!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+        int[] array = new int[result.size()];
+        for(int i=0;i<array.length;i++) {
+            array[i] = result.get(array.length-1-i);
+        }
+        return array;
+    }
+}
