@@ -8,41 +8,45 @@
  */
  //O(logn) time and O(1) space
 class Solution {
-    public int findInMountainArray(int target, MountainArray A) {
-        int n = A.length(), l, r, m, peak = 0;
-        // find index of peak
-        l  = 0;
-        r = n - 1;
-        while (l < r) {
-            m = (l + r) / 2;
-            if (A.get(m) < A.get(m + 1))
-                l = peak = m + 1;
-            else
-                r = m;
+    public int findInMountainArray(int target, MountainArray mountainArr) {
+        int n = mountainArr.length();
+        if(n<3) return -1;
+        int low = 0, high = n-1, peak = 0;
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(mountainArr.get(mid+1)>mountainArr.get(mid)) {
+                low = mid+1;
+            }
+            else {
+                high = mid;
+            }
         }
-        // find target in the left of peak
-        l = 0;
-        r = peak;
-        while (l <= r) {
-            m = (l + r) / 2;
-            if (A.get(m) < target)
-                l = m + 1;
-            else if (A.get(m) > target)
-                r = m - 1;
-            else
-                return m;
+        peak = low;
+        low = 0;
+        high = peak;
+        //Find in the increasing strip
+        while(low<=high) {
+            int mid = low + (high-low)/2;
+            if(mountainArr.get(mid)<target) {
+                low = mid+1;
+            }
+            else if(mountainArr.get(mid)>target) {
+                high = mid-1;
+            }
+            else return mid;
         }
-        // find target in the right of peak
-        l = peak;
-        r = n - 1;
-        while (l <= r) {
-            m = (l + r) / 2;
-            if (A.get(m) > target)
-                l = m + 1;
-            else if (A.get(m) < target)
-                r = m - 1;
-            else
-                return m;
+        low = peak;
+        high = n-1;
+        //Find in the decreasing strip
+        while(low<=high) {
+            int mid = low + (high-low)/2;
+            if(mountainArr.get(mid)>target) {
+                low = mid+1;
+            }
+            else if(mountainArr.get(mid)<target) {
+                high = mid-1;
+            }
+            else return mid;
         }
         return -1;
     }
