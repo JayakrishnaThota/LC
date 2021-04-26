@@ -1,0 +1,97 @@
+//O(mn) time and space
+class Solution {
+    
+    class DisjointSet {
+        int[] parent;
+        int[] size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            size = new int[n];
+            for(int i=0;i<n;i++) {
+                size[i] = 1;
+                parent[i] = i;
+            }
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(size[parentA]>size[parentB]) {
+                parent[parentB] = parentA;
+                size[parentA]+=size[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                size[parentB]+=size[parentA];
+            }
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+    
+    public int largestIsland(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        DisjointSet ds = new DisjointSet(m*n);
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(grid[i][j]==1) {
+                    int id = i*n + j;
+                    for(int[] dir:dirs) {
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+                        if(inTheGrid(x,y,m,n) && grid[x][y]==1) {
+                            int newId = x*n + y;
+                            ds.union(id, newId);
+                        }
+                    }
+                }
+            }
+        }
+        int max = 0;
+        for(int i=0;i<m*n;i++) {
+            max = Math.max(max, ds.size[i]);
+        }
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    int id = i * n + j;
+                    int combinedSize = 1;
+                    Set<Integer> prevFather = new HashSet<>();
+                    for(int[] dir:dirs) {
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+                        int newId = x * n + y;
+                        if (inTheGrid(x, y, m, n) && grid[x][y] == 1) { 
+                            int currFather = ds.find(newId);
+                            if (prevFather.isEmpty() || !prevFather.contains(currFather)) {
+                                combinedSize += ds.size[currFather];
+                                prevFather.add(currFather);
+                            }
+                        }
+                    }
+                    max = Math.max(max, combinedSize);
+                }
+            }
+        }
+        
+        // return whole size if the grid is an all 1 matrix, otherwise return the value of max
+        return max == 0 ? m * n : max;
+        
+    }
+    
+    private boolean inTheGrid(int x, int y, int m, int n) {
+        return (x<m) && (x>=0) && (y<n) && (y>=0);
+    }
+    
+}
