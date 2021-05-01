@@ -3,39 +3,30 @@ class Solution {
     public boolean isNumber(String s) {
         if(s==null || s.length()==0) return true;
         s = s.trim();
-        int n = s.length();
-        boolean numberSeen = false;
-        boolean pointSeen = false;
-        boolean exponentialSeen = false;
-        boolean numberAfterE = true;
-        for(int i=0;i<n;i++){
+        boolean eSeen = false, pointSeen = false;
+        boolean numberSeen = false, numberAfterE = true;
+        for(int i=0;i<s.length();i++) {
             char c = s.charAt(i);
-            if(c>='0' && c<='9'){
-                numberSeen = true;
+            if(Character.isDigit(c)) {
                 numberAfterE = true;
-            }
-            else if(c=='.'){
-                if(pointSeen || exponentialSeen) {
-                    return false;
-                }
+                numberSeen = true;
+            } else if(c=='.') {
+                if(pointSeen || eSeen) return false;
                 pointSeen = true;
-            }
-            else if(c=='e'){
-                if(!numberSeen || exponentialSeen) {
-                    return false;
-                }
-                exponentialSeen = true;
+                
+            } else if(c=='e' || c=='E') {
+                if(!numberSeen || eSeen) return false;
+                eSeen = true;
                 numberAfterE = false;
-            }
-            else if(c=='+' || c=='-'){
+            } else if(c=='+' || c=='-') {
                 if(i!=0 && s.charAt(i-1)!='e') {
                     return false;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
         return numberSeen && numberAfterE;
+        
     }
 }
