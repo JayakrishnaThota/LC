@@ -1,43 +1,27 @@
 //O(n) time and O(1) space
 class Solution {
     public Node insert(Node head, int insertVal) {
-        //Edge case 0: When there are 0 nodes
-        if(head==null) return new Node(insertVal);
-        //Edge case 1: When there is only one node
-        if(head.next.equals(head)){
-            Node newnode = new Node(insertVal);
-            head.next = newnode;
-            newnode.next = head;
-            return head;
+        Node node = new Node(insertVal);
+        if (head == null) { node.next = node; return node; }
+        Node prev = head;
+        Node cur = head.next;
+        while(cur != head) {
+            if ( (prev.val <= cur.val) ) {
+                if (prev.val <= insertVal && insertVal <= cur.val) {
+                    break;
+                }
+            } else {
+                if (insertVal <= cur.val || prev.val <= insertVal) {
+                    break;
+                }
+            }
+            prev = cur;
+            cur = cur.next;
         }
-        Node max = head;
-        while(max.val<max.next.val){
-            max = max.next;
-        }
-        Node min = max.next;
-        //At this point, min is parked at the smallest point and max belongs to the previous node
-        //Edge case 2: When the insertval is the smallest value
-        if(min.val>insertVal){
-            Node newnode = new Node(insertVal);
-            max.next = newnode;
-            newnode.next = min;
-            return head;
-        }
-        //Edge case 3: When the insertVal is the largest value
-        if(max.val<insertVal){
-            Node newnode = new Node(insertVal);
-            max.next = newnode;
-            newnode.next = min;
-            return head;
-        }
-        //General case
-        while(min.val<insertVal){
-            max = max.next;
-            min = min.next;
-        }
-        Node newnode = new Node(insertVal);
-        max.next = newnode;
-        newnode.next = min;
+        
+        prev.next = node;
+        node.next = cur;
         return head;
     }
+
 }
