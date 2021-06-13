@@ -32,3 +32,92 @@ class Solution {
 }
 
 //DFS + Trie
+class Solution {
+    class TrieNode {
+        List<String> prefixes;
+        TrieNode[] children;
+        
+        TrieNode()
+        {
+            prefixes = new ArrayList();
+            children = new TrieNode[26];
+        }
+        
+        public void addWord(String word)
+        {
+            TrieNode node = root;
+            for(char ch: word.toCharArray())
+            {
+                if(node.children[ch-'a'] == null)
+                {
+                    node.children[ch-'a'] = new TrieNode();
+                }
+                node.children[ch-'a'].prefixes.add(word);
+                node = node.children[ch-'a'];
+            }
+        }
+        
+        public List<String> getPrefixes(String word)
+        {
+            TrieNode node = root;
+            List<String> res = new ArrayList();
+            for(char ch: word.toCharArray())
+            {
+                if(node.children[ch-'a'] == null)
+                    return res;
+                
+                node = node.children[ch-'a'];
+            }
+            return node.prefixes;
+        }
+    }
+    
+    TrieNode root;
+    public List<List<String>> wordSquares(String[] words) {
+        List<List<String>> res = new ArrayList();
+        if(words == null || words.length == 0)
+            return res;
+        
+        root = new TrieNode();
+        for(String word: words)
+        {
+            TrieNode node = root;
+            root.addWord(word);
+        }
+        
+        for(String word: words)
+        {
+            helper(res, word, new ArrayList());
+        }
+        return res;
+    }
+    
+    private void helper(List<List<String>> res, String word, List<String> subList)
+    {
+        subList.add(word);
+        if(subList.size() == word.length())
+        {
+            res.add(new ArrayList(subList));
+            subList.remove(subList.size()-1);
+            return;
+        }
+        
+        if(word.length() < subList.size()+1)
+            return;
+        
+        StringBuilder preStr = new StringBuilder();
+        
+        for(String str: subList)
+        {
+            preStr.append(str.charAt(subList.size()));
+        }
+        
+        List<String> prefixes = root.getPrefixes(preStr.toString());
+        
+        for(String prefix: prefixes)
+        {
+            helper(res, prefix, subList);
+        }
+        subList.remove(subList.size()-1);
+    }
+}
