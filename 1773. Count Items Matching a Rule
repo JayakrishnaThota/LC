@@ -1,0 +1,14 @@
+//O(n) time and O(1) space
+class Solution {
+    public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        int res = 0, match = 0;
+        if(ruleKey.equals("color")) match = 1;
+        if(ruleKey.equals("name")) match = 2;
+        for(List<String> item:items) {
+            if(item.get(match).equals(ruleValue)) {
+                res++;
+            }
+        }
+        return res;
+    }
+}
