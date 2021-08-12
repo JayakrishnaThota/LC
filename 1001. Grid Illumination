@@ -10,11 +10,13 @@ class Solution {
         for(int i=0; i<lamps.length; i++){
             int x = lamps[i][0];
             int y = lamps[i][1];
-            m1.put(x, m1.getOrDefault(x, 0) + 1);
-            m2.put(y, m2.getOrDefault(y, 0) + 1);
-            m3.put(x-y, m3.getOrDefault(x-y, 0) + 1);
-            m4.put(x+y, m4.getOrDefault(x+y, 0) + 1);
-            m5.put(N*x + y, true);
+            if(!m5.containsKey(N*x + y)){
+                m1.put(x, m1.getOrDefault(x, 0) + 1);
+                m2.put(y, m2.getOrDefault(y, 0) + 1);
+                m3.put(x-y, m3.getOrDefault(x-y, 0) + 1);
+                m4.put(x+y, m4.getOrDefault(x+y, 0) + 1);
+                m5.put(N*x + y, true);
+            }
         }
         int[] ans = new int[queries.length];
         for(int i=0; i<queries.length; i++){
@@ -24,6 +26,7 @@ class Solution {
             for(int d=0; d<dirs.length; d++){
                 int x1 = x + dirs[d][0];
                 int y1 = y + dirs[d][1];
+                if(x1 < 0 || x1 >= N || y1 < 0 || y1 >= N) continue;
 				if(m5.containsKey(N*x1 + y1) && m5.get(N*x1 + y1)){
                     m1.put(x1, m1.getOrDefault(x1, 1) - 1);
                     m2.put(y1, m2.getOrDefault(y1, 1) - 1);
