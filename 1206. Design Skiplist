@@ -1,101 +1,68 @@
 class Skiplist {
-    
     class Node {
         int val;
-        Node left, right, up, down;
-        public Node(int val) {
+        Node next, down;
+        public Node(int val, Node next, Node down) {
             this.val = val;
+            this.next = next;
+            this.down = down;
         }
     }
-
-    Random rand;
-    List<Node> sentinels;
-    
+    Node head = new Node(-1, null, null);
+    Random rand = new Random();
     public Skiplist() {
-        rand = new Random();
-        sentinels = new ArrayList();
-        sentinels.add(new Node(Integer.MIN_VALUE));
-    }
-    
-    //O(logn) time
-    public boolean search(int target) {
-        Node less = getLesserOrEqual(target);
-        if(less!=null && less.val==target) return true;
-        return false;
-    }
-    
-    //O(logn) time
-    public void add(int num) {
-        Node less = getLesserOrEqual(num);
-        Node newNode = new Node(num);
-        insert(less, newNode);
-        moveUpLevel(newNode);
-    }
-    
-    //O(logn) time
-    public void moveUpLevel(Node node) {
-        Node prev = node.left, cur = node;
-        while(flipCoin()) {
-            while(prev.left!=null && prev.up==null) {
-                prev = prev.left;
-            }
-            if(prev.up==null) {
-                Node sentinel = new Node(Integer.MIN_VALUE);
-                sentinel.down = prev;
-                prev.up = sentinel;
-                sentinels.add(sentinel);
-            }
-            prev = prev.up;
-            Node curUp = new Node(cur.val);
-            cur.up = curUp;
-            curUp.down = cur;
-            cur = curUp;
-            prev.right = cur;
-            cur.left = prev;
-        }
-    }
-    
-    public boolean flipCoin() {
-        return (rand.nextInt(2)==0);
-    }
-    
-    public void insert(Node prev, Node cur) {
-        Node right = prev.right;
-        prev.right = cur;
-        cur.left = prev;
-        if(right!=null) {
-            right.left = cur;
-            cur.right = right;
-        }
         
     }
     
+    //O(logn) average time and O(n) space
+    public boolean search(int target) {
+        Node cur = head;
+        while (cur != null) {
+            while (cur.next != null && cur.next.val < target) {
+                cur = cur.next;
+            }
+            if (cur.next != null && cur.next.val == target) return true;
+            cur = cur.down;
+        }
+        return false;
+    }
+    
+    //O(logn) average time and O(n) space
+    public void add(int num) {
+        Stack<Node> stack = new Stack<>();
+        Node cur = head;
+        while (cur != null) {
+            while (cur.next != null && cur.next.val < num) {
+                cur = cur.next;
+            }
+            stack.push(cur);
+            cur = cur.down;
+        }
+        boolean insert = true;
+        Node down = null;
+        while (insert && !stack.isEmpty()) {
+            cur = stack.pop();
+            cur.next = new Node(num, cur.next, down);
+            down = cur.next;
+            insert = rand.nextDouble() < 0.5;
+        }
+        if (insert) head = new Node(-1, null, head);
+    }
+    
+    //O(logn) average time and O(n) space
     public boolean erase(int num) {
-        Node node = getLesserOrEqual(num);
-        if(node.val!=num) return false;
-        while(node!=null) {
-            Node prev = node.left, next = node.right;
-            prev.right = next;
-            if(next!=null)
-                next.left = prev;
-            node = node.up;
-        }
-        return true;
-    }
-    
-    public Node getLesserOrEqual(int target) {
-        Node node = sentinels.get(sentinels.size()-1);
-        while(node!=null) {
-            if(node.right==null || node.right.val>target) {
-                if(node.down==null) break;
-                node = node.down;
+        Node cur = head;
+        boolean found = false;
+        while (cur != null) {
+            while (cur.next != null && cur.next.val < num) {
+                cur = cur.next;
             }
-            else {
-                node = node.right;
+            if (cur.next != null && cur.next.val == num) {
+                found = true;
+                cur.next = cur.next.next;
             }
+            cur = cur.down;
         }
-        return node;
+        return found;
     }
-    
-    
 }
