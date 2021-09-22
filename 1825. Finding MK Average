@@ -1,0 +1,69 @@
+class MKAverage {
+    TreeMap<Integer, Integer> top = new TreeMap<>(), middle = new TreeMap<>(), bottom = new TreeMap<>();
+    Queue<Integer> q = new LinkedList<>();
+    long middleSum;
+    int m, k;
+    int countTop, countBottom;
+    public MKAverage(int m, int k) {
+        this.m = m;
+        this.k = k;
+    }
+    
+    
+    private int remove(TreeMap<Integer, Integer> tm, int num) {
+        tm.put(num, tm.get(num) - 1);
+        if (tm.get(num) == 0) tm.remove(num); 
+        return num;
+    }
+    
+    private void add(TreeMap<Integer, Integer> tm, int num) {
+        tm.put(num, tm.getOrDefault(num, 0) + 1);
+    }
+    
+    //O(logn) time and O(1) space
+    public void addElement(int num) {
+        if (q.size() == m) {
+            int pop = q.poll();
+            if (top.containsKey(pop)) {
+                remove(top, pop); 
+                countTop--;
+            } else if (middle.containsKey(pop)) {
+                remove(middle, pop);
+                middleSum -= pop;
+            } else {
+                remove(bottom, pop); 
+                countBottom--;
+            }
+        }
+        add(middle, num);
+        q.offer(num);
+        middleSum += num;
+        while (countTop < k && !middle.isEmpty()) {
+            countTop++;
+            middleSum -= middle.lastKey();
+            add(top, remove(middle, middle.lastKey()));
+        }
+        while (!middle.isEmpty() && !top.isEmpty() && top.firstKey() < middle.lastKey()) {
+            middleSum += top.firstKey();
+            add(middle, remove(top, top.firstKey()));
+            middleSum -= middle.lastKey();
+            add(top, remove(middle, middle.lastKey()));
+        }
+        while (countBottom < k && !middle.isEmpty()) {
+            countBottom++;
+            middleSum -= middle.firstKey();
+            add(bottom, remove(middle, middle.firstKey()));
+        }
+        while (!middle.isEmpty() && !bottom.isEmpty() && bottom.lastKey() > middle.firstKey()) {
+            middleSum += bottom.lastKey();
+            add(middle, remove(bottom, bottom.lastKey()));
+            middleSum -= middle.firstKey();
+            add(bottom, remove(middle, middle.firstKey()));
+        }
+    }
+    
+    //O(1) time and space
+    public int calculateMKAverage() {
+        return q.size() == m ? (int)(middleSum / (m - 2 * k)) : -1;
+    }
+}
