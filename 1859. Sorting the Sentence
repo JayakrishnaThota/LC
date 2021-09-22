@@ -1,0 +1,20 @@
+//O(n) time and space
+class Solution {
+    public String sortSentence(String s) {
+        if(s==null || s.length()==0) return "";
+        String[] tokens = s.split(" ");
+        String[] result = new String[tokens.length];
+        for(String token:tokens) {
+            int index = token.charAt(token.length()-1) - '1';
+            result[index] = token.substring(0, token.length()-1);
+        }
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        for(String r:result) {
+            sb.append(r);
+            index++;
+            if(index!=result.length) sb.append(" ");
+        }
+        return sb.toString();
+    }
+}
