@@ -1,36 +1,26 @@
-/*
-
-Numbers can be regarded as product of its factors. For example,
-
-8 = 2 x 2 x 2;
-  = 2 x 4.
-Write a function that takes an integer n and return all possible combinations of its factors.
-Note:
-You may assume that n is always positive.
-Factors should be greater than 1 and less than n.
-
-*/
-
+//O(n*logn) time and O(logn) space
 class Solution {
     public List<List<Integer>> getFactors(int n) {
-        List<List<Integer>> list = new ArrayList();
-        helper(list, new ArrayList(), n, 2);
-        return list;
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> list = new ArrayList();
+        backtrack(result, list, n, 2);
+        return result;
     }
     
-    public void helper(List<List<Integer>> list, List<Integer> sublist, int n, int start){
-        if(n<=1){
-            if(sublist.size()>1){
-                list.add(new ArrayList(sublist));
+    public void backtrack(List<List<Integer>> result, List<Integer> list, int n, int index) {
+        if(n<=1) {
+            if(list.size()>1) {
+                result.add(new ArrayList(list));
             }
             return;
         }
-        for(int i=start;i<=n;i++){
-            if(n%i==0){
-                sublist.add(i);
-                helper(list, sublist, n/i, i);
-                sublist.remove(sublist.size()-1);
+        for(int i=index;i<=n;i++) {
+            if(n%i==0) {
+                list.add(i);
+                backtrack(result, list, n/i, i);
+                list.remove(list.size()-1);
             }
         }
     }
+    
 }
