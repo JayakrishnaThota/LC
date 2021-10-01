@@ -1,0 +1,40 @@
+class DetectSquares {
+
+    int[][] map;
+    int m, n;
+    //O(mn) time and space
+    public DetectSquares() {
+        m = n = 1000;
+        map = new int[m+1][n+1];
+        
+    }
+    
+    public void add(int[] point) {
+        map[point[0]][point[1]]+=1;
+    }
+    
+    //O(max(m,n)) time and O(1) space
+    public int count(int[] point) {
+        int x = point[0], y = point[1], res = 0;
+        for(int len=1;len<=Math.max(m,n);len++) {
+            if(valid(x+len,y) && valid(x,y+len) && valid(x+len, y+len)) {
+                res+=(map[x+len][y]*map[x][y+len]*map[x+len][y+len]);
+            }
+            if(valid(x-len,y) && valid(x,y-len) && valid(x-len, y-len)) {
+                res+=(map[x-len][y]*map[x][y-len]*map[x-len][y-len]);
+            }
+            if(valid(x-len,y) && valid(x,y+len) && valid(x-len, y+len)) {
+                res+=(map[x-len][y]*map[x][y+len]*map[x-len][y+len]);
+            }
+            if(valid(x+len,y) && valid(x,y-len) && valid(x+len, y-len)) {
+                res+=(map[x+len][y]*map[x][y-len]*map[x+len][y-len]);
+            }
+        }
+        return res;
+    }
+    
+    public boolean valid(int x,int y){
+        if(x>=0 && x<=m && y>=0 && y<=n) return true;
+        return false;
+    }
+}
