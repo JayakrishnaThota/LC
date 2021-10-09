@@ -1,0 +1,18 @@
+//O(n) time and O(1) space
+class Solution {
+    public int numUniqueEmails(String[] emails) {
+        Set<String> set = new HashSet();
+        for(String email:emails) {
+            String[] tokens = email.split("@");
+            String local = tokens[0];
+            if(local.contains("+")) {
+                int lastIndex = local.indexOf("+");
+                local = local.substring(0, lastIndex);
+            }
+            local = local.replace(".", "");
+            System.out.println(local+"@"+tokens[1]);
+            set.add(local+"@"+tokens[1]);
+        }
+        return set.size();
+    }
+}
