@@ -1,12 +1,12 @@
-//O(n) time and O(n) space
+//O(nlogn) time and O(n) space
 class Solution {
     public int[] beautifulArray(int N) {
         List<Integer> result = new ArrayList();
         result.add(1);
         while(result.size()<N) {
             List<Integer> list = new ArrayList();
-            for(int i:res) if(i*2-1<=N) list.add(i*2-1);
-            for(int i:res) if(i*2<=N) list.add(i*2);
+            for(int i:result) if(i*2-1<=N) list.add(i*2-1);
+            for(int i:result) if(i*2<=N) list.add(i*2);
             result = list;
         }
         return array(result);
@@ -17,6 +17,7 @@ class Solution {
         for(int i=0;i<result.length;i++) {
             result[i] = list.get(i);
         }
+        return result;
     }
     
 }
