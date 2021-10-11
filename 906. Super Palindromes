@@ -1,0 +1,39 @@
+//O(r-l) time and space
+class Solution {
+    public int superpalindromesInRange(String l, String r) {
+        int res = 0;
+        List<Long> palindromes = new ArrayList();
+        for(long i=1;i<10;i++) {
+            palindromes.add(i);
+        }
+        Long left = Long.parseLong(l);
+        Long right = Long.parseLong(r);
+        for(long i=1;i<10000;i++) {
+            String leftString = String.valueOf(i);
+            String rightString = new StringBuffer(leftString).reverse().toString();
+            palindromes.add(Long.parseLong(leftString + rightString));
+            for (long j = 0; j < 10; j++) {
+                palindromes.add(Long.parseLong(leftString + j + rightString));
+            }
+        }
+        for(Long palindrome:palindromes) {
+            Long square = palindrome*palindrome;
+            if(square<left || square>right || !isPalindrome(String.valueOf(square))) continue;
+            res++;
+        }
+        return res;
+    }
+    
+    private boolean isPalindrome(String str) {
+        int i = 0;
+        int j = str.length() - 1;
+        while (i < j) {
+            if (str.charAt(i) != str.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+}
