@@ -1,46 +1,13 @@
-//O(n^2) time and O(1) space
-class Solution {
-    public int maxProfit(int[] prices) {
-        if(prices==null || prices.length<2) return 0;
-        int n = prices.length;
-        int max = 0;
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                max = Math.max(max, prices[j]-prices[i]);
-            }
-        }
-        return max;
-    }
-}
-
 //O(n) time and O(1) space
 class Solution {
     public int maxProfit(int[] prices) {
-        if(prices==null || prices.length<2) return 0;
-        int n = prices.length;
-        int max = prices[n-1], result = 0;
-        for(int i=n-2;i>=0;i--){
-            result = Math.max(result, max-prices[i]);
-            max = Math.max(max, prices[i]);
+        if(prices==null || prices.length<2)
+            return 0;
+        int b0 = -prices[0], s0 = 0;
+        for(int i=1;i<prices.length;i++) {
+            s0 = Math.max(s0, prices[i]+b0);
+            b0 = Math.max(b0, -prices[i]);
         }
-        return result;
-    }
-}
-
-//O(n) time and O(1) space
-class Solution {
-    public int maxProfit(int[] prices) {
-        if(prices==null || prices.length==0) return 0;
-        int n = prices.length;
-        int minPrice = Integer.MAX_VALUE, maxProfit = 0;
-        for(int i=0;i<n;i++){
-            if(minPrice>prices[i]){
-                minPrice = prices[i];
-            }
-            else if(prices[i]-minPrice > maxProfit){
-                maxProfit = prices[i] - minPrice;
-            }
-        }
-        return maxProfit;
+        return s0;
     }
 }
