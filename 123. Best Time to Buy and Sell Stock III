@@ -1,16 +1,16 @@
 //O(n) time and O(1) space
 class Solution {
-    public int maxProfit(int[] prices) { 
-        if (prices == null || prices.length < 2)
-             return 0;
-        int minCost1 = Integer.MAX_VALUE, minCost2 = Integer.MAX_VALUE, maxProfit1 = 0, maxProfit2 = 0;
-
-        for (int price : prices){
-            minCost1 = Math.min(minCost1, price);
-            maxProfit1 = Math.max(maxProfit1, price - minCost1);
-            minCost2 = Math.min(minCost2, price - maxProfit1);
-            maxProfit2 = Math.max(maxProfit2, price - minCost2);
+    public int maxProfit(int[] prices) {
+        if(prices==null || prices.length<2)
+            return 0;
+        int b1 = Integer.MAX_VALUE, s1 = 0;
+        int b0 = Integer.MAX_VALUE, s0 = 0;
+        for(int i=0;i<prices.length;i++) {
+            b1 = Math.min(b1, prices[i]);
+            s1 = Math.max(s1, prices[i]-b1);
+            b0 = Math.min(b0, prices[i]-s1);
+            s0 = Math.max(s0, prices[i]-b0);
         }
-        return maxProfit2;
+        return s0;
     }
 }
