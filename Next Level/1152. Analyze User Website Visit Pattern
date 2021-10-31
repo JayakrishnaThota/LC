@@ -1,0 +1,46 @@
+//O(n^4) time and O(n^3) space
+class Solution {
+    
+    class Pair {
+        int time;
+        String web;
+        public Pair(int time, String web) {
+            this.time = time;
+            this.web = web;
+        }
+    }
+    
+    public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
+        String res = "";
+        Map<String, List<Pair>> map = new HashMap();
+        Map<String, Integer> countMap = new HashMap();
+        for(int i=0;i<username.length;i++) {
+            String user = username[i], web = website[i];
+            int time = timestamp[i];
+            map.putIfAbsent(user, new ArrayList());
+            map.get(user).add(new Pair(time, web));
+        }
+        for(String key:map.keySet()) {
+            List<Pair> list = map.get(key);
+            Collections.sort(list, ((a,b)->(a.time-b.time)));
+            int n = list.size();
+            Set<String> set = new HashSet();
+            for(int i=0;i<n;i++) {
+                for(int j=i+1;j<n;j++) {
+                    for(int k=j+1;k<n;k++) {
+                        String s = list.get(i).web+" "+list.get(j).web+" "+list.get(k).web;
+                        if(!set.contains(s)) {
+                            set.add(s);
+                            countMap.put(s, countMap.getOrDefault(s,0)+1);
+                        }
+                        if(res.equals("") || countMap.get(res)<countMap.get(s) || (countMap.get(res)==countMap.get(s)) && (s.compareTo(res)<0)) {
+                            res = s;
+                        }
+                    }
+                }
+            }
+        }
+        String[] array = res.split(" ");
+        return Arrays.asList(array);
+    }
+}

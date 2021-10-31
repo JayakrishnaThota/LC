@@ -1,0 +1,31 @@
+//O(n) time and O(1) space
+class Solution {
+    public int maxEqualFreq(int[] nums) {
+        if(nums==null || nums.length==0) return 0;
+        if(nums.length==1) return 1;
+        int n = nums.length, max = 0, res = 0;
+        int[] count = new int[100001];
+        int[] freq = new int[100001];
+        for(int i=0;i<n;i++) {
+            int num = nums[i];
+            int prevCount = count[num];
+            count[num]++;
+            freq[prevCount+1]++;
+            freq[prevCount]--;
+            max = Math.max(max, count[num]);
+            //Case 1: Every element is a 1
+            if(max==1) {
+                res = Math.max(res, i+1);
+            }
+            //Case 2: Every element has length max-1 and current element has max
+            if((max-1)*(freq[max-1]+1) == i) {
+                res = Math.max(res, i+1);
+            }
+            //Case 3: Every element has max except 1 element which is a 1
+            if(freq[max]*max == i) {
+                res = Math.max(res, i+1);
+            }
+        }
+        return res;
+    }
+}

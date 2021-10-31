@@ -1,0 +1,31 @@
+//O(nlogn) time and O(1) space
+class Solution {
+    public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2, int duration) {
+        List<Integer> result = new ArrayList();
+        Arrays.sort(slots1, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[0]-b[0];
+            }
+        });
+        Arrays.sort(slots2, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[0]-b[0];
+            }
+        });
+        int i = 0, j = 0;
+        while(i<slots1.length && j<slots2.length) {
+            int startMax = Math.max(slots1[i][0], slots2[j][0]);
+            int endMin = Math.min(slots1[i][1], slots2[j][1]);
+            if(startMax+duration<=endMin) {
+                return Arrays.asList(startMax, startMax+duration);
+            }
+            else if(slots1[i][1]<slots2[j][1]) {
+                i++;
+            }
+            else {
+                j++;
+            }
+        }
+        return result;
+    }
+}

@@ -1,0 +1,63 @@
+//O(n) time and space
+class Solution {
+    
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+            size = n;
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+        DisjointSet ds = new DisjointSet(s.length());
+        for(List<Integer> pair:pairs) {
+            ds.union(pair.get(0), pair.get(1));
+        }
+        Map<Integer, PriorityQueue<Character>> map = new HashMap<>();
+        for(int i=0;i<s.length();i++) {
+            int root = ds.find(i);
+            map.putIfAbsent(root, new PriorityQueue());
+            map.get(root).add(s.charAt(i));
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            sb.append(map.get(ds.find(i)).poll());
+        }
+        return sb.toString();
+    }
+}

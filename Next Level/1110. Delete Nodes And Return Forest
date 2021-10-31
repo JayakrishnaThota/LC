@@ -1,0 +1,30 @@
+//O(n) time and space
+class Solution {
+    
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        List<TreeNode> result = new ArrayList();
+        if(root==null) return result;
+        Set<Integer> set = new HashSet();
+        for(int t:to_delete) {
+            set.add(t);
+        }
+        postOrder(root, null, result, set);
+        return result;
+    }
+    
+    public TreeNode postOrder(TreeNode node, TreeNode parent, List<TreeNode> result, Set<Integer> set) {
+        if(node==null) return node;
+        if(set.contains(node.val)){
+            postOrder(node.left, null, result, set);
+            postOrder(node.right, null, result, set);
+            return null;
+        }
+        TreeNode left = postOrder(node.left, node, result, set);
+        TreeNode right = postOrder(node.right, node, result, set);
+        node.left = left;
+        node.right = right;
+        if(parent==null) result.add(node);
+        return node;
+    }
+    
+}

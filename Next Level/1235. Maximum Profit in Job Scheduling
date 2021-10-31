@@ -1,0 +1,27 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        if(startTime==null || startTime.length==0) return 0;
+        int n = startTime.length;
+        int[][] jobs = new int[n][3];
+        for(int i=0;i<n;i++) {
+            jobs[i][0] = startTime[i];
+            jobs[i][1] = endTime[i];
+            jobs[i][2] = profit[i];
+        }
+        Arrays.sort(jobs, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[1] - b[1];
+            }
+        });
+        TreeMap<Integer, Integer> map = new TreeMap();
+        map.put(0, 0);
+        for(int[] job:jobs) {
+            int curProfit = map.floorEntry(job[0]).getValue() + job[2];
+            if(curProfit > map.lastEntry().getValue()) {
+                map.put(job[1], curProfit);
+            }
+        }
+        return map.lastEntry().getValue();
+    }
+}
