@@ -1,0 +1,22 @@
+//O(mn) time and O(n) space
+class Solution {
+    public long maxPoints(int[][] points) {
+        if(points==null || points.length==0) return 0;
+        int m = points.length, n = points[0].length;
+        long[] curRow = new long[n];
+        long[] prevRow = new long[n];
+        for(int[] row:points) {
+            long max = 0;
+            for(int j=0;j<n;j++) {
+                max = Math.max(max-1, prevRow[j]);
+                curRow[j] = max;
+            }
+            for(int j=n-1;j>=0;j--) {
+                max = Math.max(max-1, prevRow[j]);
+                curRow[j] = Math.max(curRow[j], max) + row[j];
+            }
+            prevRow = curRow;
+        }
+        return Arrays.stream(curRow).max().getAsLong();
+    }
+}

@@ -1,0 +1,15 @@
+//O(n) time and O(1) space
+class Solution {
+    public int numberOfUniqueGoodSubsequences(String binary) {
+        int mod = (int)1e9 + 7, has0 = 0, ends0 = 0, ends1 = 0;
+        for(char c:binary.toCharArray()) {
+            if(c=='0') {
+                ends0 = (ends0 + ends1) % mod;
+                has0 = 1;
+            } else {
+                ends1 = (ends0 + ends1 + 1) % mod;
+            }
+        }
+        return (ends0 + ends1 + has0) % mod;
+    }
+}

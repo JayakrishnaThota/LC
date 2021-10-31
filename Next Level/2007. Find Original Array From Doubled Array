@@ -1,0 +1,23 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int[] findOriginalArray(int[] changed) {
+        if(changed==null || changed.length==0 || changed.length%2!=0) return new int[0];
+        int n = changed.length, index = 0;
+        int[] res = new int[n/2];
+        TreeMap<Integer, Integer> map = new TreeMap();
+        for(int c:changed) {
+            map.put(c, map.getOrDefault(c,0)+1);
+        }
+        for(Integer key:map.keySet()) {
+            int target = 2*key;
+            if(map.get(key)>map.getOrDefault(target, 0)) {
+                return new int[0];
+            }
+            for(int i=0;i<map.get(key);i++) {
+                res[index++] = key;
+                map.put(target, map.get(target)-1);
+            }
+        }
+        return res;
+    }
+}

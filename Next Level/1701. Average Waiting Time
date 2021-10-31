@@ -1,0 +1,14 @@
+//O(n) time and O(1) space
+class Solution {
+    public double averageWaitingTime(int[][] customers) {
+        if(customers==null || customers.length==0) return 0.0;
+        int max = customers[0][0];
+        double res = 0;
+        for(int[] c:customers) {
+            int a = c[0], t = c[1];
+            max = Math.max(max+t, a+t);
+            res+=(max-a);
+        }
+        return res/customers.length;
+    }
+}

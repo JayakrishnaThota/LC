@@ -1,0 +1,35 @@
+//O(n^2) time and O(1) space
+class Solution {
+    public int beautySum(String s) {
+        if(s==null || s.length()<2) return 0;
+        int n = s.length(), sum = 0;
+        for(int i=0;i<n;i++) {
+            int[] map = new int[26];
+            for(int j=i;j<n;j++) {
+                map[s.charAt(j)-'a']++;
+                int cur = max(map) - min(map);
+                sum+=cur;
+            }
+        }
+        return sum;
+    }
+    
+    private int max(int[] map) {
+        int max = 0;
+        for(int i=0;i<map.length;i++) {
+            if(map[i]==0) continue;
+            max = Math.max(max, map[i]);
+        }
+        return max;
+    }
+    
+    private int min(int[] map) {
+        int min = Integer.MAX_VALUE;
+        for(int i=0;i<map.length;i++) {
+            if(map[i]==0) continue;
+            min = Math.min(min, map[i]);
+        }
+        return min;
+    }
+    
+}

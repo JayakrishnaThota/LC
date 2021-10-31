@@ -1,0 +1,22 @@
+//O(max(m,n)) time and O(1) space
+class Solution {
+    public int minCharacters(String a, String b) {
+        int m = a.length(), n = b.length(), res = m+n;
+        int[] map1 = new int[26];
+        int[] map2 = new int[26];
+        for(char c:a.toCharArray()) map1[c-'a']++;
+        for(char c:b.toCharArray()) map2[c-'a']++;
+        for(int i=0;i<26;i++) {
+            res = Math.min(res, m+n-map1[i]-map2[i]);
+            if(i>0) {
+                map1[i]+=map1[i-1];
+                map2[i]+=map2[i-1];
+            }
+            if(i<25) {
+                res = Math.min(res, m-map1[i]+map2[i]);
+                res = Math.min(res, n-map2[i]+map1[i]);
+            }
+        }
+        return res;
+    }
+}

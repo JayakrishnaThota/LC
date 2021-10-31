@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] largestSubarray(int[] nums, int k) {
+        if(nums == null || nums.length==0) return new int[0];
+        int max = nums[0], maxIndex = 0, n = nums.length;
+        int[] res = new int[k];
+        for(int i=1;i<=n-k;i++) {
+            if(max<nums[i]) {
+                max = nums[i];
+                maxIndex = i;
+            }
+        }
+        int index = 0;
+        for(int j=maxIndex;j<maxIndex+k;j++) {
+            res[index++] = nums[j];
+        }
+        return res;
+    }
+}

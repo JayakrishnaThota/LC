@@ -1,0 +1,30 @@
+//O(n) time and space
+class Solution {
+    public int maximumGain(String s, int x, int y) {
+        if(s==null || s.length()<2) return 0;
+        Stack<Character> stack = new Stack(), stack2 = new Stack();
+        int max = Math.max(x,y), min = Math.min(x,y), res = 0;
+        char first = (x==max) ? 'a' : 'b';
+        char second = (x==max) ? 'b' : 'a';
+        for(char c:s.toCharArray()) {
+            if(!stack.isEmpty() && stack.peek()==first && c==second) {
+                res+=max;
+                stack.pop();
+            }
+            else {
+                stack.push(c);
+            }
+        }
+        while(!stack.isEmpty()) {
+            char c = stack.pop();
+            if(!stack2.isEmpty() && stack2.peek()==first && c==second) {
+                res+=min;
+                stack2.pop();
+            }
+            else {
+                stack2.push(c);
+            }
+        }
+        return res;
+    }
+}

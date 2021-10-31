@@ -1,0 +1,72 @@
+class LockingTree {
+
+    int[] parent;
+    Map<Integer, List<Integer>> adjlist;
+    Map<Integer, Integer> map;
+    //O(n) time and space
+    public LockingTree(int[] parent) {
+        this.parent = parent;
+        adjlist = new HashMap();
+        map = new HashMap();
+        for(int i=-1;i<parent.length;i++) {
+            adjlist.put(i, new ArrayList());
+        }
+        for(int i=0;i<parent.length;i++) {
+            adjlist.get(parent[i]).add(i);
+        }
+    }
+    
+    //O(1) time and space
+    public boolean lock(int num, int user) {
+        if(map.containsKey(num)) return false;
+        map.put(num, user);
+        return true;
+    }
+    
+    //O(1) time and space
+    public boolean unlock(int num, int user) {
+        if(!map.containsKey(num) || map.get(num) != user) return false;
+        map.remove(num, user);
+        return true;
+    }
+    
+    //O(n) time and O(1) space
+    public boolean upgrade(int num, int user) {
+        //1st Condition: The node is unlocked
+        if(map.containsKey(num))
+            return false;
+        //2nd Condition: It has at least one locked descendant (by any user)
+        int node = num;
+        while(node!=-1) {
+            node = parent[node];
+            if(map.containsKey(node))
+                return false;
+        }
+        int size = map.size();
+        removeLock(num);
+        //3rd Condition: It does not have any locked ancestors
+        if(size==map.size()) return false;
+        map.put(num, user);
+        return true;
+    }
+    
+    public boolean dfs(int u, Set<Integer> set) {
+        if(set.contains(u)) return false;;
+        if(map.containsKey(u)) return true;
+        set.add(u);
+        for(int v:adjlist.get(u)) {
+            if(dfs(v, set)) return true;
+        }
+        return false;
+    }
+    
+    public void removeLock(int u) {
+        if(map.containsKey(u))
+            map.remove(u);
+        for(int v:adjlist.get(u)) {
+            removeLock(v);
+        }
+    }
+    
+    
+}

@@ -1,0 +1,18 @@
+//O(n) time and O(1) space
+class Solution {
+    public List<Integer> longestCommonSubsequence(int[][] arrays) {
+        List<Integer> res = new ArrayList();
+        if(arrays==null || arrays.length==0) return res;
+        int n = arrays.length;
+        int[] freq = new int[101];
+        for(var arr:arrays) {
+            for(var a:arr) {
+                freq[a]++;
+            }
+        }
+        for(int i=1;i<=100;i++) {
+            if(freq[i]==n) res.add(i);
+        }
+        return res;
+    }
+}

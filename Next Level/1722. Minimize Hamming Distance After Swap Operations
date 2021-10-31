@@ -1,0 +1,74 @@
+class Solution {
+    
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+            size = n;
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+    
+    //O(n) time and space
+    public int minimumHammingDistance(int[] source, int[] target, int[][] swaps) {
+        if(source==null || source.length==0) return 0;
+        int n = source.length;
+        DisjointSet ds = new DisjointSet(n);
+        for(int[] swap:swaps) {
+            ds.union(swap[0], swap[1]);
+        }
+        Map<Integer, Map<Integer, Integer>> map = new HashMap();
+        for(int i=0;i<source.length;i++) {
+            int s = source[i];
+            int root = ds.find(i);
+            map.putIfAbsent(root, new HashMap());
+            Map<Integer, Integer> rootMap = map.get(root);
+            rootMap.put(s, rootMap.getOrDefault(s,0)+1);
+            map.put(root, rootMap);
+        }
+        int res = 0;
+        for(int i=0;i<target.length;i++) {
+            int t = target[i];
+            int root = ds.find(i);
+            Map<Integer, Integer> rootMap = map.get(root);
+            if(rootMap.containsKey(t)) {
+                rootMap.put(t, rootMap.get(t)-1);
+                if(rootMap.get(t)==0) rootMap.remove(t);
+            }
+            else {
+                res++;
+            }
+        }
+        return res;
+    }
+}

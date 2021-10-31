@@ -1,0 +1,22 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] minOperations(String boxes) {
+        if(boxes == null || boxes.length()==0) return new int[0];
+        int n = boxes.length(), left = 0, right = 0, sum = 0;
+        int[] res = new int[n];
+        //Left to right
+        for(int i=0;i<n;i++) {
+            res[i] += sum;
+            left += (boxes.charAt(i)=='1') ? 1 : 0;
+            sum+=left;
+        }
+        sum = 0;
+        //Right to left
+        for(int i=n-1;i>=0;i--) {
+            res[i] += sum;
+            right += (boxes.charAt(i)=='1') ? 1 : 0;
+            sum+=right;
+        }
+        return res;
+    }
+}

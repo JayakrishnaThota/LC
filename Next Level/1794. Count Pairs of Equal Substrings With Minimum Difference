@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+class Solution {
+    public int countQuadruples(String firstString, String secondString) {
+        int min = Integer.MAX_VALUE, res = 0;
+        for(char c='a';c<='z';c++) {
+            int j = firstString.indexOf(c);
+            int a = secondString.lastIndexOf(c);
+            if(j==-1 || a==-1) continue;
+            if(min>j-a) {
+                min = j-a;
+                res = 0;
+            }
+            if(min==j-a) {
+                res++;
+            }
+        }
+        return res;
+    }
+}

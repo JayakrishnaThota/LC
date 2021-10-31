@@ -1,0 +1,21 @@
+//O(n^2) time and space
+class Solution {
+    public int tupleSameProduct(int[] nums) {
+        if(nums == null || nums.length==0) return 0;
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i = 0;i<nums.length;i++){
+            for(int j = i+1;j<nums.length;j++){
+                int mul = nums[i] * nums[j];
+                int count = map.getOrDefault(mul,0);
+                map.put(mul,count+1);
+            }
+        }
+        int res = 0;
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            int count = entry.getValue();
+            res += 4*count*(count - 1);
+        }
+        return res;
+    }
+}

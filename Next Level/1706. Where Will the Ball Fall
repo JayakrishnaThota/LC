@@ -1,0 +1,25 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int[] findBall(int[][] grid) {
+        if(grid==null || grid.length==0) return new int[0];
+        int m = grid.length, n = grid[0].length;
+        int[] res = new int[n];
+        for(int j=0;j<n;j++) {
+            int r = 0, c = j;
+            while(r<m) {
+                int g = grid[r][c];
+                if(g==1 && c+1<n && grid[r][c+1]==1) {
+                    c++;
+                    r++;
+                } else if(g==-1 && c-1>=0 && grid[r][c-1]==-1) {
+                    c--;
+                    r++;
+                } else {
+                    break;
+                }
+            }
+            res[j] = (r==m) ? c : -1;
+        }
+        return res;
+    }
+}
