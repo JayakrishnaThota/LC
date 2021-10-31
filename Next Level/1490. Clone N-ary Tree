@@ -1,0 +1,10 @@
+//O(n) time and space
+class Solution {
+    public Node cloneTree(Node root) {
+        if (root == null) return null;
+        Node copy = new Node(root.val);
+        for (Node child : root.children) 
+            copy.children.add(cloneTree(child));
+        return copy;
+    }
+}

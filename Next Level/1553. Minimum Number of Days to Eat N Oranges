@@ -1,0 +1,29 @@
+//O(n) time and space
+class Solution {
+    public int minDays(int n) {
+        int[] dp = new int[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for(int i=2;i<=n;i++) {
+            dp[i] = 1+dp[i-1];
+            if(i%2==0) {
+                dp[i] = Math.min(dp[i], dp[i/2]+1);
+            }
+            if(i%3==0) {
+                dp[i] = Math.min(dp[i], dp[i/3]+1);
+            }
+        }
+        return dp[n];
+    }
+}
+
+//O(logn^2) time and space
+class Solution {
+    Map<Integer, Integer> dp = new HashMap();
+    public int minDays(int n) {
+        if(n<2) return n;
+        if(dp.containsKey(n)) return dp.get(n);
+        dp.put(n, 1+Math.min(n%2+minDays(n/2), n%3+minDays(n/3)));
+        return dp.get(n);
+    }
+}

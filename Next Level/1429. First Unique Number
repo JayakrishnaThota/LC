@@ -1,0 +1,26 @@
+class FirstUnique {
+
+    Queue<Integer> queue;
+    Map<Integer, Integer> map;
+    public FirstUnique(int[] nums) {
+        queue = new LinkedList();
+        map = new HashMap();
+        for(int num:nums) {
+            add(num);
+        }
+    }
+    
+    //Amortized O(1) time and space
+    public int showFirstUnique() {
+        while(!queue.isEmpty() && map.getOrDefault(queue.peek(),0)>1) {
+            queue.poll();
+        }
+        return queue.isEmpty() ? -1 : queue.peek();
+    }
+    
+    //O(1) time and space
+    public void add(int num) {
+        queue.offer(num);
+        map.put(num, map.getOrDefault(num,0)+1);
+    }
+}

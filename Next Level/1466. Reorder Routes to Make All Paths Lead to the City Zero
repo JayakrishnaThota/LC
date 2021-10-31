@@ -1,0 +1,44 @@
+//O(n+connections.length) time and space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    public int minReorder(int n, int[][] connections) {
+        construct(n, connections);
+        return bfs(0);
+    }
+    
+    public void construct(int n, int[][] connections) {
+        adjlist = new HashMap();
+        for(int i=0;i<n;i++) {
+            adjlist.put(i, new HashSet());
+        }
+        for(int[] c:connections) {
+            int u = c[0], v = c[1];
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(-u);
+        }
+    }
+    
+    public int bfs(int source) {
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> set = new HashSet();
+        queue.offer(0);
+        set.add(0);
+        int sum = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int u = queue.poll();
+                for(int v:adjlist.get(u)) {
+                    if(set.contains(v)) continue;
+                    if(v>0) {
+                        sum++;  
+                    }
+                    set.add(Math.abs(v));
+                    queue.offer(Math.abs(v));
+                }
+            }
+        }
+        return sum;
+    }
+    
+}

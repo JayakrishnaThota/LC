@@ -1,0 +1,18 @@
+//O(n) time and O(1) space
+class Solution {
+    public int numSub(String s) {
+        if(s==null || s.length()==0) return 0;
+        int mod = (int)1e9 + 7;;
+        int n = s.length(), right = 0, res = 0, len = 0;;
+        for(;right<n;right++) {
+            if(s.charAt(right)=='1') {
+                len++;
+            }
+            else {
+                len = 0;
+            }
+            res = (res + len) % mod;
+        }
+        return res;
+    }
+}

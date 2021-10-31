@@ -1,0 +1,19 @@
+//O(n) time and space
+class Solution {
+    public NodeCopy copyRandomBinaryTree(Node root) {
+        Map<Node, NodeCopy> map = new HashMap();
+        return dfs(root, map);
+    }
+    
+    public NodeCopy dfs(Node root, Map<Node, NodeCopy> map) {
+        if(root==null) return null;
+        if(map.containsKey(root)) return map.get(root);
+        NodeCopy copy = new NodeCopy(root.val);
+        map.put(root, copy);
+        copy.left = dfs(root.left, map);
+        copy.right = dfs(root.right, map);
+        copy.random = dfs(root.random, map);
+        return copy;
+    }
+    
+}

@@ -1,0 +1,20 @@
+class Solution {
+    public boolean arrayStringsAreEqual(String[] word1, String[] word2) {
+        int i = 0, j = 0, word1Index = 0, word2Index = 0;
+        while(word1Index<word1.length && word2Index<word2.length) {
+            if(word1[word1Index].charAt(i)!=word2[word2Index].charAt(j))
+                return false;
+            i++;
+            j++;
+            while(word1Index<word1.length && i==word1[word1Index].length()) {
+                i = 0;
+                word1Index++;
+            }
+            while(word2Index<word2.length && j==word2[word2Index].length()) {
+                j = 0;
+                word2Index++;
+            }
+        }
+        return (word1Index==word1.length && word2Index==word2.length);
+    }
+}

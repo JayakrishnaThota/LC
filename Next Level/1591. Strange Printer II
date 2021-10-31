@@ -1,0 +1,85 @@
+//O(mnc) time and O(mn) space
+class Solution {
+    Map<Integer, int[]> map;
+    Map<Integer, Set<Integer>> adjlist;
+    Map<Integer, Integer> indegree;
+    public boolean isPrintable(int[][] targetGrid) {
+        if(targetGrid==null || targetGrid.length==0) return true;
+        int m = targetGrid.length, n = targetGrid[0].length;
+        construct(targetGrid, m, n);
+        return topSort();
+    }
+    
+    public boolean topSort() {
+        int count = 0;
+        Queue<Integer> queue = new LinkedList();
+        for(Integer key:map.keySet()){
+            if(indegree.getOrDefault(key,0)==0) {
+                count++;
+                queue.offer(key);
+            }
+        }
+        while(!queue.isEmpty()){
+            int u = queue.poll();
+            if(adjlist.get(u)==null) continue;
+            for(int v:adjlist.get(u)){
+                indegree.put(v, indegree.get(v)-1);
+                if(indegree.get(v)==0){
+                    queue.offer(v);
+                    count++;
+                }
+            }
+        }
+        return (count==map.size());
+    }
+    
+    public void construct(int[][] grid, int m, int n) {
+        map = new HashMap();
+        adjlist = new HashMap();
+        indegree = new HashMap();
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                int color = grid[i][j];
+                if(map.containsKey(color)) continue;
+                int[] boundaries = helper(grid, m, n, color);
+                map.put(color, boundaries);
+            }
+        }
+        for(Integer key:map.keySet()) {
+            adjlist.put(key, new HashSet());
+            constructIndegree(key, grid);
+        }
+    }
+    
+    public void constructIndegree(int color, int[][] grid) {
+        int[] boundaries = map.get(color);
+        for(int i=boundaries[0];i<=boundaries[2];i++) {
+            for(int j=boundaries[1];j<=boundaries[3];j++) {
+                if(color!=grid[i][j]) {
+                    int dependent = grid[i][j];
+                    int independent = color;
+                    if(adjlist.get(independent).contains(dependent)) continue;
+                    adjlist.get(independent).add(dependent);
+                    indegree.put(dependent, indegree.getOrDefault(dependent,0)+1);
+                }
+            }
+        }
+    }
+    
+    public int[] helper(int[][] grid, int m, int n, int color) {
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(color==grid[i][j]) {
+                    minX = Math.min(minX, i);
+                    minY = Math.min(minY, j);
+                    maxX = Math.max(maxX, i);
+                    maxY = Math.max(maxY, j);
+                }
+            }
+        }
+        return new int[]{minX, minY, maxX, maxY};
+    }
+    
+}

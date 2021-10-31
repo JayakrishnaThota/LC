@@ -1,0 +1,15 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int diagonalSum(int[][] mat) {
+        if(mat==null || mat.length==0) return 0;
+        int sum = 0, m = mat.length, n = mat[0].length;
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(i==j) sum+=mat[i][j];
+                if(i+j==m-1) sum+=mat[i][j];
+                if(i+j==m-1 && i==j) sum-=mat[i][j];
+            }
+        }
+        return sum;
+    }
+}

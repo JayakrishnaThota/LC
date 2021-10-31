@@ -1,0 +1,30 @@
+//O(mn) time and space
+class Solution {
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+        if(nums==null || nums.size()==0) return new int[0];
+        Map<Integer, LinkedList<Integer>> map = new HashMap();
+        List<Integer> list = new ArrayList();
+        int max = 0;
+        for(int i=0;i<nums.size();i++) {
+            for(int j=0;j<nums.get(i).size();j++) {
+                int index = i+j;
+                map.putIfAbsent(index, new LinkedList());
+                map.get(index).addFirst(nums.get(i).get(j));
+                max = Math.max(max, index);
+            }
+        }
+        for(int i=0;i<=max;i++) {
+            list.addAll(map.get(i));
+        }
+        return array(list);
+    }
+    
+    public int[] array(List<Integer> list) {
+        int[] array = new int[list.size()];
+        for(int i=0;i<array.length;i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+    
+}

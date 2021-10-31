@@ -1,0 +1,34 @@
+//O(n) time and space
+class Solution {
+    public Node findRoot(List<Node> tree) {
+        if(tree==null || tree.size()==0) return null;
+        Set<Node> set = new HashSet();
+        for(Node t:tree) {
+            for(Node child:t.children) {
+                set.add(child);
+            }
+        }
+        for(Node t:tree) {
+            if(!set.contains(t)) return t;
+        }
+        return null;
+    }
+}
+
+//O(n) time and O(1) space
+class Solution {
+    public Node findRoot(List<Node> tree) {
+        if(tree==null || tree.size()==0) return null;
+        long sum = 0;
+        for(Node t:tree) {
+            sum+=t.val;
+            for(Node child:t.children) {
+                sum-=child.val;
+            }
+        }
+        for(Node t:tree) {
+            if(sum==t.val) return t;
+        }
+        return null;
+    }
+}

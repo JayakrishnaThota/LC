@@ -1,0 +1,69 @@
+//O(n^2) time and space
+class Solution {
+    
+     class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+            size = n;
+        }
+        
+        //O(1) amortized
+        public boolean union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return false;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+            return true;
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+    
+    public int minCostConnectPoints(int[][] points) {
+        List<int[]> edges = construct(points);
+        Collections.sort(edges, (a,b) -> (a[2]-b[2]));
+        DisjointSet ds = new DisjointSet(points.length);
+        int res = 0;
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1], w = edge[2];
+            if(ds.union(u,v)) {
+                res+=w;
+            }
+        }
+        return (ds.size==1)?res:-1;
+    }
+    
+    public List<int[]> construct(int[][] points) {
+        List<int[]> result = new ArrayList();
+        for(int i=0;i<points.length;i++) {
+            for(int j=i+1;j<points.length;j++) {
+                int distance = Math.abs(points[i][0]-points[j][0]) + Math.abs(points[i][1]-points[j][1]);
+                result.add(new int[]{i,j,distance});
+            }
+        }
+        return result;
+    }
+    
+}
