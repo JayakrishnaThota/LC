@@ -1,0 +1,63 @@
+//O(V+E) time and space
+class Solution {
+    Map<Integer, Set<Integer>> map;
+    Map<Integer, Integer> indegree;
+    public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
+        construct(seqs);
+        return topSort(org);
+    }
+    
+    public void construct(List<List<Integer>> seqs) {
+        map = new HashMap();
+        indegree = new HashMap();
+        for(List<Integer> seq:seqs) {
+            if(seq.size()==1) {
+                int a = seq.get(0);
+                if(!map.containsKey(a)) {
+                    map.put(a, new HashSet());
+                    indegree.put(a, 0);
+                }
+            }
+            else {
+                for(int i=1;i<seq.size();i++) {
+                    int prev = seq.get(i-1), cur = seq.get(i);
+                    if(!map.containsKey(prev)) {
+                        map.put(prev, new HashSet());
+                        indegree.put(prev, 0);
+                    }
+                    if(!map.containsKey(cur)) {
+                        map.put(cur, new HashSet());
+                        indegree.put(cur, 0);
+                    }
+                    if(map.get(prev).add(cur)) {
+                        indegree.put(cur, indegree.getOrDefault(cur,0)+1);
+                    }
+                }
+            }
+        }
+    }
+    
+    public boolean topSort(int[] org) {
+        int index = 0;
+        Queue<Integer> queue = new LinkedList();
+        for(Integer key:indegree.keySet()) {
+            if(indegree.get(key)==0) {
+                queue.offer(key);
+            }
+        }
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            //Unique Way Check
+            if(size>1) return false;
+            int u = queue.poll();
+            //Seq order check
+            if(index==org.length || u!=org[index++]) return false;
+            for(int v:map.get(u)) {
+                indegree.put(v, indegree.get(v)-1);
+                if(indegree.get(v)==0) { queue.offer(v); }
+            }
+        }
+        return (index==indegree.size())&&(index==org.length);
+    }
+    
+}

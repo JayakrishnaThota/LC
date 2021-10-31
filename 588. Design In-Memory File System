@@ -1,0 +1,84 @@
+class FileSystem {
+
+    class File {
+        String content;
+        Map<String, File> children;
+        boolean isFile;
+        public File() {
+            content = "";
+            children = new HashMap();
+            isFile = false;
+        }
+    }
+    
+    File root;
+    public FileSystem() {
+        root = new File();
+    }
+    
+    //O(n) time and space
+    public List<String> ls(String path) {
+        List<String> result = new ArrayList();
+        String[] tokens = path.split("/");
+        File node = root;
+        String name = "";
+        for(String token:tokens) {
+            name = token;
+            if(token.length()==0) continue;
+            if(node.children.get(token)==null) return result;
+            node = node.children.get(token);
+        }
+        if(node.isFile) {
+            result.add(name);
+        }
+        else {
+            for(String key:node.children.keySet()) {
+                result.add(key);
+            }
+        }
+        Collections.sort(result);
+        return result;
+    }
+    
+    //O(n) time and space
+    public void mkdir(String path) {
+        String[] tokens = path.split("/");
+        File node = root;
+        for(String token:tokens) {
+            if(token.length()==0) continue;
+            if(node.children.get(token)==null) {
+                node.children.put(token, new File());
+            }
+            node = node.children.get(token);
+        }
+    }
+    
+    //O(n) time and space
+    public void addContentToFile(String path, String content) {
+        String[] tokens = path.split("/");
+        File node = root;
+        for(String token:tokens) {
+            if(token.length()==0) continue;
+            if(node.children.get(token)==null) {
+                node.children.put(token, new File());
+            }
+            node = node.children.get(token);
+        }
+        node.isFile = true;
+        node.content += content;
+    }
+    
+    //O(n) time and space
+    public String readContentFromFile(String path) {
+        String[] tokens = path.split("/");
+        File node = root;
+        for(String token:tokens) {
+            if(token.length()==0) continue;
+            if(node.children.get(token)==null) {
+                node.children.put(token, new File());
+            }
+            node = node.children.get(token);
+        }
+        return node.content;
+    }
+}

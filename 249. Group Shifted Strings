@@ -1,0 +1,35 @@
+//O(n2) time and O(n) space 
+class Solution {
+    public List<List<String>> groupStrings(String[] strings) {
+        List<List<String>> result = new ArrayList();
+        Map<String, List<String>> map = new HashMap();
+        if(strings==null || strings.length==0) return result;
+        for(String s:strings){
+            String key = getDifference(s);
+            if(map.get(key)==null){
+                map.put(key, new ArrayList());
+            }
+            map.get(key).add(s);
+        }
+        for(String key:map.keySet()){
+            List<String> list = map.get(key);
+            Collections.sort(list);
+            result.add(list);
+        }
+        return result;
+    }
+    
+    public String getDifference(String s){
+        if(s==null || s.length()<2) return "";
+        String ret = "";
+        for(int i=1;i<s.length();i++){
+            int diff = s.charAt(i)-s.charAt(i-1);
+            if(diff<0){
+                diff+=26;
+            }
+            ret+=(diff+'a'+"");
+        }
+        return ret;
+    }
+    
+}

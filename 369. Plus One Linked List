@@ -1,0 +1,39 @@
+//O(n) time and space
+class Solution {
+    public ListNode plusOne(ListNode head) {
+        ListNode rev = reverse(head);
+        ListNode iter = rev;
+        ListNode prev = null;
+        while(iter!=null){
+            prev = iter;
+            int val = iter.val;
+            if(iter.val==9){
+                iter.val = 0;
+                iter = iter.next;
+            }
+            else{
+                iter.val = val+1;
+                break;
+            }
+        }
+        if(iter==null){
+            prev.next = new ListNode(1);
+            reverse(prev.next);
+        }
+        return reverse(rev);
+    }
+    
+    public ListNode reverse(ListNode head){
+        //Sanity Check
+        if(head==null || head.next==null) return head;
+        ListNode cur = head, prev = null;
+        while(cur!=null){
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+    
+}

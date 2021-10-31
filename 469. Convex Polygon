@@ -1,0 +1,25 @@
+public class Solution {
+    //O(n) time and O(1) space
+    public boolean isConvex(int[][] points) {
+        if(points==null || points.length<3) return false;
+        int n = points.length;
+        boolean neg = false, pos = false;
+        for(int i=0;i<n;i++){
+            int j = (i+1)%n;
+            int k = (i+2)%n;
+            int c  = crossProduct(points[i], points[j], points[k]);
+            if(c<0) neg = true;
+            else if(c>0) pos = true;
+            if(neg && pos) return false;
+        }
+        return true;
+    }
+    
+    public int crossProduct(int[] a, int[] b, int[] c) {
+        int abx = a[0] - b[0];
+        int aby = a[1] - b[1];
+        int acx = a[0] - c[0];
+        int acy = a[1] - c[1];
+        return abx*acy - aby*acx;
+    }
+}

@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    public boolean checkEqualTree(TreeNode root) {
+        Map<Integer, Integer> map = new HashMap();
+        int sum = sum(root, map);
+        if(sum%2!=0) return false;
+        if(sum==0) return map.getOrDefault(sum,0)>1;
+        return map.containsKey(sum/2);
+    }
+    public int sum(TreeNode root, Map<Integer, Integer> map){
+        if(root==null) return 0;
+        int sum = root.val + sum(root.left, map) + sum(root.right, map);
+        map.put(sum, map.getOrDefault(sum,0)+1);
+        return sum;
+    }
+}

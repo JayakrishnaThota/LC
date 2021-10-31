@@ -1,0 +1,23 @@
+/* 
+Given a string, determine if a permutation of the string could form a palindrome.
+
+For example, “code” -> False, “aab” -> True, “carerac” -> True.
+*/
+
+
+
+//O(n) time and O(1) space
+class Solution {
+    public boolean canPermutePalindrome(String s) {
+        int[] map = new int[256];
+        int odd = 0;
+        for(char c:s.toCharArray()){
+            map[c]++;
+        }
+        for(int i:map){
+            if(i%2!=0)
+                odd++;
+        }
+        return (odd<=1);
+    }
+}

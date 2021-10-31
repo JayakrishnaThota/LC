@@ -1,29 +1,48 @@
-//O(nlog26) = O(n) time and O(n) space
+/*
+
+Given a non-empty string str and an integer k, rearrange the string such that the same characters are at least distance k from each other.
+
+All input strings are given in lowercase letters. If it is not possible to rearrange the string, return an empty string "".
+Example:
+
+str = "aabbcc", k = 3
+
+Result: "abcabc"
+
+The same letters are at least distance 3 from each other.
+
+*/
+
+//O(n) time and space
 class Solution {
     public String rearrangeString(String s, int k) {
-        //Sanity check
-        if(s==null || s.length()==0) return "";
-        int n = s.length();
+        if(s==null || s.length()==0 || k<2) return s;
+        int[] count = new int[26];
+        for(char c:s.toCharArray()) count[c-'a']++;
         StringBuffer sb = new StringBuffer();
-        Map<Character, Integer> map = new HashMap();
-        for(char c:s.toCharArray()) map.put(c, map.getOrDefault(c,0)+1);
-        //Declaration of max heap with values
-        Queue<Map.Entry<Character, Integer>> pq = new PriorityQueue(new Comparator<Map.Entry<Character, Integer>>(){
-            public int compare(Map.Entry<Character, Integer> m1, Map.Entry<Character, Integer> m2){
-                return m2.getValue()-m1.getValue();
-            }
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(1, new Comparator<int[]>(){
+           public int compare(int[] a, int[] b){
+               return b[1]-a[1];
+           } 
         });
-        Queue<Map.Entry<Character, Integer>> q = new LinkedList();
-        pq.addAll(map.entrySet());
-        while(!pq.isEmpty()){
-            Map.Entry<Character, Integer> entry = pq.poll();
-            sb.append(entry.getKey());
-            map.put(entry.getKey(), map.get(entry.getKey())-1);
-            q.offer(entry);
-            if(q.size()<k) continue;
-            Map.Entry<Character, Integer> qentry = q.poll();
-            if(qentry.getValue()>0) pq.offer(qentry);
+        for(int i=0;i<26;i++){
+            if(count[i]>0){
+                pq.offer(new int[]{i, count[i]});
+            }
         }
-        return (sb.length()==n)?sb.toString():"";
+        Queue<int[]> waitqueue = new LinkedList();
+        while(!pq.isEmpty()){
+            int[] max = pq.poll();
+            sb.append((char)(max[0]+'a'));
+            max[1]--;
+            waitqueue.offer(max);
+            if(waitqueue.size()>=k){
+                int[] temp = waitqueue.poll();
+                if(temp[1]>0){
+                    pq.offer(temp);
+                }
+            }
+        }
+        return (sb.length()==s.length())?sb.toString():"";
     }
 }

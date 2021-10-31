@@ -1,0 +1,58 @@
+/* 
+
+Given a sorted array of integers nums and integer values a, band c. Apply a quadratic function of the form f(x) = ax2 + bx + c to each element x in the array.
+
+The returned array must be in sorted order.
+
+Expected time complexity: O(n)
+
+Example 1:
+
+Input: nums = [-4,-2,2,4], a = 1, b = 3, c = 5
+Output: [3,9,15,33]
+Example 2:
+
+Input: nums = [-4,-2,2,4], a = -1, b = 3, c = 5
+Output: [-23,-5,1,7]
+
+*/
+
+//O(n) time and O(1) space
+class Solution {
+    public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
+        int n = nums.length;
+        int[] result = new int[n];
+        int low = 0, high = n-1;
+        int index = (a>=0)?high:low;
+        while(low<=high){
+            int l = quad(nums[low], a, b, c);
+            int h = quad(nums[high], a, b, c);
+            if(a>=0){
+                if(l>h){
+                    result[index--] = l;
+                    low++;
+                }
+                else{
+                    result[index--] = h;
+                    high--;
+                }
+            }
+            else{
+                if(l<=h){
+                    result[index++] = l;
+                    low++;
+                }
+                else{
+                    result[index++] = h;
+                    high--;
+                }
+            }
+        }
+        return result;
+    }
+    
+    public int quad(int x, int a, int b, int c) {
+        return a * x * x + b * x + c;
+    }
+    
+}

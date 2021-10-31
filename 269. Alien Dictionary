@@ -1,0 +1,146 @@
+//O(V+E) time and space
+class Solution {
+    //abc, ab should return "", no flag returns "abc"
+    boolean flag = false;
+    Map<Character, Set<Character>> adjlist;
+    Map<Character, Integer> indegree;
+    public String alienOrder(String[] words) {
+        if(words==null || words.length==0)
+            return "";
+        initialise(words);
+        if(flag) return "";
+        return topSort(words);
+    }
+    
+    public void initialise(String[] words){
+        adjlist = new HashMap();
+        indegree = new HashMap();
+        for(String word:words){
+            for(char c:word.toCharArray()){
+                indegree.put(c,0);
+            }
+        }
+        for(int i=0;i<words.length-1;i++){
+            String cur = words[i], next = words[i+1];
+            if(cur.length()>next.length() && cur.startsWith(next)) { flag = true; return; }
+            int length = Math.min(cur.length(), next.length());
+            for(int j=0;j<length;j++){
+                char a = cur.charAt(j), b = next.charAt(j);
+                if(a!=b){
+                    adjlist.putIfAbsent(a, new HashSet());
+                    Set<Character> set = adjlist.get(a);
+                    if(!set.contains(b)){
+                        set.add(b);
+                        adjlist.put(a, set);
+                        indegree.put(b, indegree.getOrDefault(b,0)+1);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    public String topSort(String[] words){
+        StringBuffer sb = new StringBuffer();
+        Queue<Character> queue = new LinkedList();
+        for(Character key:indegree.keySet()){
+            if(indegree.get(key)==0){
+                queue.offer(key);
+            }
+        }
+        while(!queue.isEmpty()){
+            char u = queue.poll();
+            sb.append(u);
+            if(adjlist.containsKey(u)){
+                for(char v:adjlist.get(u)){
+                    indegree.put(v,indegree.getOrDefault(v,0)-1);
+                    if(indegree.get(v)==0){
+                        queue.offer(v);
+                    }
+                }
+            }
+        }
+        return (sb.length()==indegree.size())?sb.toString():"";
+    }
+    
+}
+
+
+/* Another Solution */
+class Solution {
+    HashMap<Character, HashSet<Character>> graph;
+    HashMap<Character, Integer> inDegree;
+    public String alienOrder(String[] words) {
+        if(words == null || words.length == 0)
+            return "";
+        boolean canConstruct = constructGraph(words);
+        if(!canConstruct)
+            return "";
+        return topSort();
+    }
+    
+    private boolean constructGraph(String[] words)
+    {
+        graph = new HashMap();
+        inDegree = new HashMap();
+        
+         for(String word:words){
+            for(char c:word.toCharArray()){
+                inDegree.put(c,0);
+                graph.put(c, new HashSet());
+            }
+        }
+        
+        for(int i=1; i<words.length; i++)
+        {
+            String prev = words[i-1];
+            String cur = words[i];
+            if(prev.length() > cur.length() && prev.startsWith(cur))
+                return false;
+            
+            int len = Math.min(prev.length(), cur.length());
+            for(int j=0; j<len; j++)
+            {
+                char prevch = prev.charAt(j);
+                char curch = cur.charAt(j);
+                if(prevch != curch)
+                {
+                    if(!graph.get(prevch).contains(curch))
+                    {
+                        graph.get(prevch).add(curch);
+                        inDegree.put(curch, inDegree.getOrDefault(curch, 0)+1);
+                    }
+                    break;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    private String topSort()
+    {
+        Queue<Character> queue = new LinkedList();
+        StringBuilder res = new StringBuilder();
+        for(char ch: inDegree.keySet())
+        {
+            if(inDegree.get(ch) == 0)
+                queue.offer(ch);
+        }
+        
+        while(!queue.isEmpty())
+        {
+            char u = queue.poll();
+            res.append(u);
+            for(char v: graph.get(u))
+            {
+                inDegree.put(v, inDegree.get(v)-1);
+                if(inDegree.get(v) == 0)
+                    queue.offer(v);
+            }
+            
+        }
+        
+        return (res.length() == graph.size()) ? res.toString() : "";
+    }
+}

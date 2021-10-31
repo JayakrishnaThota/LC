@@ -1,55 +1,53 @@
 //O((mn)^2) time and O(mn) space
 class Solution {
-    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    int[][] dirs = new int[][]{{0,1},{1,0},{0,-1},{-1,0}};
     public int shortestDistance(int[][] grid) {
         if(grid==null || grid.length==0) return 0;
-        int m = grid.length, n = grid[0].length, min = Integer.MAX_VALUE;
-        int[][] reach = new int[m][n];
+        int m = grid.length, n = grid[0].length;
         int[][] distance = new int[m][n];
+        int[][] reach = new int[m][n];
         int buildingCount = 0;
-        for(int i=0;i<m;i++) {
-            for(int j=0;j<n;j++) {
-                if(grid[i][j]==0) {
-                    bfs(grid,i,j,m,n,reach,distance);
-                }
-                else if(grid[i][j]==1) buildingCount++;
-            }
-        }
-        for(int i=0;i<m;i++) {
-            for(int j=0;j<n;j++) {
-                if((grid[i][j] == 0) && buildingCount == reach[i][j]) {
-                    min = Math.min(min, distance[i][j]);
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    buildingCount++;
+                    bfs(grid, distance, reach, i, j);
                 }
             }
         }
-        return (min==Integer.MAX_VALUE)?-1:min;
+        int result = Integer.MAX_VALUE;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if((grid[i][j]==0)&&(reach[i][j]==buildingCount)){
+                    result = Math.min(result, distance[i][j]);
+                }
+            }
+        }
+        return (result==Integer.MAX_VALUE)?-1:result;
     }
     
-    public void bfs(int[][] grid, int si, int sj, int m, int n, int[][] reach, int[][] distance) {
-        Queue<int[]> queue = new LinkedList();
+    public void bfs(int[][] grid, int[][] distance, int[][] reach, int i, int j){
+        int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
-        queue.offer(new int[]{si,sj});
-        visited[si][sj] = true;
+        Queue<int[]> q = new LinkedList();
+        q.offer(new int[]{i,j});
         int level = 1;
-        while(!queue.isEmpty()) {
-            int size = queue.size();
-            for(int k=0;k<size;k++) {
-                int[] cell = queue.poll();
-                int i = cell[0], j = cell[1];
-                for(int[] dir:dirs) {
-                    int x = i + dir[0], y = j + dir[1];
-                    if(x<0 || y<0 || x>=m || y>=n || grid[x][y]==2 || visited[x][y]) continue;
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int k=0;k<size;k++){
+                int[] temp = q.poll();
+                for(int[] dir:dirs){
+                    int x = dir[0] + temp[0];
+                    int y = dir[1] + temp[1];
+                    if(x<0 || x>=m || y<0 || y>=n) continue;
+                    if((grid[x][y]!=0)||(visited[x][y])) continue;
+                    distance[x][y]+=level;
+                    reach[x][y]++;
                     visited[x][y] = true;
-                    if(grid[x][y]==0)
-                        queue.offer(new int[]{x,y});
-                    if(grid[x][y]==1) {
-                        reach[si][sj]++;
-                        distance[si][sj]+=level;
-                    }
+                    q.offer(new int[]{x,y});
                 }
             }
             level++;
         }
     }
-    
 }

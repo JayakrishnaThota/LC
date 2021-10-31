@@ -1,0 +1,16 @@
+//O(h) time and O(1) space 
+class Solution {
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        TreeNode suc = null, iter = root;
+        while(iter!=null) {
+            if(iter.val>p.val) {
+                suc = iter;
+                iter = iter.left;
+            }
+            else {
+                iter = iter.right;
+            }
+        }
+        return suc;
+    }
+}

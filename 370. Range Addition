@@ -1,0 +1,33 @@
+//O(nk) time and O(1) space
+class Solution {
+    public int[] getModifiedArray(int length, int[][] updates) {
+        int[] array = new int[length];
+        for(int[] update:updates){
+            int start = update[0];
+            int end = update[1];
+            int val = update[2];
+            for(int i=start;i<=end;i++){
+                array[i]+=val;
+            }
+        }
+        return array;
+    }
+}
+
+//O(n+k) time and O(1) space
+class Solution {
+    public int[] getModifiedArray(int length, int[][] updates) {
+        int[] array = new int[length];
+        for(int[] update:updates){
+            int start = update[0];
+            int end = update[1];
+            int val = update[2];
+            array[start] = array[start] + val;
+            if(end!=length-1) array[end+1] = array[end+1] - val; 
+        }
+        for(int i=1;i<length;i++){
+            array[i] = array[i-1] + array[i];
+        }
+        return array;
+    }
+}

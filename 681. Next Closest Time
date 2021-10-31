@@ -1,0 +1,26 @@
+//O(1) time and space
+class Solution {
+    public String nextClosestTime(String t) {
+        String[] tokens = t.split(":");
+        Set<Character> set = new HashSet();
+        for(char c:t.toCharArray()) {
+            if(c==':') continue;
+            set.add(c);
+        }
+        int time = Integer.parseInt(tokens[0])*60 + Integer.parseInt(tokens[1]);
+        while(true) {
+            time = (time+1)%(24*60);
+            int[] digits = new int[]{time/60/10, time/60%10, time%60/10, time%60%10};
+            boolean done = true;
+            for(int d:digits) {
+                char c = (char)(d+'0');
+                if(!set.contains(c)) done = false;
+            }
+            if(done) {
+                String hour = (time/60/10)+""+time/60%10;
+                String minute = time%60/10+""+time%60%10;
+                return hour+":"+minute;
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+//O(nk) time and O(1) space
+public class Solution {
+    public int minCostII(int[][] costs) {
+        if(costs==null || costs.length==0) return 0;
+        int n = costs.length, k = costs[0].length;
+        int preMinIndex = -1, preMin = 0, preSecondMin = 0;
+        for(int i=0;i<n;i++) {
+            int curMinIndex = -1, curMin = Integer.MAX_VALUE, curSecondMin = Integer.MAX_VALUE;
+            for(int j=0;j<k;j++) {
+                if(j==preMinIndex) {
+                    costs[i][j] += preSecondMin;
+                }
+                else {
+                    costs[i][j] += preMin;
+                }
+                if(curMin>costs[i][j]) {
+                    curSecondMin = curMin;
+                    curMin = costs[i][j];
+                    curMinIndex = j;
+                }
+                else if(curSecondMin>costs[i][j]) {
+                    curSecondMin = costs[i][j];
+                }
+            }
+            preMinIndex = curMinIndex;
+            preMin = curMin;
+            preSecondMin = curSecondMin;
+        }
+        int result = Integer.MAX_VALUE;
+        for(int j=0;j<k;j++) {
+            result = Math.min(result, costs[n-1][j]);
+        }
+        return result;
+    }
+}

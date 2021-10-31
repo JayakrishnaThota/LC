@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+public class Solution {
+    /**
+     * @param num: a string
+     * @return: true if a number is strobogrammatic or false
+     */
+    public boolean isStrobogrammatic(String num) {
+        Map<Character, Character> map = new HashMap();
+        map.put('0','0');map.put('1','1');map.put('6','9');map.put('9','6');map.put('8','8');
+        int low = 0, high = num.length()-1;
+        while(low<=high){
+            char a = num.charAt(low++);
+            char b = num.charAt(high--);
+            if(!map.containsKey(a) || !map.containsKey(b)) return false;
+            if(a!=map.get(b) || b!=map.get(a)) return false;
+        }
+        return true;
+    }
+}

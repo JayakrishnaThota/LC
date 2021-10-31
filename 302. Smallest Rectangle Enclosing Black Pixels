@@ -1,0 +1,22 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int minArea(char[][] image, int x, int y) {
+        //Sanity Check
+        if(image==null || image.length==0) return 0;
+        int m = image.length, n = image[0].length;
+        int up = m+1, down = -1, left = n+1, right = -1;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                char pixel = image[i][j];
+                if(image[i][j]=='1'){
+                    up = Math.min(up, i);
+                    down = Math.max(down, i);
+                    left = Math.min(left, j);
+                    right = Math.max(right, j);
+                }
+            }
+        }
+        if(up==m+1 || down==-1 || left==n+1 || right==-1) return -1;
+        return (down-up+1)*(right-left+1);
+    }
+}
