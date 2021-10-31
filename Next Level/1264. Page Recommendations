@@ -1,0 +1,11 @@
+# Write your MySQL query statement below
+
+Select DISTINCT page_id as recommended_page from Likes
+where user_id in
+(
+    Select user2_id as friend_id from Friendship where user1_id = 1 
+    UNION
+    Select user1_id as friend_id from Friendship where user2_id = 1
+) and page_id not in (
+    Select page_id from Likes where user_id = 1
+);

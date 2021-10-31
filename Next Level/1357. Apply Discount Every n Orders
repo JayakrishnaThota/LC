@@ -1,0 +1,28 @@
+class Cashier {
+    int count;
+    int n;
+    int discount;
+    Map<Integer, Integer> map;
+    public Cashier(int n, int discount, int[] products, int[] prices) {
+        this.count = 0;
+        this.n = n;
+        this.discount = discount;
+        map = new HashMap();
+        for(int i=0;i<products.length;i++) {
+            map.put(products[i], prices[i]);
+        }
+    }
+    
+    public double getBill(int[] product, int[] amount) {
+        double result = 0;
+        for(int i=0;i<amount.length;i++) {
+            result = result + (amount[i]*map.get(product[i]));
+        }
+        count++;
+        count%=n;
+        if(count==0) {
+            result = result - (discount*result)/100;
+        }
+        return result;
+    }
+}

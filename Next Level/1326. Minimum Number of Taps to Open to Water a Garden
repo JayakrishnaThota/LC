@@ -1,0 +1,31 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int minTaps(int n, int[] ranges) {
+        int[][] clips = new int[ranges.length][2];
+        for(int i=0;i<ranges.length;i++) {
+            clips[i][0] = i-ranges[i];
+            clips[i][1] = i+ranges[i];
+        }
+        return videoStitching(clips, n);
+    }
+    
+    public int videoStitching(int[][] clips, int T) {
+        int result = 0;
+        Arrays.sort(clips, new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[0]-b[0];
+            }
+        });
+        int i = 0, start = 0, end = 0;
+        while(start<T) {
+            for(;i<clips.length && clips[i][0]<=start;i++) {
+                end = Math.max(end, clips[i][1]);
+            }
+            if(start==end) return -1;
+            start = end;
+            result++;
+        }
+        return result;
+    }
+    
+}

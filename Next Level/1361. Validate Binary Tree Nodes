@@ -1,0 +1,48 @@
+//O(n) time and space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    Set<Integer> visited;
+    int[] parent;
+    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+        if(!construct(n, leftChild, rightChild)) return false;
+        int root = -1;
+        for(int i=0;i<n;i++) {
+            if(parent[i]==-1) { root = i; break; }
+        }
+        if(root==-1 || hasCycle(root)) return false;
+        return (visited.size()==n);
+    }
+    
+    public boolean construct(int n, int[] leftChild, int[] rightChild) {
+        adjlist = new HashMap();
+        visited = new HashSet();
+        parent = new int[n];
+        Arrays.fill(parent, -1);
+        for(int i=0;i<n;i++) {
+            int left = leftChild[i];
+            int right = rightChild[i];
+            adjlist.put(i, new HashSet());
+            if(left!=-1) {
+                if(parent[left]!=-1) return false;
+                parent[left] = i;
+                adjlist.get(i).add(left);
+            }
+            if(right!=-1) {
+                if(parent[right]!=-1) return false;
+                parent[right] = i;
+                adjlist.get(i).add(right);
+            }
+        }
+        return true;
+    }
+    
+    public boolean hasCycle(int u) {
+        if(visited.contains(u)) return true;
+        visited.add(u);
+        for(Integer v:adjlist.get(u)) {
+            if(hasCycle(v)) return true;
+        }
+        return false;
+    }
+    
+}

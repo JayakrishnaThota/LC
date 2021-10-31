@@ -1,0 +1,32 @@
+//O(mnk) time and space
+class Solution {
+    int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+    public int shortestPath(int[][] grid, int k) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList();
+        boolean[][][] visited = new boolean[m][n][k+1];
+        queue.offer(new int[]{0,0,0});
+        visited[0][0][0] = true;
+        int level = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int r=0;r<size;r++) {
+                int[] cell = queue.poll();
+                int i = cell[0], j = cell[1], obstacleCount = cell[2];
+                if(i==m-1 && j==n-1) return level;
+                for(int[] dir:dirs) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    int newObstacleCount = ((x>=0 && x<m && y>=0 && y<n && grid[x][y]==1))?obstacleCount+1:obstacleCount;
+                    if(x>=0 && x<m && y>=0 && y<n && newObstacleCount<=k && !visited[x][y][newObstacleCount]) {
+                        queue.offer(new int[]{x,y,newObstacleCount});
+                        visited[x][y][newObstacleCount] = true;
+                    }
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+}

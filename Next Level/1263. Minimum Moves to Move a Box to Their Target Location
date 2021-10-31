@@ -1,0 +1,76 @@
+//O((mn)^2) time and O(mn) space
+class Solution {
+    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    public int minPushBox(char[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<int[]>();
+        HashMap<String, Integer> dist = new HashMap();
+        int[] start = new int[4];
+        int[] target = new int[2];
+        for(int i=0; i<m; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(grid[i][j] == 'S')
+                {
+                    start[0] = i; start[1] = j;
+                }
+                else if(grid[i][j] == 'B')
+                {
+                    start[2] = i; start[3] = j;
+                }
+                else if(grid[i][j] == 'T')
+                    target = new int[]{i,j};
+            }
+        }
+        queue.offer(start);
+        dist.put(Arrays.toString(start), 0);
+        int res = Integer.MAX_VALUE;
+        while(!queue.isEmpty())
+        {
+            int[] cors = queue.poll();
+            String loc = Arrays.toString(cors);
+            if(dist.get(loc) >= res)
+                continue;
+            if(cors[2] == target[0] && cors[3] == target[1])
+            {
+                res = Math.min(res, dist.get(loc));
+                continue;
+            }
+            int[] s = new int[] {cors[0], cors[1]};
+            int[] b = new int[] {cors[2], cors[3]};
+            for(int[] dir: dirs)
+            {
+                int sx = s[0]+dir[0];
+                int sy = s[1]+dir[1];
+                if(sx < 0 || sy < 0 || sx >= m || sy >= n || grid[sx][sy] == '#')
+                    continue;
+                int bx = b[0], by = b[1];
+//                 man and Box are in same pos continue to move man and box
+                if(sx == b[0] && sy == b[1])
+                {
+                    bx = b[0]+dir[0];
+                    by = b[1]+dir[1]; 
+                    if(bx < 0 || by < 0 || bx >= m || by >= n || grid[bx][by] == '#')
+                        continue;
+                    String newLoc = Arrays.toString(new int[]{sx,sy,bx,by});
+                    if(dist.getOrDefault(newLoc, Integer.MAX_VALUE) > dist.get(loc)+1)
+                    {
+                        dist.put(newLoc, dist.get(loc)+1);
+                        queue.offer(new int[]{sx,sy,bx,by});
+                    }
+                }
+                else
+                {
+                    String newLoc = Arrays.toString(new int[]{sx,sy,bx,by});
+                    if(dist.getOrDefault(newLoc, Integer.MAX_VALUE) > dist.get(loc))
+                    {
+                        dist.put(newLoc, dist.get(loc));
+                        queue.offer(new int[]{sx,sy,bx,by});
+                    }
+                }
+            }
+        }
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }
+}

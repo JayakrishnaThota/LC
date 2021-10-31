@@ -1,0 +1,19 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        TreeMap<Integer, List<Integer>> map = new TreeMap();
+        int index = 0;
+        for(int a:arr) {
+            map.putIfAbsent(a, new ArrayList());
+            map.get(a).add(index++);
+        }
+        int rank = 1;
+        for(Integer key:map.keySet()) {
+            for(Integer l:map.get(key)) {
+                arr[l] = rank;
+            }
+            rank++;
+        }
+        return arr;
+    }
+}
