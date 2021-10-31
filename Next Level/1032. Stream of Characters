@@ -1,0 +1,53 @@
+class StreamChecker {
+
+    class TrieNode {
+        TrieNode[] children;
+        boolean isWord;
+        public TrieNode() {
+            children = new TrieNode[26];
+            isWord = false;
+        }
+    }
+    TrieNode root;
+    StringBuffer sb;
+    //O(n) time and space
+    //n is the length of the largest word
+    public StreamChecker(String[] words) {
+        sb = new StringBuffer();
+        root = new TrieNode();
+        for(String word:words) {
+            insert(word);
+        }
+    }
+    
+    //O(n) time and space
+    public void insert(String word) {
+        TrieNode node = root;
+        for(int i=word.length()-1;i>=0;i--) {
+            char c = word.charAt(i);
+            int index = c-'a';
+            if(node.children[index]==null) node.children[index] = new TrieNode();
+            node = node.children[index];
+        }
+        node.isWord = true;
+    }
+    
+    public boolean startsWith(String word) {
+        TrieNode node = root;
+        for(int i=word.length()-1;i>=0;i--) {
+            char c = word.charAt(i);
+            int index = c-'a';
+            if(node.children[index]==null) return false;
+            node = node.children[index];
+            if(node.isWord) return true;
+        }
+        return false;
+    }
+    
+    //O(n) time and space
+    //n is the length of sb
+    public boolean query(char letter) {
+        sb.append(letter+"");
+        return startsWith(sb.toString());
+    }
+}

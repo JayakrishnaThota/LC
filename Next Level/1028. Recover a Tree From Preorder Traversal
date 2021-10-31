@@ -1,0 +1,34 @@
+//O(n) time and space
+class Solution {
+    public TreeNode recoverFromPreorder(String S) {
+        int i = 0, n = S.length();
+        Stack<TreeNode> stack = new Stack<>();
+        while(i<n) {
+            int index = i, level = 0, val = 0;
+            while(index<n && S.charAt(index)=='-') {
+                index++;
+                level++;
+            }
+            while(index<n && S.charAt(index)!='-') {
+                val = val * 10 + (S.charAt(index++) - '0');
+            }
+            while (stack.size() > level) {
+                stack.pop();
+            }
+            TreeNode node = new TreeNode(val);
+            if (!stack.isEmpty()) {
+                if (stack.peek().left == null) {
+                    stack.peek().left = node;
+                } else {
+                    stack.peek().right = node;
+                }
+            }
+            stack.add(node);
+            i = index;
+        }
+        while (stack.size() > 1) {
+            stack.pop();
+        }
+        return stack.pop();
+    }
+}

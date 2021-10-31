@@ -1,0 +1,35 @@
+//O(n) time and O(1) space
+class Solution {
+    public List<String> commonChars(String[] words) {
+        List<String> list = new ArrayList();
+        if(words==null || words.length==0) return list;
+        int[] map = new int[26];
+        Arrays.fill(map, -1);
+        for(String word:words) {
+            int[] tmp = freq(word);
+            for(int i=0;i<26;i++) {
+                if(tmp[i]==0) map[i] = 0;
+                else {
+                    if(map[i]==-1) map[i] = tmp[i];
+                    map[i] = Math.min(map[i], tmp[i]);
+                }
+            }
+        }
+        for(int i=0;i<26;i++) {
+            char c = (char)(i+'a');
+            for(int j=0;j<map[i];j++) {
+                list.add(c+"");
+            }
+        }
+        return list;
+    }
+    
+    public int[] freq(String s) {
+        int[] map = new int[26];
+        for(char c:s.toCharArray()) {
+            map[c-'a']++;
+        }
+        return map;
+    }
+    
+}

@@ -1,0 +1,24 @@
+//O(ns^2) time and O(n) space
+class Solution {
+    public int longestStrChain(String[] words) {
+        if(words==null || words.length==0) return 0;
+        int n = words.length, result = 0;
+        Arrays.sort(words, new Comparator<String>(){
+            public int compare(String a, String b) {
+                return a.length() - b.length();
+            }
+        });
+        Map<String, Integer> dp = new HashMap();
+        for(int i=0;i<n;i++) {
+            String key = words[i];
+            int cur = 0;
+            for(int j=0;j<key.length();j++) {
+                String prev = key.substring(0,j) + key.substring(j+1);
+                cur = Math.max(cur, dp.getOrDefault(prev,0)+1);
+            }
+            result = Math.max(result, cur);
+            dp.put(key, cur);
+        }
+        return result;
+    }
+}

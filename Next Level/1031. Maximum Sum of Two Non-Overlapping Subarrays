@@ -1,0 +1,25 @@
+//O(n) time and O(1) space
+class Solution {
+    
+    public int maxSumTwoNoOverlap(int[] A, int L, int M) {
+        return Math.max(helper(A, L, M), helper(A, M, L));
+    }
+    
+    public int helper(int[] A, int L, int M) {
+        int maxL = 0, sumL = 0, sumM = 0, result = 0;
+        for(int i=0;i<L+M;i++) {
+            if(i<L) sumL+=A[i];
+            else sumM+=A[i];
+        }
+        maxL = Math.max(maxL, sumL);
+        result = Math.max(result, maxL+sumM);
+        for(int i=L+M;i<A.length;i++) {
+            sumL+=(A[i-M]-A[i-(L+M)]);
+            maxL = Math.max(maxL, sumL);
+            sumM+=(A[i]-A[i-M]);
+            result = Math.max(result, maxL+sumM);
+        }
+        return result;
+    }
+    
+}

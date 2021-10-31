@@ -1,0 +1,14 @@
+//O(n) time and space
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int res = 0;
+        for (int first : time) {
+            //%60 to deal with 60
+            int second = (60 - first % 60) % 60;
+            res += map.getOrDefault(second, 0);
+            map.put(first % 60, 1 + map.getOrDefault(first % 60, 0));
+        }
+        return res;
+    }
+}

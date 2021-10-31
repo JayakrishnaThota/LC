@@ -1,0 +1,42 @@
+//Exponential time and space
+class Solution {
+    public String[] expand(String S) {
+        int n = S.length();
+        if(n==0) return new String[]{""};
+        if(n==1) return new String[]{S};
+        List<String> list = new ArrayList();
+        if(S.charAt(0)=='{') {
+            int count = 0;
+            int i = 0;
+            while(i<n) {
+                if(S.charAt(i)=='}') break;
+                i++;
+            }
+            String[] lResult = S.substring(1, i).split(",");
+            String[] rResult = expand(S.substring(i + 1));
+            for(String l:lResult) {
+                for(String r:rResult) {
+                    list.add(l+""+r);
+                }
+            }
+        }
+        else {
+            String[] rResult = expand(S.substring(1));
+            for(String r:rResult) {
+                list.add(S.charAt(0)+""+r);
+            }
+        }
+        Collections.sort(list);
+        return array(list);
+    }
+    
+    public String[] array(List<String> list) {
+        String[] res = new String[list.size()];
+        int index = 0;
+        for(String l:list) {
+            res[index++] = l;
+        }
+        return res;
+    }
+    
+}

@@ -1,0 +1,17 @@
+//O(n) time and O(1) space
+class Solution {
+    public int longestOnes(int[] A, int K) {
+        if(A==null || A.length==0) return 0;
+        int n = A.length, max = 0, left = 0, count = 0;
+        for(int right=0;right<n;right++) {
+            if(A[right]==0) {
+                count++;
+            }
+            while(left<=right && count>K) {
+                if(A[left++]==0) count--;
+            }
+            max = Math.max(max, right-left+1);
+        }
+        return max;
+    }
+}

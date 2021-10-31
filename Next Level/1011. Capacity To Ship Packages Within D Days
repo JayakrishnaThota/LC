@@ -1,0 +1,35 @@
+//O(n*log(sum-max)) time and O(1) space
+class Solution {
+    public int shipWithinDays(int[] weights, int D) {
+        int sum = 0;
+        int max = 0;
+        for(int weight:weights) {
+            sum+=weight;
+            max = Math.max(max, weight);
+        }
+        int low = max, high = sum;
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(!valid(weights, D, mid)) {
+                low = mid+1;
+            }
+            else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+    
+    public boolean valid(int[] weights, int D, int mid) {
+        int sum = 0, days = 1;
+        for(int weight:weights) {
+            if(sum+weight > mid) {
+                days++;
+                sum = 0;
+            }
+            sum+=weight;
+        }
+        return days<=D;
+    }
+    
+}

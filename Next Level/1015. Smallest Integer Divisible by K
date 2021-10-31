@@ -1,0 +1,12 @@
+//O(K) time and O(1) space
+class Solution {
+    public int smallestRepunitDivByK(int K) {
+        if(K%2==0 || K%5==0) return -1;
+        int cur = 0;
+        for(int i=1;i<=K;i++) {
+            cur = ((cur*10) + 1)%K;
+            if(cur%K==0) return i;
+        }
+        return -1;
+    }
+}
