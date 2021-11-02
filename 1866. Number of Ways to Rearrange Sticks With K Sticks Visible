@@ -1,0 +1,18 @@
+//O(nk) time and space
+class Solution {
+    int mod = 1000000007;
+    public int rearrangeSticks(int n, int k) {
+        long[][] dp = new long[n+1][k+1];
+        return (int)helper(n, k, dp);
+    }
+    
+    public long helper(int n, int k, long[][] dp) {
+        if(n==k) return 1;
+        if(k==0) return 0;
+        if(dp[n][k]>0) return dp[n][k];
+        dp[n][k] = helper(n-1,k-1,dp)%mod + ((helper(n-1,k,dp)%mod)*(n-1))%mod;
+        dp[n][k]%=mod;
+        return dp[n][k];
+    }
+    
+}
