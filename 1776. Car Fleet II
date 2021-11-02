@@ -1,0 +1,31 @@
+//O(n) time and space
+class Solution {
+    public double[] getCollisionTimes(int[][] cars) {
+        if(cars==null || cars.length==0) return new double[0];
+        Stack<Integer> stack = new Stack();
+        int n = cars.length;
+        double[] res = new double[n];
+        Arrays.fill(res, -1.0);
+        for(int i=n-1;i>=0;i--) {
+            while(!stack.isEmpty()) {
+                int j = stack.peek();
+                if(cars[i][1]>cars[j][1] && (res[j]==-1.0 || catchTime(cars,i,j)<=res[j])) {
+                    res[i] = catchTime(cars,i,j);
+                    break;
+                }
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+    
+    // time for cars[i] to catch cars[j]
+    private double catchTime(int[][] cars, int i, int j) {
+        int dist = cars[j][0] - cars[i][0];
+        int v = cars[i][1] - cars[j][1];
+        
+        return (double)dist / v;
+    }
+    
+}
