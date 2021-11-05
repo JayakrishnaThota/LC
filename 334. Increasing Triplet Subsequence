@@ -1,20 +1,17 @@
-//O(n) time and O(1) space
+//O(n) time and space
 class Solution {
     public boolean increasingTriplet(int[] nums) {
-        int a = Integer.MAX_VALUE,b=Integer.MAX_VALUE,c=Integer.MAX_VALUE;
-        for(int num:nums){
-            if(num==a || num==b || num==c) continue;
-            if(num<a){
+        Integer a = null, b = null, c = null;
+        for(int num:nums) {
+            if((a!=null && a==num) || (b!=null && b==num)  || (c!=null && c==num)) continue;
+            if(a==null || num<a) {
                 a = num;
-            }
-            else if(num<b){
+            } else if(b==null || num<b) {
                 b = num;
-            }
-            else if(num<c){
+            } else if(c==null || num<c) {
                 return true;
             }
         }
-        System.out.println(a+""+b+""+c);
         return false;
     }
 }
