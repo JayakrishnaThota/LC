@@ -1,38 +1,36 @@
-//Exponential time and space complexity
+//O(2^N*N) time and space
+//Number of paths between two vertices
+//when there are N nodes is Summation i = 0 to N-2 (2^i) = 2^(N-1) -1 
 class Solution {
-    Map<Integer, List<Integer>> adjlist;
     List<List<Integer>> result;
+    Map<Integer, Set<Integer>> adjlist;
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         construct(graph);
         dfs(0, graph.length-1, new ArrayList());
         return result;
     }
     
-    public void construct(int[][] graph){
+    public void construct(int[][] graph) {
         adjlist = new HashMap();
         result = new ArrayList();
-        int source = 0;
-        for(int[] g:graph){
-            adjlist.put(source, new ArrayList());
-            for(int neighbor:g){
-                adjlist.get(source).add(neighbor);
+        for(int u=0;u<graph.length;u++) {
+            adjlist.putIfAbsent(u, new HashSet());
+            for(int v:graph[u]) {
+                adjlist.get(u).add(v);
             }
-            source++;
         }
     }
     
-    public void dfs(int source, int destination, List<Integer> list){
-        if(list.contains(source)) return;
-        if(source==destination){
-            list.add(source);
-            result.add(new ArrayList(list));
-            return;
-        }
+    public void dfs(int source, int target, List<Integer> list) {
         list.add(source);
-        for(Integer neighbor:adjlist.get(source)){
-            dfs(neighbor, destination, list);
-            list.remove(neighbor);
+        if(source==target) {
+            result.add(new ArrayList(list));
+        } else {
+            for(int neighbor:adjlist.get(source)) {
+                dfs(neighbor, target, list);
+            }
         }
+        list.remove(list.size()-1);
     }
     
 }
