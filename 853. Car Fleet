@@ -2,18 +2,19 @@
 class Solution {
     public int carFleet(int target, int[] position, int[] speed) {
         TreeMap<Integer, Integer> map = new TreeMap();
-        for(int i=0;i<position.length;i++){
+        int n = position.length, res = 0;
+        double maxTime = 0;
+        for(int i=0;i<n;i++) {
             map.put(target-position[i], speed[i]);
         }
-        int result = 0;
-        double maxTime = -1;
-        for(Integer key:map.keySet()){
-            double curTime = 1.0*key/map.get(key);
-            if(curTime>maxTime){
+        for(Integer distance:map.keySet()) {
+            int curSpeed = map.get(distance);
+            double curTime = (double)distance/(double)curSpeed;
+            if(curTime>maxTime) {
                 maxTime = curTime;
-                result++;
+                res++;
             }
         }
-        return result;
+        return res;
     }
 }
