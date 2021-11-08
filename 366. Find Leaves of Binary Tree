@@ -1,18 +1,20 @@
 //O(n) time and space
 class Solution {
-    List<List<Integer>> list;
     public List<List<Integer>> findLeaves(TreeNode root) {
-        list = new ArrayList();
-        postOrder(root);
-        return list;
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> list = new ArrayList();
+        dfs(result, list, root);
+        return result;
     }
     
-    public int postOrder(TreeNode node){
-        if(node==null) return -1;
-        int level = 1 + Math.max(postOrder(node.left), postOrder(node.right));
-        if(list.size()<level+1) list.add(new ArrayList());
-        list.get(level).add(node.val);
-        return level;
+    public int dfs(List<List<Integer>> result, List<Integer> list, TreeNode root) {
+        if(root==null) return -1;
+        int left = dfs(result, list, root.left);
+        int right = dfs(result, list, root.right);
+        int height = Math.max(left, right) + 1;
+        if(result.size()<height+1) result.add(new ArrayList());
+        result.get(height).add(root.val);
+        return height;
     }
     
 }
