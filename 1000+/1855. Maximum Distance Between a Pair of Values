@@ -1,0 +1,15 @@
+//O(m+n) time and O(1) space
+class Solution {
+    public int maxDistance(int[] nums1, int[] nums2) {
+        int i = 0, j = 0, m = nums1.length, n = nums2.length, res = 0;
+        while(i<m && j<n) {
+            if(nums1[i]>nums2[j]) {
+                i++;
+            } else {
+                res = Math.max(res, j-i);
+                j++;
+            }
+        }
+        return res;
+    }
+}
