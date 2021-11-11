@@ -1,0 +1,20 @@
+//O(n) time and space
+class Solution {
+
+    public int twoEggDrop(int n) {
+        return superEggDrop(2, n);
+    }
+
+    public int superEggDrop(int K, int N) {
+        int[][] dp = new int[K+1][N+1];
+        int curFloor = 0;
+        while(dp[K][curFloor]<N) {
+            curFloor++;
+            for(int k=1;k<=K;k++) {
+                dp[k][curFloor] += (dp[k-1][curFloor-1]+dp[k][curFloor-1]+1);
+            }
+        }
+        return curFloor;
+    }
+
+}
