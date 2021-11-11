@@ -1,20 +1,21 @@
-//O(n2) time and O(1) space
-    public class Solution {
-    public int pathSum(TreeNode root, int sum) {
-        if(root == null)
-            return 0;
-        return findPath(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+//O(n) time and space
+class Solution {
+    public int pathSum(TreeNode root, int targetSum) {
+        if(root==null) return 0;
+        Map<Integer, Integer> map = new HashMap();
+        map.put(0,1);
+        return preOrder(root, targetSum, 0, map);
     }
     
-    public int findPath(TreeNode root, int sum){
-        int res = 0;
-        if(root == null)
-            return res;
-        if(sum == root.val)
-            res++;
-        res += findPath(root.left, sum - root.val);
-        res += findPath(root.right, sum - root.val);
+    public int preOrder(TreeNode root, int targetSum, int curSum, Map<Integer, Integer> map) {
+        if(root==null) return 0;
+        curSum+=root.val;
+        int res = map.getOrDefault(curSum-targetSum, 0);
+        map.put(curSum, map.getOrDefault(curSum,0)+1);
+        res+=preOrder(root.left, targetSum, curSum, map);
+        res+=preOrder(root.right, targetSum, curSum, map);
+        map.put(curSum, map.get(curSum)-1);
         return res;
     }
-   
+    
 }
