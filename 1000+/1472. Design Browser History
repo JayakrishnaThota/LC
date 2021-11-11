@@ -1,0 +1,41 @@
+class BrowserHistory {
+
+    class DLNode {
+        DLNode pre, post;
+        String url;
+
+        public DLNode(String url) {
+            this.url = url;
+        }
+
+    }
+
+    DLNode head, cur;
+    public BrowserHistory(String homepage) {
+        head = new DLNode(homepage);
+        cur = head;
+    }
+
+    public void visit(String url) {
+        DLNode newNode = new DLNode(url);
+        cur.post = newNode;
+        newNode.pre = cur;
+        cur = newNode;
+    }
+
+    public String back(int steps) {
+        while(cur.pre!=null && steps>0) {
+            steps--;
+            cur = cur.pre;
+        }
+        return cur.url;
+    }
+
+    public String forward(int steps) {
+        while(cur.post!=null && steps>0) {
+            steps--;
+            cur = cur.post;
+        }
+        return cur.url;
+    }
+}
