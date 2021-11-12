@@ -1,0 +1,24 @@
+class Solution {
+    Double[][] dp;
+    public double probabilityOfHeads(double[] prob, int target) {
+        dp = new Double[prob.length][target+1];
+        return dfs(prob, target, 0);
+    }
+
+    public double dfs(double[] prob, int target, int index) {
+        if(index==prob.length) {
+            return (target==0) ? 1.0 : 0.0;
+        }
+        if(dp[index][target]!=null) return dp[index][target];
+        double res = 0;
+        //Heads
+        if(target>0) {
+            res+=dfs(prob, target-1, index+1) * prob[index];
+        }
+        //Tails
+        res+=dfs(prob, target, index+1) * (1-prob[index]);
+        dp[index][target] = res;
+        return dp[index][target];
+    }
+
+}

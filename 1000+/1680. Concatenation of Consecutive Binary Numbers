@@ -1,0 +1,11 @@
+//O(n) time and O(1) space
+class Solution {
+    public int concatenatedBinary(int n) {
+        long sum = 0;
+        for (int i = 1; i <= n; i++) {
+            String binary = Integer.toBinaryString(i);
+            sum = ((sum << binary.length()) + i) % 1000000007;
+        }
+        return (int) sum;
+    }
+}

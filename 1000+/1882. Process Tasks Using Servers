@@ -1,0 +1,29 @@
+//O(m+n*(log(m+n))) time and O(m+n) space
+class Solution {
+    public int[] assignTasks(int[] servers, int[] tasks) {
+        PriorityQueue<int[]> freeServers = new PriorityQueue<>((a, b) -> (a[0] != b[0]) ? (a[0] - b[0]) : (a[1] - b[1]));
+        PriorityQueue<int[]> usedServers = new PriorityQueue<>((a, b)->(a[2] != b[2]) ? (a[2] - b[2]) : ((a[0] != b[0]) ? (a[0] - b[0]) : (a[1] - b[1])));
+        int[] result = new int[tasks.length];
+        for(int i=0;i<servers.length;i++) {
+            freeServers.add(new int[]{servers[i],i,0});
+        }
+        for(int i=0;i<tasks.length;i++) {
+            int task = tasks[i];
+            while (!usedServers.isEmpty() && usedServers.peek()[2] <= i) {
+                freeServers.add(usedServers.poll());
+            }
+            if(freeServers.isEmpty()) {
+                int[] usedServer = usedServers.poll();
+                result[i] = usedServer[1];
+                usedServer[2]+=tasks[i];
+                usedServers.add(usedServer);
+            } else {
+                int[] freeServer = freeServers.poll();
+                result[i] = freeServer[1];
+                freeServer[2] = i+tasks[i];
+                usedServers.add(freeServer);
+            }
+        }
+        return result;
+    }
+}
