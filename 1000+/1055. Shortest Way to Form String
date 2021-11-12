@@ -1,20 +1,23 @@
-//O(n) time and O(1) space
+//O(mn) time and O(1) space
 class Solution {
     public int shortestWay(String source, String target) {
-        int[] smap = new int[26];
-        int[] tmap = new int[26];
-        int result = 0;
-        for(char c:source.toCharArray()) {
-            smap[c-'a']++;
+        char[] cs = source.toCharArray(), ts = target.toCharArray();
+        boolean[] map = new boolean[26];
+        for (char c:cs) {
+            map[c-'a'] = true;
         }
-        for(char t:target.toCharArray()) {
-            if(smap[t-'a']==0) return -1;
-            tmap[t-'a']++;
+        int j = 0, res = 1;
+        for (int i = 0; i < ts.length; i++,j++) {
+            if (!map[ts[i] - 'a']) return -1;
+            while (j < cs.length && cs[j] != ts[i]) {
+                j++;
+            }
+            if (j == cs.length) {
+                j = -1;
+                res++;
+                i--;
+            }
         }
-        for(int i=0;i<26;i++) {
-            if(tmap[i]>0)
-                result = Math.max(result, tmap[i]/smap[i]);
-        }
-        return result;
+        return res;
     }
 }

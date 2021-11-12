@@ -1,0 +1,34 @@
+//O(mn) time and space
+class Solution {
+    public int[][] highestPeak(int[][] island) {
+        if(island==null || island.length==0) return island;
+        int m = island.length, n = island[0].length;
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        int[][] height = new int[m][n];
+        Queue<int[]> queue = new LinkedList();
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(island[i][j]==1) {
+                    height[i][j] = 0;
+                    queue.offer(new int[]{i,j});
+                } else {
+                    height[i][j] = -1;
+                }
+            }
+        }
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int[] cell = queue.poll();
+                int i = cell[0], j = cell[1];
+                for(int[] dir:dirs) {
+                    int x = i + dir[0], y = j + dir[1];
+                    if(x<0 || y<0 || x>=m || y>=n || height[x][y]!=-1) continue;
+                    height[x][y] = height[i][j] + 1;
+                    queue.offer(new int[]{x,y});
+                }
+            }
+        }
+        return height;
+    }
+}

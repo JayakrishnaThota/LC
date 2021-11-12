@@ -1,0 +1,35 @@
+class StockPrice {
+
+    TreeMap<Integer, Integer> record = new TreeMap<>();
+    TreeMap<Integer, Set<Integer>> vals = new TreeMap<>();
+
+    //O(logn) time and O(1) space
+    public void update(int timestamp, int price) {
+        if (record.containsKey(timestamp)) {
+            int prevPrice = record.get(timestamp);
+            Set<Integer> book = vals.get(prevPrice);
+            book.remove(timestamp);
+            if (book.isEmpty()) {
+                vals.remove(prevPrice);
+            }
+        }
+        vals.putIfAbsent(price, new HashSet<>());
+        vals.get(price).add(timestamp);
+        record.put(timestamp, price);
+    }
+
+    //O(1) time and space
+    public int current() {
+        return record.lastEntry().getValue();
+    }
+
+    //O(1) time and space
+    public int maximum() {
+        return vals.lastKey();
+    }
+
+    //O(1) time and space
+    public int minimum() {
+        return vals.firstKey();
+    }
+}

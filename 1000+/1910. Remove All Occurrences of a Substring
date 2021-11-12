@@ -1,0 +1,29 @@
+//O(n) time and space
+class Solution {
+    public String removeOccurrences(String s, String part) {
+        if(part==null || part.length()==0) return s;
+        int m = s.length(), n = part.length();
+        Stack<Character> stack = new Stack();
+        StringBuilder sb = new StringBuilder();
+        for(char c:s.toCharArray()) {
+            stack.push(c);
+            if(stack.size()<n) continue;
+            int j=n-1;
+            while(j>=0 && stack.peek()==part.charAt(j)) {
+                sb.append(stack.pop()); 
+                j--;
+            }
+            if(j!=-1) {
+                for(int k=sb.length()-1;k>=0;k--) {
+                    stack.push(sb.charAt(k));
+                }
+            }
+            sb = new StringBuilder();
+        }
+        sb = new StringBuilder();
+        while(!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+        return sb.reverse().toString();
+    }
+}
