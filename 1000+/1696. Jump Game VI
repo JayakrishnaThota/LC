@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public int maxResult(int[] nums, int k) {
+        if(nums==null || nums.length==0) return 0;
+        int n = nums.length;
+        int[] dp = new int[n];
+        dp[0] = nums[0];
+        Deque<Integer> dq = new ArrayDeque();
+        dq.offer(0);
+        for(int i=1;i<n;i++) {
+            while(!dq.isEmpty() && i-k>dq.peek()) {
+                dq.poll();
+            }
+            dp[i] = dp[dq.peek()] + nums[i];
+            while(!dq.isEmpty() && dp[i]>dp[dq.peekLast()]) {
+                dq.pollLast();
+            }
+            dq.offerLast(i);
+        }
+        return dp[n-1];
+    }
+}
