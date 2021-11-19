@@ -1,0 +1,23 @@
+//O(n) time and space
+class Solution {
+    public ListNode removeZeroSumSublists(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        ListNode iter = dummy;
+        iter.next = head;
+        Map<Integer, ListNode> map = new HashMap();
+        int sum = 0;
+        while(iter!=null) {
+            sum+=iter.val;
+            map.put(sum, iter);
+            iter = iter.next;
+        }
+        iter = dummy;
+        sum = 0;
+        while(iter!=null) {
+            sum+=iter.val;
+            iter.next = map.get(sum).next;
+            iter = iter.next;
+        }
+        return dummy.next;
+    }
+}
