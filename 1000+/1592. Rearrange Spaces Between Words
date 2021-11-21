@@ -1,0 +1,33 @@
+//O(n) time and space
+class Solution {
+    public String reorderSpaces(String text) {
+        if (text == null || text.length() == 0) return "";
+        int numWords = 0, numSpaces = 0, lastNonSpace = -1;
+        for (int i=0;i<text.length();i++) {
+            if (text.charAt(i) == ' ') {
+                numSpaces++;
+            } else {
+                if(i==0 || (i>0 && text.charAt(i-1)==' '))
+                    numWords++;
+                lastNonSpace = i;
+            }
+        }
+        int maxSpaces = numWords == 1 ? 0 : numSpaces / (numWords - 1);
+        int remainingSpaces = numWords == 1 ? numSpaces : numSpaces % (numWords - 1);
+        StringBuffer sb = new StringBuffer();
+        for (int i=0;i<=lastNonSpace;i++) {
+            char c = text.charAt(i);
+            if(c==' ') continue;
+            if(i>0 && text.charAt(i-1)==' ' && sb.length()!=0) {
+                for(int j=0;j<maxSpaces;j++) {
+                    sb.append(" ");
+                }
+            }
+            sb.append(c);
+        }
+        for(int j=0;j<remainingSpaces;j++) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+}
