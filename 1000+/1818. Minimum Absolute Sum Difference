@@ -1,0 +1,36 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int minAbsoluteSumDiff(int[] nums1, int[] nums2) {
+        int[] sorted1 = nums1.clone();
+        Arrays.sort(sorted1);
+        long ans = 0;
+        int max_change = -1;
+       
+        for(int i = 0; i < nums1.length; i++)
+        {
+            int diff = Math.abs(nums1[i] - nums2[i]);
+            ans += diff;
+            
+            if(nums1[i] == nums2[i]) continue;
+            
+            int idx = Arrays.binarySearch(sorted1, nums2[i]);
+            
+            if(idx >= 0){
+                max_change = Math.max(max_change, diff);
+                
+            }else{
+                int actualIndex = -1* (idx  + 1);  
+                if(actualIndex > 0)
+                {
+                    max_change = Math.max(max_change, diff - Math.abs(sorted1[actualIndex - 1] - nums2[i]));
+                }
+                if(actualIndex < nums1.length)
+                {
+                    max_change = Math.max(max_change, diff - Math.abs(sorted1[actualIndex] - nums2[i]));
+                }
+            }
+        }
+        if(max_change > -1) ans -= max_change;
+        return (int)(ans% 1_000_000_007);
+    }
+}
