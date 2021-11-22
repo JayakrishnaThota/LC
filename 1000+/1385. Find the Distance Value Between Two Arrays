@@ -1,0 +1,18 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
+        int res = 0;
+        TreeSet<Integer> ts = new TreeSet<>();
+        for(int n : arr2)
+            ts.add(n);
+        
+        for(int n : arr1){
+            Integer higher = ts.ceiling(n);
+            Integer lower = ts.floor(n);
+            if(higher!=null && higher-n<=d) continue;
+            if(lower!=null && n-lower<=d) continue;
+            res++;
+        }
+        return res;
+    }
+}
