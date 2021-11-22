@@ -1,34 +1,35 @@
 class Solution {
+    
     class Tuple{
         int x;
         int y;
-        int sum;
-        public Tuple(int x, int y, int sum){
+        int val;
+        public Tuple(int x, int y, int val){
             this.x = x;
             this.y = y;
-            this.sum = sum;
+            this.val = val;
         }
     }
     
-    //O(klogn) time and O(n) space
-    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
-        List<int[]> list = new ArrayList();
-        if(nums1.length==0 || nums2.length==0) return list;
+    //O(mlogn) time and O(n) space
+    public int kthSmallest(int[][] matrix, int k) {
+        if(matrix==null || matrix.length==0 || k<1) return -1;
+        int m = matrix.length, n = matrix[0].length;
         PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(new Comparator<Tuple>(){
            public int compare(Tuple a, Tuple b){
-               return a.sum - b.sum;
+               return a.val - b.val;
            } 
         });
-        for(int i=0;i<nums2.length;i++){
-            pq.offer(new Tuple(0, i, nums1[0]+nums2[i]));
+        for(int i=0;i<n;i++){
+            pq.offer(new Tuple(0, i, matrix[0][i]));
         }
         while(!pq.isEmpty()){
             Tuple t = pq.poll();
-            list.add(new int[]{nums1[t.x], nums2[t.y]});
-            if(list.size()==k) return list;
-            if(t.x==nums1.length-1) continue;
-            pq.offer(new Tuple(t.x+1, t.y, nums1[t.x+1]+nums2[t.y]));
+            k--;
+            if(0==k) return t.val;
+            if(t.x==m-1) continue;
+            pq.offer(new Tuple(t.x+1, t.y, matrix[t.x+1][t.y]));
         }
-        return list;
+        return -1;
     }
 }
