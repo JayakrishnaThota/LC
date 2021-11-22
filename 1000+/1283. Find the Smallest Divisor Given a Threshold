@@ -1,0 +1,33 @@
+//O(n*log(max)) time and O(1) space
+class Solution {
+    public int smallestDivisor(int[] nums, int threshold) {
+        long low = 1, high = 0, res = 1, sum = 0;
+        for(int num:nums) {
+            high = Math.max(high, num);
+            sum+=num;
+        }
+        if (sum <= threshold) return 1;
+        while(low<high) {
+            long mid = low + (high-low)/2;
+            if(!valid(nums, threshold, mid)) {
+                low = mid+1;
+            } else {
+                high = mid;
+            }
+        }
+        return (int)low;
+    }
+    
+    public boolean valid(int[] nums, int threshold, long divisor) {
+        long sum = 0;
+        for(int num:nums) {
+            long quotient = num/divisor;
+            if(num%divisor != 0) {
+                quotient++;
+            }
+            sum+=quotient;
+        }
+        return (sum<=threshold);
+    }
+    
+}
