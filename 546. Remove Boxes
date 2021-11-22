@@ -1,0 +1,29 @@
+//O(n^4) time and O(n^3) space
+class Solution {
+    public int removeBoxes(int[] boxes) {
+        if(boxes==null || boxes.length==0)
+            return 0;
+        int n = boxes.length;
+        Integer[][][] dp = new Integer[n][n][n];
+        return helper(boxes, 0, n-1, 0, dp);
+    }
+    
+    public int helper(int[] boxes, int low, int high, int k, Integer[][][] dp) {
+        if(low>high) return 0;
+        while(high>low && dp[high]==dp[high-1]) {
+            k++;
+            high--;
+        }
+        if(dp[low][high][k]!=null) {
+            return dp[low][high][k];
+        }
+        dp[low][high][k] = helper(boxes,low,high-1,0,dp) + (k+1)*(k+1);
+        for(int i=low;i<high;i++) {
+            if(boxes[i]==boxes[high]) {
+                dp[low][high][k] = Math.max(dp[low][high][k], helper(boxes, low, i, k+1, dp) + helper(boxes, i+1, high-1, 0, dp)); 
+            }
+        }
+        return dp[low][high][k];
+    }
+    
+}
