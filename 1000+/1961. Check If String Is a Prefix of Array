@@ -1,0 +1,14 @@
+//O(k) time and O(1) space
+//k - no of characters in words
+class Solution {
+     public boolean isPrefixString(String s, String[] words) {
+        int index=0;
+        for(String word:words){
+            for(char c:word.toCharArray()){
+                if(index==s.length()||s.charAt(index++)!=c) return false; // no more s & in middle of word / char does not match
+            }
+            if(index==s.length()) return true; // full s matched
+        }
+        return false; // s is longer than all words
+    }
+}
