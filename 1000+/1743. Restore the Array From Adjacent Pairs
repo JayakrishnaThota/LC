@@ -1,0 +1,48 @@
+//O(n) time and space
+class Solution {
+    Map<Integer, List<Integer>> adjlist;
+    public int[] restoreArray(int[][] adjacentPairs) {
+        construct(adjacentPairs.length, adjacentPairs);
+        for (Integer key : adjlist.keySet()) {
+            if (adjlist.get(key).size() == 1) {
+                return bfs(key, adjacentPairs.length+1);
+            }
+        }
+        return new int[0];
+    }
+    
+    public void construct(int n, int[][] pre){
+        adjlist = new HashMap();
+        for(int[] p:pre){
+            int dependent = p[0];
+            int independent = p[1];
+            if(adjlist.get(independent)==null) adjlist.put(independent, new ArrayList());
+            if(adjlist.get(dependent)==null) adjlist.put(dependent, new ArrayList());
+            adjlist.get(independent).add(dependent);
+            adjlist.get(dependent).add(independent);
+        }
+    }
+    
+    public int[] bfs(int num, int n) {
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> set = new HashSet();
+        queue.offer(num);
+        set.add(num);
+        int[] result = new int[n];
+        int ri = 0;
+        result[ri++] = num;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int u = queue.poll();
+                for(int v:adjlist.get(u)) {
+                    if(set.contains(v)) continue;
+                    set.add(v);
+                    queue.add(v);
+                    result[ri++] = v;
+                }
+            }
+        }
+        return result;
+    }
+}
