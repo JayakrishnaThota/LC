@@ -1,0 +1,73 @@
+//O(mn) time and O(n) space
+class Solution {
+    
+    class UnionFind {
+        int[] parent;
+        int[] rank;
+        int size;
+        public UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+            size = n;
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+    
+    public boolean[] friendRequests(int n, int[][] restrictions, int[][] requests) {
+        UnionFind uf = new UnionFind(n);
+        
+        boolean[] result = new boolean[requests.length];
+        
+        for(int i = 0; i < result.length; i++){
+            int[] req = requests[i];
+            int p1 = uf.find(req[0]);
+            int p2 = uf.find(req[1]);
+            
+            boolean valid = true;
+            
+            for(int[] res : restrictions){
+                int p3 = uf.find(res[0]);
+                int p4 = uf.find(res[1]);
+                
+                if((p1 == p3 && p2 == p4) || (p1 == p4 && p2 == p3)){
+                    valid = false;
+                    break;
+                }
+            }
+            
+            if(valid){
+                uf.union(p1, p2);
+                result[i] = true;
+            }
+        }
+        
+        return result;
+    }
+}
