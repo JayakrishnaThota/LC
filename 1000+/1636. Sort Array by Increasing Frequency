@@ -1,0 +1,29 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int[] frequencySort(int[] nums) {
+        int[] result = new int[nums.length];
+        int index = 0;
+        if(nums==null || nums.length==0) return result;
+        List<Integer>[] buckets = new ArrayList[nums.length+1];
+        Map<Integer, Integer> map = new HashMap();
+        for(int n:nums)
+            map.put(n, map.getOrDefault(n,0)+1);
+        for(int key:map.keySet()){
+            int value = map.get(key);
+            if(buckets[value]==null)
+                buckets[value] = new ArrayList();
+            buckets[value].add(key);
+        }
+        for(int i=1;i<=nums.length;i++){
+            if(buckets[i]!=null) {
+                Collections.sort(buckets[i], Collections.reverseOrder());
+                for(int b:buckets[i]) {
+                    for(int j=0;j<i;j++) {
+                        result[index++] = b;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+}
