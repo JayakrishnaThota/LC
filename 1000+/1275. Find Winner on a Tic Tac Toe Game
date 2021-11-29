@@ -1,0 +1,20 @@
+//O(m) time and O(1) space
+class Solution {
+    public String tictactoe(int[][] moves) {
+        int[] row = new int[3];
+        int[] col = new int[3];
+        int diagonal = 0, antidiagonal = 0, score = 1;
+        for(int[] move:moves) {
+            int r = move[0], c = move[1];
+            row[r]+=score;
+            col[c]+=score;
+            if(r==c) diagonal+=score;
+            if(r+c==2) antidiagonal+=score;
+            score = (score==1) ? -1 : 1;
+        }
+        if(row[0]==3 || row[1]==3 || row[2]==3 || col[0]==3 || col[1]==3 || col[2]==3 || diagonal==3 || antidiagonal==3) return "A";
+        if(row[0]==-3 || row[1]==-3 || row[2]==-3 || col[0]==-3 || col[1]==-3 || col[2]==-3 || diagonal==-3 || antidiagonal==-3) return "B";
+        if(moves.length==9) return "Draw";
+        return "Pending";
+    }
+}
