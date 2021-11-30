@@ -1,0 +1,36 @@
+//O(nlogn) time and O(1) space
+class Solution {
+    public int maxFont(String text, int w, int h, int[] fonts, FontInfo fontInfo) 
+    {
+        int[] map = new int[26];
+        
+        for(int i = 0; i < text.length(); i++)
+            map[text.charAt(i) - 'a']++;
+
+        int low = 0, high = fonts.length - 1, width = 0;
+        
+        while(low < high)
+        {
+            int mid = (low + high + 1) / 2;
+            
+            int height = fontInfo.getHeight(fonts[mid]);
+
+            if(height <= h && (width = GetWidth(map, fonts[mid], fontInfo)) <= w)
+                low = mid;
+            else
+                high = mid - 1;
+        }
+        
+        return GetWidth(map, fonts[low], fontInfo) <= w ? fonts[low] : -1;
+    }
+    
+    private int GetWidth(int[] map, int font, FontInfo fontInfo)
+    {
+        int width = 0;
+        
+        for(int i = 0; i < 26; i++)
+            width += map[i] * fontInfo.getWidth(font, (char)(i + 'a'));
+        
+        return width;
+    }
+}
