@@ -1,0 +1,22 @@
+class Solution {
+    public int minCost(int n, int[] cuts) {
+        Arrays.sort(cuts);
+        Map<String, Integer> map = new HashMap();
+        return dfs(cuts, 0, n, map);
+    }
+    
+    public int dfs(int[] cuts, int low, int high, Map<String, Integer> map) {
+        if(low>=high) return 0;
+        int min = Integer.MAX_VALUE;
+        String key = low+","+high;
+        if(map.containsKey(key)) return map.get(key);
+        for (int i = 0; i < cuts.length; ++i) {
+		    if (cuts[i] <= low || cuts[i] >= high) continue;
+            min = Math.min(min, dfs(cuts,low,cuts[i],map)+dfs(cuts,cuts[i],high,map)+high-low);
+        }
+        min = (min==Integer.MAX_VALUE) ? 0 : min;
+        map.put(key, min);
+        return min;
+    }
+    
+}
