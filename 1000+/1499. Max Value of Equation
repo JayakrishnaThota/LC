@@ -1,0 +1,23 @@
+//O(n) time and space
+//yi-xi + (yj+xj)
+//xj-xi<=k
+//Store in increasing order of y-x as we need to maximize that for (xj,yj)
+class Solution {
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        Deque<int[]> dq = new ArrayDeque();
+        int max = Integer.MIN_VALUE;
+        for(int[] point:points) {
+            while(!dq.isEmpty() && point[0]-dq.peekFirst()[0]>k) {
+                dq.pollFirst();
+            }
+            if(!dq.isEmpty()) {
+                max = Math.max(max, dq.peekFirst()[1] + (point[0]+point[1]));
+            }
+            while(!dq.isEmpty() && ((point[1]-point[0])>=dq.peekLast()[1])) {
+                dq.pollLast();
+            }
+            dq.offer(new int[]{point[0], (point[1]-point[0])});
+        }
+        return max;
+    }
+}
