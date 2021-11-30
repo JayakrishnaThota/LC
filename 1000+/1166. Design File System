@@ -1,0 +1,48 @@
+class FileSystem {
+    
+    class File {
+        String name;
+        Map<String, File> children;
+        int value;
+        public File(String name, int value) {
+            this.children = new HashMap();
+            this.name = name;
+            this.value = value;
+        }
+    }
+
+    File root;
+    public FileSystem() {
+        root = new File("", 0);
+    }
+    
+    public boolean createPath(String path, int value) {
+        File file = root;
+        String[] tokens = path.split("/");
+        for(int i=1;i<tokens.length-1;i++) {
+            String token = tokens[i];
+            if(!file.children.containsKey(token)) {
+                return false;
+            }
+            file = file.children.get(token);
+        }
+        String key = tokens[tokens.length-1];
+        if(file.children.containsKey(key)) return false;
+        File keyFile = new File(key, value);
+        file.children.put(key, keyFile);
+        return true;
+    }
+    
+    public int get(String path) {
+        File file = root;
+        String[] tokens = path.split("/");
+        for(int i=1;i<tokens.length;i++) {
+            String token = tokens[i];
+            if(!file.children.containsKey(token)) {
+                return -1;
+            }
+            file = file.children.get(token);
+        }
+        return file.value;
+    }
+}
