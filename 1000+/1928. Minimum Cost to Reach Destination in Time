@@ -1,0 +1,50 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    Map<Integer, List<int[]>> adjlist;
+    int[] minTime;
+    public int minCost(int maxTime, int[][] edges, int[] passingFees) {
+        construct(edges, passingFees);
+        return dijkstras(maxTime, passingFees);   
+    }
+    
+    public void construct(int[][] edges, int[] passingFees) {
+        int n = passingFees.length;
+        adjlist = new HashMap();
+        minTime = new int[n];
+        Arrays.fill(minTime, Integer.MAX_VALUE);
+        for (int i = 0; i < n; ++i){
+            adjlist.put(i, new ArrayList());
+        }
+        for (int [] edge : edges){
+            int u = edge[0], v = edge[1], w = edge[2];
+            adjlist.get(u).add(new int[]{v,w});
+            adjlist.get(v).add(new int[]{u,w});
+        }
+    }
+    
+    public int dijkstras(int maxTime, int[] passingFees) {
+        PriorityQueue<int []> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        pq.add(new int [] {0, passingFees[0], 0});
+        while (!pq.isEmpty()){
+            int[] current = pq.poll();
+            int u = current[0], fee = current[1], time = current[2];
+            if (time >= minTime[u])
+                continue;
+            minTime[u] = time;
+            if (u==passingFees.length-1)
+                return fee;
+            List<int[]> tempList = adjlist.get(u);
+            for (int[] neighbor:tempList){
+                int v = neighbor[0], uvTime = neighbor[1];
+                int newTime = time + uvTime;
+                int newFee = fee + passingFees[v];
+                if (newTime > maxTime || newTime>=minTime[v])
+                    continue;
+                pq.add(new int[]{v, newFee, newTime});
+            }
+        }
+        
+        return -1;
+    }
+    
+}
