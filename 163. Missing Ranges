@@ -1,22 +1,22 @@
 //O(n) time and O(1) space
 class Solution {
     public List<String> findMissingRanges(int[] nums, int lower, int upper) {
-        List<String> result = new ArrayList();
-        long next = lower;
-        for(int num:nums) {
-            if(num<next) continue;
-            if(num==next) {
-                next++;
-                continue;
+        List<String> result = new ArrayList<>();
+        int prev = lower - 1;
+        for (int i = 0; i <= nums.length; i++) {
+            int curr = (i < nums.length) ? nums[i] : upper + 1;
+            if (prev + 1 <= curr - 1) {
+                result.add(formatRange(prev + 1, curr - 1));
             }
-            result.add(getRange(next, ((long)num)-1));
-            next = ((long)num)+1;
+            prev = curr;
         }
-        if(next<=upper) result.add(getRange(next, (long)upper));
         return result;
     }
-    
-    public String getRange(long low, long high) {
-        return (low==high)?""+low:low+"->"+high;
+
+    private String formatRange(int lower, int upper) {
+        if (lower == upper) {
+            return String.valueOf(lower);
+        }
+        return lower + "->" + upper;
     }
 }
