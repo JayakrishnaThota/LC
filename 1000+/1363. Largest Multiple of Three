@@ -1,0 +1,26 @@
+//O(n) time and O(1) space
+class Solution {
+    public String largestMultipleOfThree(int[] digits) {
+        int[] cnt = new int[10];
+        for (int d : digits) cnt[d]++;
+        int remain1Cnt = cnt[1] + cnt[4] + cnt[7]; // Number of elements with remainder = 1
+        int remain2Cnt = cnt[2] + cnt[5] + cnt[8]; // Number of elements with remainder = 2
+        int remainSum = (remain1Cnt + 2 * remain2Cnt) % 3;
+        if (remainSum == 1) { // Delete 1 smallest digit with remainder = 1 or Delete 2 smallest digits with remainder = 2
+            if (remain1Cnt >= 1) remain1Cnt -= 1;
+            else remain2Cnt -= 2;
+        } else if (remainSum == 2) { // Delete 1 smallest digit with remainder = 2 or Delete 2 smallest digits with remainder = 1
+            if (remain2Cnt >= 1) remain2Cnt -= 1;
+            else remain1Cnt -= 2;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int d = 9; d >= 0; d--) {
+            if (d % 3 == 0) while (cnt[d]-- > 0) sb.append(d);
+            else if (d % 3 == 1) while (cnt[d]-- > 0 && remain1Cnt-- > 0) sb.append(d);
+            else while (cnt[d]-- > 0 && remain2Cnt-- > 0) sb.append(d);
+        }
+        if (sb.length() > 0 && sb.charAt(0) == '0') return "0"; // Remove leading 0 case [0,...,0]
+        return sb.toString();
+    }
+}
