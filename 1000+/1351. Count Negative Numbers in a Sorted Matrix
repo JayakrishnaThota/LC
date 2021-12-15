@@ -1,0 +1,17 @@
+//O(m+n) time and O(1) space
+class Solution {
+    public int countNegatives(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length, count = 0;
+        int r = 0, c = n-1;
+        while(r<m && c>=0) {
+            if(grid[r][c]<0) {
+                count+=(m-r);
+                c--;
+            } else {
+                r++;
+            }
+        }
+        return count;
+    }
+}
