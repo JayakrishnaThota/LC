@@ -1,0 +1,23 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public int eatenApples(int[] apples, int[] days) {
+        int res = 0;
+        int n = apples.length;                  
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+        
+        for(int i=0; i<n || !queue.isEmpty(); ++i) {
+            if(i<n) 
+                queue.offer(new int[]{ apples[i], i + days[i] });
+            while(!queue.isEmpty() && queue.peek()[1] <= i) {
+                queue.poll();
+            }
+            if(!queue.isEmpty()) {
+                ++res;
+                if(--queue.peek()[0] == 0)
+                    queue.poll();
+            }
+        }
+        
+        return res;
+    }
+}
