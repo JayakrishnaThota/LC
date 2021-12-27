@@ -1,0 +1,36 @@
+class Solution {
+    public static final int[][] dirs = {{0,-1},{0,1},{-1,0},{1,0}};
+    public static final double error = 0.0000001;
+    
+    public double getMinDistSum(int[][] positions) {
+        double x = 0;
+        double y = 0;
+        double step = 50;
+        double res = distSum(x, y, positions);
+        while (step > error) {
+            boolean found = false;
+            for (int[] dir : dirs) {
+                double nx = x + dir[0] * step;
+                double ny = y + dir[1] * step;
+                double cur = distSum(nx, ny, positions);
+                if (cur < res) {
+                    res = cur;
+                    x = nx;
+                    y = ny;
+                    found = true; 
+                    break;
+                }
+            }
+            step /= found ? 1 : 2;
+        }
+        return res;
+    }
+    
+    private double distSum(double x0, double y0, int[][] positions) {
+        double res = 0.0;
+        for (int[] position : positions) {
+            res += Math.sqrt((x0 - position[0]) * (x0 - position[0]) + (y0 - position[1]) * (y0 - position[1]));
+        }
+        return res;
+    }
+}
