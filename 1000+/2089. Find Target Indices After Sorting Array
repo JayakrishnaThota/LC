@@ -1,0 +1,15 @@
+//O(n) time and O(1) space
+class Solution {
+    public List<Integer> targetIndices(int[] nums, int target) {
+        List<Integer> result = new ArrayList();
+        int count = 0, less = 0;
+        for(int num:nums) {
+            if(num<target) less++;
+            else if(num==target) count++;
+        }
+        for(int i=0;i<count;i++) {
+            result.add(less++);
+        }
+        return result;
+    }
+}
