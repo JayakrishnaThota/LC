@@ -1,0 +1,16 @@
+//O(n) time and space
+class Solution {
+    public String destCity(List<List<String>> paths) {
+        Map<String, Set<String>> adjlist = new HashMap();
+        for(List<String> path:paths) {
+            String u = path.get(0), v = path.get(1);
+            adjlist.putIfAbsent(u, new HashSet());
+            adjlist.putIfAbsent(v, new HashSet());
+            adjlist.get(u).add(v);
+        }
+        for(String key:adjlist.keySet()) {
+            if(adjlist.get(key).size()==0) return key;
+        }
+        return "";
+    }
+}
