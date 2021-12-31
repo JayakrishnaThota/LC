@@ -1,0 +1,68 @@
+//O(n) time and space
+class Solution {
+    
+    class Cell {
+        int vertex;
+        String s;
+        public Cell(int vertex, String s) {
+            this.vertex = vertex;
+            this.s = s;
+        }
+        
+        public String toString() {
+            return vertex+","+s;
+        }
+        
+    }
+    
+    Map<Integer, Map<Integer, String>> adjlist;
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        adjlist = new HashMap();
+        dfs(root, null);
+        return bfs(startValue, destValue);
+    }
+    
+    public void dfs(TreeNode node, TreeNode parent) {
+        if(node==null) return;
+        adjlist.put(node.val, new HashMap());
+        if(parent!=null) {
+            adjlist.get(node.val).put(parent.val,"U");
+        }
+        if(node.left!=null) {
+            adjlist.get(node.val).put(node.left.val, "L");
+            dfs(node.left, node);
+        }
+        if(node.right!=null) {
+            adjlist.get(node.val).put(node.right.val, "R");
+            dfs(node.right, node);
+        }
+    }
+    
+    public String bfs(int start, int end) {
+        Cell source = new Cell(start, "");
+        Queue<Cell> queue = new LinkedList();
+        Set<Integer> set = new HashSet();
+        queue.offer(source);
+        set.add(start);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                Cell cell = queue.poll();
+                int u = cell.vertex;
+                String s = cell.s;
+                if(u==end) return cell.s;
+                Map<Integer, String> neighborMap = adjlist.get(u);
+                for(Integer v:neighborMap.keySet()) {
+                    String newS = s+neighborMap.get(v);
+                    Cell newCell = new Cell(v, newS);
+                    if(!set.contains(v)) {
+                        set.add(v);
+                        queue.offer(newCell);
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    
+}
