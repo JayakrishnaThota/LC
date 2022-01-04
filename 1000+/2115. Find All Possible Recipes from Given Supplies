@@ -1,0 +1,54 @@
+//O(V+E) time and space
+class Solution {
+    
+    Map<String, Set<String>> adjlist;
+    Map<String, Integer> degree;
+    Set<String> supplySet;
+    public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
+        construct(recipes, ingredients, supplies);
+        return topSort(recipes);
+    }
+    
+    public void construct(String[] recipes, List<List<String>> ingredients, String[] supplies){
+        adjlist = new HashMap();
+        degree = new HashMap();
+        supplySet = new HashSet();
+        for(String s:supplies) {
+            supplySet.add(s);
+        }
+        for(int i=0;i<recipes.length;i++) {
+            degree.putIfAbsent(recipes[i], 0);
+            for(String ingredient:ingredients.get(i)) {
+                if(!supplySet.contains(ingredient)) {
+                    adjlist.putIfAbsent(ingredient, new HashSet());
+                    adjlist.get(ingredient).add(recipes[i]);
+                    degree.put(recipes[i], degree.getOrDefault(recipes[i],0)+1);
+                }
+            }
+        }
+    }
+    
+    public List<String> topSort(String[] recipes) {
+        List<String> result = new ArrayList();
+        Queue<String> queue = new LinkedList();
+        for(String key:recipes) {
+            if(degree.get(key)==0) {
+                queue.add(key);
+                result.add(key);
+            }
+        }
+        while(!queue.isEmpty()){
+            String u = queue.poll();
+            if(adjlist.get(u)==null) continue;
+            for(String v:adjlist.get(u)){
+                degree.put(v, degree.getOrDefault(v,0)-1);
+                if(degree.get(v)==0){
+                    queue.offer(v);
+                    result.add(v);
+                }
+            }
+        }
+        return result;
+    }
+    
+}
