@@ -1,50 +1,57 @@
-/*
-// Definition for a QuadTree node.
-class Node {
-    public boolean val;
-    public boolean isLeaf;
-    public Node topLeft;
-    public Node topRight;
-    public Node bottomLeft;
-    public Node bottomRight;
-
-    public Node() {}
-
-    public Node(boolean _val,boolean _isLeaf,Node _topLeft,Node _topRight,Node _bottomLeft,Node _bottomRight) {
-        val = _val;
-        isLeaf = _isLeaf;
-        topLeft = _topLeft;
-        topRight = _topRight;
-        bottomLeft = _bottomLeft;
-        bottomRight = _bottomRight;
-    }
-};
-*/
+//O(mn*log(mn)) time and O(log(mn)) space
 class Solution {
     public Node construct(int[][] grid) {
-        return helper(0,0,grid.length-1,grid[0].length-1,grid);
+        if(grid==null || grid.length==0) return null;
+        return helper(grid, 0, grid.length-1, 0, grid[0].length-1);
     }
-    public Node helper(int r1, int c1, int r2, int c2, int[][] grid){
-        if(r1>r2 || c1>c2) return null;
-        int count1 = 0; 
-        for(int i=r1;i<=r2;i++){
-            for(int j=c1;j<=c2;j++){
-                if(grid[i][j]==1){
-                    count1++;
+    
+    public Node helper(int[][] grid, int rs, int re, int cs, int ce) {
+        if(rs>re || cs>ce) return null;
+        int count = 0;
+        for(int i=rs;i<=re;i++) {
+            for(int j=cs;j<=ce;j++) {
+                if(grid[i][j]==1) {
+                    count++;
                 }
             }
         }
-        if(count1==((c2-c1+1)*(r2-r1+1))){
-            return new Node(true, true, null, null, null, null);
-        }
-        if(count1==0){
-            return new Node(false, true, null, null, null, null);
-        }
-        return new Node(false, false, 
-               helper(r1, c1, (r2+r1)/2, (c2+c1)/2, grid),
-               helper(r1, (c2+c1)/2 +1, (r2+r1)/2, c2, grid),
-               helper((r2+r1)/2 +1, c1, r2, (c2+c1)/2, grid),
-               helper((r2+r1)/2 +1, (c2+c1)/2 +1, r2, c2, grid)
-               );
+        if(count==(re-rs+1)*(ce-cs+1)) return new Node(true, true, null, null, null, null);
+        if(count==0) return new Node(false, true, null, null, null, null);
+        Node root = new Node();
+        root.val = false;
+        root.isLeaf = false;
+        root.topLeft = helper(grid, rs, (rs+re)/2, cs, (cs+ce)/2);
+        root.topRight = helper(grid, rs, (rs+re)/2, (cs+ce)/2 + 1, ce);
+        root.bottomLeft = helper(grid, (rs+re)/2 + 1, re, cs, (cs+ce)/2);
+        root.bottomRight = helper(grid, (rs+re)/2 + 1, re,  (cs+ce)/2 + 1, ce);
+        return root;
+        
     }
+    
+}
+
+//O(mn) time and O(log(mn)) space
+class Solution {
+    public Node construct(int[][] grid) {
+        if(grid==null || grid.length==0) return null;
+        return helper(grid, 0, grid.length-1, 0, grid[0].length-1);
+    }
+    
+    public Node helper(int[][] grid, int rs, int re, int cs, int ce) {
+        if(rs>re || cs>ce) return null;
+        if(re == rs && ce == cs) {
+            return new Node(grid[rs][cs] != 0, true, null, null, null, null);
+        }
+        Node topLeft = helper(grid, rs, (rs+re)/2, cs, (cs+ce)/2);
+        Node topRight = helper(grid, rs, (rs+re)/2, (cs+ce)/2 + 1, ce);
+        Node bottomLeft = helper(grid, (rs+re)/2 + 1, re, cs, (cs+ce)/2);
+        Node bottomRight = helper(grid, (rs+re)/2 + 1, re,  (cs+ce)/2 + 1, ce);
+        if(topLeft.isLeaf && topRight.isLeaf && bottomLeft.isLeaf && bottomRight.isLeaf) {
+            if(topLeft.val==topRight.val && topRight.val==bottomLeft.val && bottomLeft.val==bottomRight.val) {
+                return new Node(topLeft.val, true, null, null, null, null);
+            }
+        }
+        return new Node(false, false, topLeft, topRight, bottomLeft, bottomRight);
+    }
+    
 }
