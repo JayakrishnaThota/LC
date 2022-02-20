@@ -1,41 +1,50 @@
-//O(V+E) time and space
 class Solution {
     Map<Integer, Set<Integer>> adjlist;
-    int[] depth;
+    int[] disc;
+    int[] min;
+    int time;
+    List<List<Integer>> result;
     public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
         construct(n, connections);
-        Set<List<Integer>> set = new HashSet(connections);
-        dfs(0, 0, set);
-        return new ArrayList(set);
+        for(int i=0;i<n;i++) {
+            if(disc[i]==-1) {
+                dfs(i, i);
+            }
+        }
+        return result;
     }
     
     public void construct(int n, List<List<Integer>> connections) {
+        time = 0;
         adjlist = new HashMap();
-        depth = new int[n];
+        disc = new int[n];
+        min = new int[n];
+        result = new ArrayList();
         for(int i=0;i<n;i++) {
-            adjlist.putIfAbsent(i, new HashSet());
-            depth[i] = -2;
+            adjlist.put(i, new HashSet());
+            disc[i] = -1;
         }
         for(List<Integer> connection:connections) {
-            adjlist.get(connection.get(0)).add(connection.get(1));
-            adjlist.get(connection.get(1)).add(connection.get(0));
+            int u = connection.get(0), v = connection.get(1);
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(u);
         }
     }
     
-    public int dfs(int u, int curDepth, Set<List<Integer>> set) {
-        if(depth[u]>=0) return depth[u];
-        depth[u] = curDepth;
-        int min = curDepth;
+    public void dfs(int u, int parent) {
+        disc[u] = min[u] = time++;
         for(int v:adjlist.get(u)) {
-            if(depth[v]==curDepth-1) continue;
-            int vDepth = dfs(v, curDepth+1, set);
-            min = Math.min(min, vDepth);
-            if(vDepth<=curDepth) {
-                set.remove(Arrays.asList(u,v));
-                set.remove(Arrays.asList(v,u));
+            if(parent==v) continue;
+            if(disc[v]==-1) {
+                dfs(v, u);
+                min[u] = Math.min(min[u], min[v]);
+                if(min[v]>disc[u]) {
+                    result.add(Arrays.asList(u,v));
+                }
+            } else {
+                min[u] = Math.min(min[u], min[v]);
             }
         }
-        return min;
     }
     
 }
