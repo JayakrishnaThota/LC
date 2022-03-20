@@ -1,0 +1,48 @@
+/*
+    Algorithm:
+    1. Construct the adjMatrix rep of graph(adjList gave Time Limit exceeded)
+    2. Also calculate degree of graph(Indegree or outdegree does not matter as this is a undirected graph)
+    3. For every edge, go over all other vertices for the third vertex and find min of all
+*/
+
+//O(VE) time and space
+class Solution {
+    boolean[][] adjMatrix;
+    Map<Integer, Integer> degree;
+    public int minTrioDegree(int n, int[][] edges) {
+        construct(n, edges);
+        return minDegree(n, edges);
+    }
+    
+    //O(V+E) time and O(VE) space
+    public void construct(int n, int[][] edges) {
+        adjMatrix = new boolean[n+1][n+1];
+        degree = new HashMap();
+        for(int i=1;i<=n;i++) {
+            degree.put(i, 0);
+        }
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            adjMatrix[u][v] = true;
+            adjMatrix[v][u] = true;
+            degree.put(u, degree.get(u)+1);
+            degree.put(v, degree.get(v)+1);
+        }
+    }
+    
+    //O(VE) time and O(1) space
+    public int minDegree(int n, int[][] edges) {
+        int min = Integer.MAX_VALUE;
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            for(int w=1;w<=n;w++) {
+                if(adjMatrix[u][w] && adjMatrix[v][w]) {
+                    int du = degree.get(u), dv = degree.get(v), dw = degree.get(w);
+                    min = Math.min(min, du+dv+dw-6);
+                }
+            }
+        }
+        return (min==Integer.MAX_VALUE) ? -1 : min;
+    }
+    
+}
