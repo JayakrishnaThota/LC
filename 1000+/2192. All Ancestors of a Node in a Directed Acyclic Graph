@@ -1,0 +1,39 @@
+//O(V*(V+E)) time and space
+class Solution {
+    
+    Map<Integer, Set<Integer>> adjlist;
+    List<List<Integer>> result;
+    public List<List<Integer>> getAncestors(int n, int[][] edges) {
+        construct(n, edges);
+        for(int i=0;i<n;i++) {
+            dfs(i, i, new HashSet());
+        }
+        return result;
+    }
+    
+    public void construct(int n, int[][] pre){
+        adjlist = new HashMap();
+        result = new ArrayList();
+        for(int i=0;i<n;i++) {
+            result.add(new ArrayList());
+        }
+        for(int[] p:pre){
+            int u = p[0];
+            int v = p[1];
+            if(adjlist.get(u)==null) adjlist.put(u, new HashSet());
+            adjlist.get(u).add(v);
+        }
+    }
+    
+    public void dfs(int source, int u, Set<Integer> set) {
+        if(set.contains(u)) return;
+        set.add(u);
+        if(source!=u) {
+            result.get(u).add(source);
+        }
+        if(adjlist.get(u)!=null)
+            for(int v:adjlist.get(u)) {
+                dfs(source, v, set);
+            }
+    }
+}
