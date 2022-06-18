@@ -1,4 +1,4 @@
-//O(n) time and O(1) space
+//O(1) time and O(1) space
 class Solution {
     public int rangeBitwiseAnd(int m, int n) {
         if(m==0) return 0;
