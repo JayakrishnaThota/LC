@@ -1,18 +1,16 @@
-//O(n) time and O(1)
+//O(n) time and O(1) space
 class Solution {
     public ListNode removeElements(ListNode head, int val) {
         if(head==null) return head;
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         ListNode iter = dummy;
-        while(iter!=null){
-            ListNode next = iter.next;
-            if(next==null) break;
-            if(next.val==val){
-                iter.next = next.next;
+        while(iter!=null && iter.next!=null){
+            if(iter.next.val==val){
+                iter.next = iter.next.next;
             }
-            else{
-                iter = next;
+            else {
+                iter = iter.next;
             }
         }
         return dummy.next;
