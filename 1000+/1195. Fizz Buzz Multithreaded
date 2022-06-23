@@ -1,0 +1,68 @@
+import java.util.concurrent.Semaphore;
+class FizzBuzz {
+    private int n;
+    Semaphore num, fizz, buzz, fizzBuzz; 
+    public FizzBuzz(int n) {
+        this.n = n;
+        num = new Semaphore(1);
+        fizz = new Semaphore(0);
+        buzz = new Semaphore(0);
+        fizzBuzz = new Semaphore(0);
+    }
+    
+    private void releaseStuff(int cur) {
+        if(cur%15==0) {
+            fizzBuzz.release();
+        } else if(cur%3==0) {
+            fizz.release();
+        } else if(cur%5==0) {
+            buzz.release();
+        } else {
+            num.release();
+        }
+    }
+
+    // printFizz.run() outputs "fizz".
+    public void fizz(Runnable printFizz) throws InterruptedException {
+        for(int cur=1;cur<=n;cur++) {
+            if(cur%3==0 && cur%5!=0) {
+                fizz.acquire();
+                printFizz.run();
+                releaseStuff(cur+1);
+            }
+        }
+    }
+
+    // printBuzz.run() outputs "buzz".
+    public void buzz(Runnable printBuzz) throws InterruptedException {
+        for(int cur=1;cur<=n;cur++) {
+            if(cur%5==0 && cur%3!=0) {
+                buzz.acquire();
+                printBuzz.run();
+                releaseStuff(cur+1);
+            }
+        }
+    }
+
+    // printFizzBuzz.run() outputs "fizzbuzz".
+    public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
+        for(int cur=1;cur<=n;cur++) {
+            if(cur%15==0) {
+                fizzBuzz.acquire();
+                printFizzBuzz.run();
+                releaseStuff(cur+1);
+            }
+        }
+    }
+
+    // printNumber.accept(x) outputs "x", where x is an integer.
+    public void number(IntConsumer printNumber) throws InterruptedException {
+        for(int cur=1;cur<=n;cur++) {
+            if(cur%5!=0 && cur%3!=0) {
+                num.acquire();
+                printNumber.accept(cur);
+                releaseStuff(cur+1);
+            }
+        }
+    }
+}
