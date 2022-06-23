@@ -1,0 +1,44 @@
+import java.util.concurrent.Semaphore;
+class ZeroEvenOdd {
+    private int n;
+    private int cur;
+    Semaphore zero, even, odd;
+    public ZeroEvenOdd(int n) {
+        this.n = n;
+        this.cur = 1;
+        this.zero = new Semaphore(1);
+        this.even = new Semaphore(0);
+        this.odd = new Semaphore(0);
+    }
+
+    // printNumber.accept(x) outputs "x", where x is an integer.
+    public void zero(IntConsumer printNumber) throws InterruptedException {
+        int numTimes = this.n;
+        for(int i=0;i<numTimes;i++) {
+            zero.acquire();
+            printNumber.accept(0);
+            if(cur%2==0) even.release();
+            else odd.release();
+        }
+    }
+
+    public void even(IntConsumer printNumber) throws InterruptedException {
+        int numTimes = this.n/2;
+        for(int i=0;i<numTimes;i++) {
+            even.acquire();
+            printNumber.accept(cur);
+            cur++;
+            zero.release();
+        }
+    }
+
+    public void odd(IntConsumer printNumber) throws InterruptedException {
+        int numTimes = (int)Math.ceil((double)this.n / 2);
+        for(int i=0;i<numTimes;i++) {
+            odd.acquire();
+            printNumber.accept(cur);
+            cur++;
+            zero.release();
+        }
+    }
+}
