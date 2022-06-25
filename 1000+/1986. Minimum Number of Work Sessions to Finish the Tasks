@@ -1,0 +1,32 @@
+class Solution {
+    public int minSessions(int[] tasks, int sessionTime) {
+        Arrays.sort(tasks);
+        int low = 1, high = tasks.length;
+
+        while (low < high) {
+            int numSessions = (low + high) / 2;
+            if (canSchedule(tasks, new int[numSessions], tasks.length - 1, sessionTime))
+                high = numSessions;
+            else
+                low = numSessions + 1;
+        }
+        return low;
+    }
+
+    private boolean canSchedule(int[] tasks, int[] sessions, int taskIdx, int sessionTime) {
+        if (taskIdx == -1) return true;
+
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < sessions.length; i++) {
+            if (!set.add(sessions[i])) continue;
+            if (tasks[taskIdx] + sessions[i] > sessionTime) continue;
+
+            sessions[i] += tasks[taskIdx];
+            if (canSchedule(tasks, sessions, taskIdx - 1, sessionTime))
+                return true;
+            sessions[i] -= tasks[taskIdx];
+        }
+
+        return false;
+    }
+}
