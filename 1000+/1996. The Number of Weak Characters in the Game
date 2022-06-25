@@ -1,22 +1,24 @@
 //O(nlogn) time and O(1) space
 class Solution {
     public int numberOfWeakCharacters(int[][] properties) {
-        if(properties == null || properties.length==0) return 0;
+        if(properties==null || properties.length==0)
+            return 0;
+        int n = properties.length, res = 0;
         Arrays.sort(properties, new Comparator<int[]>(){
             public int compare(int[] a, int[] b) {
-                if(b[0]==a[0]) {
+                if(a[0]==b[0]) {
                     return a[1]-b[1];
                 } else {
                     return b[0]-a[0];
-                }
+                }    
             }
         });
-        int max = 0, res = 0;
-        for(int i=0;i<properties.length;i++) {
-            if(max>properties[i][1]) {
+        int maxDefense = properties[0][1], maxAttack = properties[0][0];
+        for(int i=1;i<n;i++) {
+            if(properties[i][0]<maxAttack && properties[i][1]<maxDefense) {
                 res++;
             }
-            max = Math.max(max, properties[i][1]);
+            maxDefense = Math.max(maxDefense, properties[i][1]);
         }
         return res;
     }
