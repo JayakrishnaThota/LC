@@ -1,0 +1,27 @@
+//O(V+E) time and space
+class Solution {
+    public int maximumScore(int[] scores, int[][] edges) {
+        int vertices = scores.length, max = -1;
+        PriorityQueue<Integer>[] pq = new PriorityQueue[vertices];
+        for(int i=0;i<vertices;i++) {
+            pq[i] = new PriorityQueue<Integer>((a,b)->(scores[a]-scores[b]));
+        }
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            pq[u].offer(v);
+            if(pq[u].size()>3) pq[u].poll();
+            pq[v].offer(u);
+            if(pq[v].size()>3) pq[v].poll();
+        }
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            for(int nu:pq[u]) {
+                for(int nv:pq[v]) {
+                    if((nu==v) || (nv==u) || (nu==nv)) continue;
+                    max = Math.max(max, scores[u] + scores[v] + scores[nu] + scores[nv]);
+                }
+            }
+        }
+        return max;
+    }
+}
