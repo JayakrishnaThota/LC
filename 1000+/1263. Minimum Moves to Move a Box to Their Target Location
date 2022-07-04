@@ -1,76 +1,62 @@
-//O((mn)^2) time and O(mn) space
+//O(mn^2*log(mn^2)) time and O(mn^2) space
 class Solution {
-    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
     public int minPushBox(char[][] grid) {
+        if(grid==null || grid.length==0) return 0;
         int m = grid.length, n = grid[0].length;
-        Queue<int[]> queue = new LinkedList<int[]>();
-        HashMap<String, Integer> dist = new HashMap();
-        int[] start = new int[4];
+        int[][] dirs = {{0,1},{1,0},{-1,0},{0,-1}};
+        int[] player = new int[2];
+        int[] box = new int[2];
         int[] target = new int[2];
-        for(int i=0; i<m; i++)
-        {
-            for(int j=0; j<n; j++)
-            {
-                if(grid[i][j] == 'S')
-                {
-                    start[0] = i; start[1] = j;
-                }
-                else if(grid[i][j] == 'B')
-                {
-                    start[2] = i; start[3] = j;
-                }
-                else if(grid[i][j] == 'T')
-                    target = new int[]{i,j};
-            }
-        }
-        queue.offer(start);
-        dist.put(Arrays.toString(start), 0);
-        int res = Integer.MAX_VALUE;
-        while(!queue.isEmpty())
-        {
-            int[] cors = queue.poll();
-            String loc = Arrays.toString(cors);
-            if(dist.get(loc) >= res)
-                continue;
-            if(cors[2] == target[0] && cors[3] == target[1])
-            {
-                res = Math.min(res, dist.get(loc));
-                continue;
-            }
-            int[] s = new int[] {cors[0], cors[1]};
-            int[] b = new int[] {cors[2], cors[3]};
-            for(int[] dir: dirs)
-            {
-                int sx = s[0]+dir[0];
-                int sy = s[1]+dir[1];
-                if(sx < 0 || sy < 0 || sx >= m || sy >= n || grid[sx][sy] == '#')
-                    continue;
-                int bx = b[0], by = b[1];
-//                 man and Box are in same pos continue to move man and box
-                if(sx == b[0] && sy == b[1])
-                {
-                    bx = b[0]+dir[0];
-                    by = b[1]+dir[1]; 
-                    if(bx < 0 || by < 0 || bx >= m || by >= n || grid[bx][by] == '#')
-                        continue;
-                    String newLoc = Arrays.toString(new int[]{sx,sy,bx,by});
-                    if(dist.getOrDefault(newLoc, Integer.MAX_VALUE) > dist.get(loc)+1)
-                    {
-                        dist.put(newLoc, dist.get(loc)+1);
-                        queue.offer(new int[]{sx,sy,bx,by});
-                    }
-                }
-                else
-                {
-                    String newLoc = Arrays.toString(new int[]{sx,sy,bx,by});
-                    if(dist.getOrDefault(newLoc, Integer.MAX_VALUE) > dist.get(loc))
-                    {
-                        dist.put(newLoc, dist.get(loc));
-                        queue.offer(new int[]{sx,sy,bx,by});
-                    }
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(grid[i][j]=='S') {
+                    player[0] = i;
+                    player[1] = j;
+                } if(grid[i][j]=='B') {
+                    box[0] = i;
+                    box[1] = j;
+                } if(grid[i][j]=='T') {
+                    target[0] = i;
+                    target[1] = j;
                 }
             }
         }
-        return res == Integer.MAX_VALUE ? -1 : res;
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>((a,b)->(a[0]-b[0]));
+        pq.offer(new int[]{distance(box, target), player[0], player[1], box[0], box[1], 0});
+        Set<String> visited = new HashSet();
+        while(!pq.isEmpty()) {
+            int[] cell = pq.poll();
+            int dist = cell[0], px = cell[1], py = cell[2], bx = cell[3], by = cell[4], moves = cell[5];
+            if(bx==target[0] && by==target[1]) return moves;
+            String key = px+":"+py+"|"+bx+":"+by;
+            if(visited.contains(key)) continue;
+            visited.add(key);
+            for(int[] dir:dirs) {
+                int npx = px + dir[0];
+                int npy = py + dir[1];
+                int[] next;
+                if(isInValid(npx, npy, m, n, grid)) continue;
+                if(npx==bx && npy==by) {
+                    int nbx= bx+dir[0];
+                    int nby = by + dir[1];
+                    if(isInValid(nbx, nby, m, n, grid)) continue;
+                    int[] newBox = {nbx,nby};
+                    next = new int[]{distance(newBox, target)+moves+1, npx, npy, nbx, nby, moves+1};
+                } else {
+                    next = new int[]{dist, npx, npy, bx, by, moves};
+                }
+                pq.offer(next);
+            }
+        }
+        return -1;
     }
+    
+    private int distance(int[] a, int[] b) {
+        return Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]);
+    }
+    
+    private boolean isInValid(int x, int y, int m, int n, char[][] grid) {
+        return (x<0 || x>=m || y<0 || y>=n || grid[x][y]=='#');
+    }
+    
 }
