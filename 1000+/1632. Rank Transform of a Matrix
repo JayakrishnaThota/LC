@@ -1,0 +1,74 @@
+//O(mn*log(mn)) time and O(mn) space
+class Solution {
+    
+    public int[][] matrixRankTransform(int[][] matrix) {
+        if(matrix==null || matrix.length==0) return matrix;
+        int m = matrix.length, n = matrix[0].length;
+        TreeMap<Integer, List<int[]>> map = new TreeMap();
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                map.putIfAbsent(matrix[i][j], new ArrayList());
+                map.get(matrix[i][j]).add(new int[]{i,j});
+            }
+        }
+        int[] rank = new int[m+n];
+        //Iterate in increasing values of matirx[i][j]
+        for(Integer key:map.keySet()) {
+            //Union on co-ordiantes for same values
+            List<int[]> pairs = map.get(key);
+            Map<Integer, Integer> parentMap = new HashMap();
+            for(int[] pair:pairs) {
+                int x = pair[0], y = pair[1];
+                union(parentMap, x, y+m);
+            }
+            //Group parents
+            Map<Integer, List<Integer>> groups = new HashMap();
+            for(Integer parentKey:parentMap.keySet()) {
+                int parent = find(parentMap, parentKey);
+                groups.putIfAbsent(parent, new ArrayList());
+                groups.get(parent).add(parentKey);
+            }
+            for(Integer groupKey:groups.keySet()) {
+                List<Integer> group = groups.get(groupKey);
+                int max = 0;
+                for(Integer g:group) {
+                    max = Math.max(max, rank[g]);
+                }
+                for(Integer g:group) {
+                    rank[g] = max+1;
+                }
+            }
+            for(int[] pair:pairs) {
+                int x = pair[0], y = pair[1];
+                matrix[x][y] = rank[x];
+            }
+        }
+        return matrix;
+    }
+    
+    private int find(Map<Integer, Integer> parentMap, int value) {
+        if (parentMap.get(value) == value) {
+            return value;
+        }
+
+        parentMap.put(value, find(parentMap, parentMap.get(value)));
+        return parentMap.get(value);
+    }
+
+
+    private void union(Map<Integer, Integer> parentMap, int u, int v) {
+        if (!parentMap.containsKey(u)) {
+            parentMap.put(u, u);
+        }
+        if (!parentMap.containsKey(v)) {
+            parentMap.put(v, v);
+        }
+
+        int pu = find(parentMap, u);
+        int pv = find(parentMap, v);
+        if (pu != pv) {
+            parentMap.put(pu, pv);
+        }
+    }
+    
+}
