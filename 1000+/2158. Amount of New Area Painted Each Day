@@ -1,0 +1,23 @@
+//O(n) time and O(1) space
+class Solution {
+    public int[] amountPainted(int[][] paint) {
+        if(paint==null || paint.length==0)
+            return new int[0];
+        int n = paint.length;
+        int[] res = new int[n];
+        int[] jump = new int[50001];
+        Arrays.fill(jump, -1);
+        for(int i=0;i<n;i++) {
+            int start = paint[i][0], end = paint[i][1];
+            int cur = 0;
+            while(start<end) {
+                int next = Math.max(start+1 , jump[start]);
+                cur+=(jump[start]==-1) ? 1 : 0;
+                jump[start] = Math.max(next, end);
+                start = next;
+            }
+            res[i] = cur;
+        }
+        return res;
+    }
+}
