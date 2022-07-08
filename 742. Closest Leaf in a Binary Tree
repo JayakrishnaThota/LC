@@ -27,15 +27,13 @@ class Solution {
             }
         }
         while(!queue.isEmpty()) {
-            int size = queue.size();
-            for(int j=0;j<size;j++) {
-                TreeNode u = queue.poll();
-                if(u!=null && adjlist.get(u).size()<=1) return u.val;
-                for(TreeNode v:adjlist.get(u)) {
-                    if(set.contains(v)) continue;
-                    set.add(v);
-                    queue.offer(v);
-                }
+            TreeNode u = queue.poll();
+            if(u==null) continue;
+            if(adjlist.get(u).size()<=1) return u.val;
+            for(TreeNode v:adjlist.get(u)) {
+                if(set.contains(v)) continue;
+                set.add(v);
+                queue.offer(v);
             }
         }
         return -1;
