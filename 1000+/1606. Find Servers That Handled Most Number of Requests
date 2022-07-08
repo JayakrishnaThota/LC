@@ -1,43 +1,39 @@
 //O(nlogn) time and O(n) space
 class Solution {
     public List<Integer> busiestServers(int k, int[] arrival, int[] load) {
-        if(arrival==null || arrival.length==0 || k<1) return new ArrayList();
-        int[] buckets = new int[k];
-        PriorityQueue<int[]> busyServers = new PriorityQueue<int[]>((a,b)->(a[1]-b[1]));
+        List<Integer> result = new ArrayList();
+        int[] counter = new int[k];
+        int n = arrival.length;
         TreeSet<Integer> availableServers = new TreeSet();
+        PriorityQueue<int[]> busyServers = new PriorityQueue<int[]>((a,b)->(a[0]-b[0]));
         for(int i=0;i<k;i++) {
             availableServers.add(i);
         }
-        for(int i=0;i<arrival.length;i++) {
-            int curTime = arrival[i];
-            int endTime = arrival[i] + load[i];
-            while(!busyServers.isEmpty() && busyServers.peek()[1]<=curTime) {
-                availableServers.add(busyServers.poll()[0]);
+        for(int i=0;i<n;i++) {
+            int time = arrival[i], l = load[i];
+            while(!busyServers.isEmpty() && busyServers.peek()[0]<=time) {
+                availableServers.add(busyServers.poll()[1]);
             }
-            if(availableServers.size()==0) continue;
+            if(availableServers.size()==0) {
+                continue;
+            }
             Integer ceil = availableServers.ceiling(i%k);
             if(ceil==null) {
                 ceil = availableServers.first();
             }
-            buckets[ceil]++;
+            counter[ceil]++;
             availableServers.remove(ceil);
-            busyServers.offer(new int[]{ceil, endTime});
+            busyServers.offer(new int[]{time+l, ceil});
         }
-        return getMax(buckets);
-    }
-    
-    private List<Integer> getMax(int[] counter) {
-        int max = 0;
-        for (int i = 0; i < counter.length; i++) {
-            max = Math.max(max, counter[i]);
+        int maxCount = counter[0];
+        for(int i=1;i<k;i++) {
+            maxCount = Math.max(maxCount, counter[i]);
         }
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < counter.length; i++) {
-            if (counter[i] == max) {
-                result.add(i);
-            }
+        for(int i=0;i<k;i++) {
+           if(maxCount==counter[i]) {
+               result.add(i);
+           }
         }
         return result;
     }
-    
 }
