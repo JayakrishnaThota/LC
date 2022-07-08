@@ -1,0 +1,29 @@
+//O(mn) time and space
+class Solution {
+    public char[][] rotateTheBox(char[][] box) {
+        if(box==null || box.length==0) return box;
+        int m = box.length, n = box[0].length;
+        char[][] res = new char[n][m];
+        for(int i=0;i<m;i++) {
+            int c = n-1;
+            for(int j=n-1;j>=0;j--) {
+                char ch = box[i][j];
+                if(ch=='#') {
+                    box[i][j] = '.';
+                    box[i][c--] = ch;
+                } else if(ch=='*') {
+                    c = j-1;
+                }
+            }
+            while(c>=0) {
+                box[i][c--] = '.';
+            }
+        }
+        for(int i = 0; i<m; ++i){
+            for(int j = n-1; j>=0; --j)
+                res[j][m-i-1] = box[i][j];
+        }
+        return res;
+    }
+    
+}
