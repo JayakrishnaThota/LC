@@ -1,9 +1,9 @@
 //O(nlogn) time and O(n) space
 class Solution {
     public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
-        List<Interval> result = new ArrayList();
-        if(schedule==null || schedule.size()==0) return result;
+        if(schedule==null || schedule.size()==0) return new ArrayList();
         List<Interval> list = new ArrayList();
+        List<Interval> result = new ArrayList();
         for(List<Interval> s:schedule) {
             for(Interval i:s) {
                 list.add(i);
@@ -11,20 +11,21 @@ class Solution {
         }
         Collections.sort(list, new Comparator<Interval>(){
             public int compare(Interval a, Interval b) {
-                return a.start-b.start;
+                if(a.start!=b.start) {
+                    return a.start-b.start;
+                } else {
+                    return a.end-b.end;
+                }
             }
         });
-        int start = list.get(0).start, end = list.get(0).end;
+        int end = list.get(0).end;
         for(int i=1;i<list.size();i++) {
             int curStart = list.get(i).start;
             int curEnd = list.get(i).end;
             if(curStart>end) {
                 result.add(new Interval(end, curStart));
-                start = curStart;
-                end = curEnd;
-            } else {
-                end = Math.max(curEnd, end);
             }
+            end = Math.max(end, curEnd);
         }
         return result;
     }
