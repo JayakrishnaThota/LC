@@ -1,0 +1,24 @@
+//O(vk) time and O(1) space
+class Solution {
+    public int[] pourWater(int[] heights, int volume, int k) {
+        if(heights==null || heights.length==0)
+            return heights;
+        int n = heights.length;
+        for(int i=0;i<volume;i++) {
+            int cur = k;
+            //Move left
+            while(cur-1>=0 && heights[cur-1]<=heights[cur]) {
+                cur--;
+            }
+            //Move right
+            while(cur+1<n && heights[cur+1]<=heights[cur]) {
+                cur++;
+            }
+            while(cur>k && heights[cur-1]<=heights[cur]) {
+                cur--;
+            }
+            heights[cur]++;
+        }
+        return heights;
+    }
+}
