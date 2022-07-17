@@ -1,0 +1,27 @@
+//O(nlogn) time and O(n) space
+class Solution {
+    public String minimizeError(String[] prices, int target) {
+        double res = 0;
+        PriorityQueue<Double> pq = new PriorityQueue<>();
+        
+        for (String s : prices) {
+            Double f = Double.valueOf(s);
+            double low = Math.floor(f);
+            double high = Math.ceil(f);
+            
+            if (low != high)
+                pq.offer((high-f)-(f-low));
+            
+            res += f-low;
+            target -= low;
+        }
+        
+        if (target < 0 || target > pq.size())
+            return "-1";
+        
+        while (target-- > 0)
+            res += pq.poll();
+        
+        return String.format("%.3f", res);
+    }
+}
