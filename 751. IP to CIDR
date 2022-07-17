@@ -1,0 +1,41 @@
+//O(logn) time and O(1) space
+class Solution {
+    public List<String> ipToCIDR(String ip, int n) {
+        List<String> result = new ArrayList();
+        long x = 0;
+        for(String s:ip.split("\\.")) {
+            x = x*256 + Integer.parseInt(s);
+        }
+        while(n>0) {
+            long step = x&-x;
+            if(step==0) {
+                step=1;
+                while(step<n) step*=2;
+            }
+            while(step>n) step/=2;
+            result.add(helper(x, (int)step));
+            n-=step;
+            x+=step;
+        }
+        return result;
+    }
+    
+    public String helper(long x, int step) {
+        int[] ans = new int[4];
+        ans[0] = (int)(x&255);
+        x>>=8;
+        ans[1] = (int)(x&255);
+        x>>=8;
+        ans[2] = (int)(x&255);
+        x>>=8;
+        ans[3] = (int)(x&255);
+        x>>=8;
+        int len = 33;
+        while(step>0) {
+            len--;
+            step/=2;
+        }
+        return ans[3]+"."+ans[2]+"."+ans[1]+"."+ans[0]+"/"+len;
+    }
+    
+}
