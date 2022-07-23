@@ -1,0 +1,37 @@
+//O(nt) time and O(n) space 
+class Solution {
+    public int minimumFinishTime(int[][] tires, int changeTime, int numLaps) {
+        int[] dp = new int[numLaps+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        for(int[] tire:tires) {
+            findMin(tire, changeTime, numLaps, dp);
+        }
+        for(int i=2;i<=numLaps;i++) {
+            for(int j=1;j<i;j++) {
+                int curMin;
+                int remainder = i%j, times = i/j;
+                if(remainder==0) {
+                    curMin = times*(dp[j]+changeTime) - changeTime; 
+                } else {
+                    curMin = times*(dp[j]+changeTime) + dp[remainder];
+                }
+                dp[i] = Math.min(dp[i], curMin);
+            }
+        }
+        return dp[numLaps];
+    }
+    
+    public void findMin(int[] tire, int changeTime, int numLaps, int[] dp) {
+        int base = tire[0];
+        int sum = base;
+        int cur = base;
+        int lap = 1;
+        dp[lap] = Math.min(dp[lap], sum);
+        while(cur*tire[1]-base<=changeTime && lap++<numLaps) {
+            cur*=tire[1];
+            sum+=cur;
+            dp[lap] = Math.min(dp[lap], sum);
+        }
+    }
+    
+}
