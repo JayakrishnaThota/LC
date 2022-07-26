@@ -3,11 +3,9 @@ class Solution {
     class TrieNode {
         List<String> prefixes;
         TrieNode[] children;
-        boolean isWord;
         public TrieNode() {
             prefixes = new ArrayList();
             children = new TrieNode[26];
-            isWord = false;
         }
     }
     
@@ -54,11 +52,12 @@ class Solution {
     }
     
     private void dfs(String word, List<String> list) {
+        if(list.size()>word.length()) return;
         list.add(word);
         if(list.size() == word.length()) {
             result.add(new ArrayList(list));
         }
-        else if(list.size()<word.length()) {
+        else {
             StringBuilder preStr = new StringBuilder();
             for(String str: list) {
                 preStr.append(str.charAt(list.size()));
