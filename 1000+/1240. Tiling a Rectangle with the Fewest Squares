@@ -1,29 +1,29 @@
 class Solution {
     int res = Integer.MAX_VALUE;
     Map<String, Integer> map;
-    public int tilingRectangle(int n, int m) {
-        if(n==m) return 1;
-        if(n>m) {
-            return tilingRectangle(m, n);
+    public int tilingRectangle(int m, int n) {
+        if(m==n) return 1;
+        if(m>n) {
+            return tilingRectangle(n, m);
         }
         map = new HashMap();
-        int[] h = new int[n+1];
-        dfs(n, m, h, 0);
+        int[] h = new int[m+1];
+        dfs(m, n, h, 0);
         return res;
     }
     
-    public void dfs(int n, int m, int[] h, int count) {
+    public void dfs(int m, int n, int[] h, int count) {
         if(count>=res) {
             return;
         }
-        int minH = m, pos = -1;
-        for(int i=1;i<=n;i++) {
+        int minH = n, pos = -1;
+        for(int i=1;i<=m;i++) {
             if(h[i]<minH) {
                 minH = h[i];
                 pos = i;
             }
         }
-        if(minH==m) {
+        if(minH==n) {
             res = Math.min(res, count);
             return;
         }
@@ -32,16 +32,15 @@ class Solution {
             return;
         }
         int end = pos;
-        while(end+1<=n && h[end+1]==minH && end+1-pos+1+minH<=m) end++;
+        while(end+1<=m && h[end+1]==minH && end+1-pos+1+minH<=n) end++;
         for(int j=pos;j<=end;j++) {
             int curH = j-pos+1;
-            int[] newH = Arrays.copyOf(h, n+1);
+            int[] newH = Arrays.copyOf(h, m+1);
             for(int k=pos;k<=j;k++) {
                 newH[k] += curH;
             }
-            dfs(n, m, newH, count+1);
+            dfs(m, n, newH, count+1);
         }
         map.put(key, count);
     }
-    
 }
