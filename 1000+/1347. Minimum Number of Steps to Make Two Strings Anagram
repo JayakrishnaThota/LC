@@ -1,0 +1,18 @@
+//O(m+n) time and O(1) space
+class Solution {
+    public int minSteps(String s, String t) {
+        int res = 0;
+        int[] map = new int[26];
+        for(char c:s.toCharArray()) {
+            map[c-'a']++;
+        }
+        for(char c:t.toCharArray()) {
+            if(map[c-'a']<1) {
+                res++;
+            } else {
+                map[c-'a']--;
+            }
+        }
+        return res;
+    }
+}
