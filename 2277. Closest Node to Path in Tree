@@ -1,0 +1,70 @@
+//O(V+E)^2 time and O(V^2 + V+E) space
+class Solution {
+    Map<Integer, Set<Integer>> adjlist;
+    int[][] dist;
+    public int[] closestNode(int n, int[][] edges, int[][] query) {
+        construct(n, edges);
+        for(int i=0;i<n;i++) {
+            shortestDistance(i, n);
+        }
+        return calculateQueries(query, n);
+    }
+    
+    private void construct(int n, int[][] edges) {
+        adjlist = new HashMap();
+        dist = new int[n][n];
+        for(int i=0;i<n;i++) {
+            adjlist.put(i, new HashSet());
+        }
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            adjlist.get(u).add(v);
+            adjlist.get(v).add(u);
+        }
+    }
+    
+    private void shortestDistance(int source, int n) {
+        int[] d = new int[n];
+        Queue<Integer> queue = new LinkedList();
+        Set<Integer> visited = new HashSet();
+        queue.offer(source);
+        visited.add(source);
+        int level = 0;
+        d[source] = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int k=0;k<size;k++) {
+                int u = queue.poll();
+                for(int v:adjlist.get(u)) {
+                    if(!visited.contains(v)) {
+                        visited.add(v);
+                        queue.offer(v);
+                        d[v] = level+1;
+                    }
+                }
+            }
+            level++;
+        }
+        dist[source] = d;
+    }
+    
+    private int[] calculateQueries(int[][] query, int n) {
+        int[] res = new int[query.length];
+        for (int i = 0; i < query.length; i++) {
+            int[] q = query[i];
+            int len = dist[q[0]][q[1]];
+            int min = n, minNode = -1;
+            for (int j = 0; j < n; j++) {
+                if (dist[j][q[0]] + dist[j][q[1]] == len) {
+                    if (dist[j][q[2]] < min) {
+                        min = dist[j][q[2]];
+                        minNode = j;
+                    }
+                }
+            }
+            res[i] = minNode;
+        }
+        
+        return res;
+    }
+}
