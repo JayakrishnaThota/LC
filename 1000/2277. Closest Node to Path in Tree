@@ -1,4 +1,4 @@
-//O(V+E)^2 time and O(V^2 + V+E) space
+//O((V+E)^2 + QV)time and O(V^2 + V+E) space
 class Solution {
     Map<Integer, Set<Integer>> adjlist;
     int[][] dist;
