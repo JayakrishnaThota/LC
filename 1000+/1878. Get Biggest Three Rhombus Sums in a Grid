@@ -1,0 +1,50 @@
+//O(mn*L^2) time and O(1) space
+class Solution {
+     public int[] getBiggestThree(int[][] grid) {
+        if(grid==null || grid.length==0) return new int[3];
+        int m = grid.length, n = grid[0].length;
+        TreeSet<Integer> set = new TreeSet(Collections.reverseOrder());
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                set.add(grid[i][j]);
+                if(set.size()>3) set.pollLast();
+                for(int L=1;L<=25;L++) {
+                    int cur = helper(grid,i,j,m,n,L);
+                    if(cur!=Integer.MAX_VALUE) {
+                        set.add(cur);
+                        if(set.size()>3) set.pollLast();
+                    }
+                }
+            }
+        }
+        return getMaxThree(set);
+    }
+    
+    private int helper(int[][] grid, int i, int j, int m, int n, int L) {
+        int iMin = i-L, iMax = i+L, jMax = j+2*L;
+        if(iMin<0 || iMax>=m || jMax>=n) return Integer.MAX_VALUE;
+        int sum = 0;
+        for(int k=1;k<L;k++) {
+            sum+=grid[i-k][j+k];
+            sum+=grid[i+k][j+k];
+            sum+=grid[i-k][jMax-k];
+            sum+=grid[i+k][jMax-k];
+        }
+        sum+=grid[i][j];
+        sum+=grid[i][jMax];
+        sum+=grid[iMin][j+L];
+        sum+=grid[iMax][j+L];
+        return sum;
+    }
+    
+    private int[] getMaxThree(TreeSet<Integer> set) {
+        int[] res = new int[Math.min(3, set.size())];
+        int i = 0;
+        System.out.println(set.size());
+        for(int s:set) {
+            res[i++] = s;
+        }
+        return res;
+    }
+    
+}
