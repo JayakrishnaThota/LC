@@ -25,3 +25,52 @@ class Solution {
         return res;
     }
 }
+
+class Solution {
+    public int maxEnvelopes(int[][] envelopes) {
+        if(envelopes==null || envelopes.length==0) return 0;
+        int m = envelopes.length;
+        Arrays.sort(envelopes, (x, y) -> (x[0] == y[0]) ? y[1]-x[1] : x[0]-y[0]);
+        
+        int[] secondDim = new int[m];
+        for(int i=0; i<m; i++)
+        {
+            secondDim[i] = envelopes[i][1];
+        }
+        
+        return lis(secondDim);
+    }
+    
+    private int lis(int[] arr)
+    {
+        int n = arr.length;
+        List<Integer> list = new ArrayList();
+        
+        list.add(arr[0]);
+        for(int i=1; i<n; i++)
+        {
+            if(arr[i] > list.get(list.size()-1))
+                list.add(arr[i]);
+            else
+            {
+                int idx = getIndex(list, arr[i]);
+                list.set(idx, arr[i]);
+            }
+        }
+        return list.size();
+    }
+    
+    private int getIndex(List<Integer> list, int val)
+    {
+        int low = 0, high = list.size()-1;
+        while(low < high)
+        {
+            int mid = low+(high - low)/2;
+            if(list.get(mid) < val)
+                low = mid+1;
+            else
+                high = mid;
+        }
+        return low;
+    }
+}
