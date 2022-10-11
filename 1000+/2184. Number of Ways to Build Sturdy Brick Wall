@@ -1,0 +1,26 @@
+//O(h*2^w) time and space
+class Solution {
+    public int buildWall(int height, int width, int[] bricks) {
+        Integer[][] dp = new Integer[height+1][1<<width];
+        return dfs(height, width, bricks, dp, 0, 0, 0);
+    }
+    
+    private int dfs(int h, int w, int[] bricks, Integer[][] dp, int config, int curW, int prev) {
+        if(dp[h][prev]!=null)
+            return dp[h][prev];
+        if(h==0)
+            return 1;
+        if(curW==w) 
+            return dfs(h-1, w, bricks, dp, 0, 0, config);
+        int res = 0;
+        for(int b:bricks) {
+            int newW = curW + b;
+            int newConfig = (newW<w) ? config | (1<<newW) : config;
+            if(newW > w || ((newConfig&prev)>0))
+                continue;
+            res = (res + dfs(h, w, bricks, dp, newConfig, newW, prev)) % 1000000007;
+        }
+        return config == 0? dp[h][prev] = res : res;
+    }
+    
+}
