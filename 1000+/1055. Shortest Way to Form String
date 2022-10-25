@@ -1,23 +1,31 @@
-//O(mn) time and O(1) space
+//O(m+n) time and O(m) space
 class Solution {
     public int shortestWay(String source, String target) {
-        char[] cs = source.toCharArray(), ts = target.toCharArray();
-        boolean[] map = new boolean[26];
-        for (char c:cs) {
-            map[c-'a'] = true;
+        int m = source.length(), n = target.length();
+        //dict[i][c-'a'] = index
+        //Indicates the index>=i where c occurs -> Inverted index
+        int[][] dict = new int[m][26];
+        Arrays.fill(dict[m-1], -1);
+        dict[m-1][source.charAt(m-1)-'a'] = m-1;
+        for(int i=m-2;i>=0;i--) {
+            dict[i] = Arrays.copyOf(dict[i+1], 26);
+            dict[i][source.charAt(i)-'a'] = i;
         }
-        int j = 0, res = 1;
-        for (int i = 0; i < ts.length; i++,j++) {
-            if (!map[ts[i] - 'a']) return -1;
-            while (j < cs.length && cs[j] != ts[i]) {
-                j++;
+        int res = 0, s = 0;
+        for(char c:target.toCharArray()) {
+            if(dict[0][c-'a']==-1) {
+                return -1;
             }
-            if (j == cs.length) {
-                j = -1;
+            if(dict[s][c-'a']==-1) {
                 res++;
-                i--;
+                s = 0;
+            }
+            s = dict[s][c-'a'] + 1;
+            if(s==m) {
+                res++;
+                s = 0;
             }
         }
-        return res;
+        return res + ((s==0) ? 0 : 1);
     }
 }
