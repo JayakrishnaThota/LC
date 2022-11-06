@@ -1,4 +1,4 @@
-// Robin-karp
+// Rabin-karp
 //O(len*n) time and space
 class Solution {
     public boolean differByOne(String[] dict) {
