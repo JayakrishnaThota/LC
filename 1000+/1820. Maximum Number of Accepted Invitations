@@ -1,0 +1,26 @@
+//O(mn) time and O(n) space
+class Solution {
+    public int maximumInvitations(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        Map<Integer, Integer> map = new HashMap();
+        for(int i=0;i<m;i++) {
+            dfs(grid,map,i,new HashSet());
+        }
+        return map.size();
+    }
+    
+    private boolean dfs(int[][] grid, Map<Integer, Integer> map, int boy, Set<Integer> set) {
+        for(int girl=0;girl<grid[0].length;girl++) {
+            if(grid[boy][girl]!=1) continue;
+            if(set.contains(girl)) continue;
+            set.add(girl);
+            if(!map.containsKey(girl) || dfs(grid, map, map.get(girl), set)) {
+                map.put(girl, boy);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+}
