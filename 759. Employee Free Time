@@ -1,31 +1,54 @@
-//O(nlogn) time and O(n) space
+/*
+// Definition for an Interval.
+class Interval {
+    public int start;
+    public int end;
+
+    public Interval() {}
+
+    public Interval(int _start, int _end) {
+        start = _start;
+        end = _end;
+    }
+};
+*/
+//O(nlogk) time and O(k) space
+//k - schedule.size()
+//n - number of intervals
 class Solution {
-    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
-        if(schedule==null || schedule.size()==0) return new ArrayList();
-        List<Interval> list = new ArrayList();
-        List<Interval> result = new ArrayList();
-        for(List<Interval> s:schedule) {
-            for(Interval i:s) {
-                list.add(i);
-            }
+    
+    class Cell {
+        int x,y;
+        Interval interval;
+        public Cell(int x, int y, Interval interval) {
+            this.x = x;
+            this.y = y;
+            this.interval = interval;
         }
-        Collections.sort(list, new Comparator<Interval>(){
-            public int compare(Interval a, Interval b) {
-                if(a.start!=b.start) {
-                    return a.start-b.start;
-                } else {
-                    return a.end-b.end;
-                }
+    }
+    
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        List<Interval> result = new ArrayList();
+        if(schedule==null || schedule.size()==0) return result;
+        PriorityQueue<Cell> pq = new PriorityQueue<Cell>((a,b)->(a.interval.start-b.interval.start));
+        int i = 0;
+        for(List<Interval> s:schedule) {
+            for(int j=0;j<s.size();j++) {
+                pq.offer(new Cell(i,j,s.get(j)));
             }
-        });
-        int end = list.get(0).end;
-        for(int i=1;i<list.size();i++) {
-            int curStart = list.get(i).start;
-            int curEnd = list.get(i).end;
-            if(curStart>end) {
-                result.add(new Interval(end, curStart));
+            i++;
+        }
+        int prev = pq.peek().interval.start;
+        while(!pq.isEmpty()) {
+            Cell cell = pq.poll();
+            int start = cell.interval.start, end = cell.interval.end, x = cell.x, y = cell.y;
+            if(start>prev) {
+                result.add(new Interval(prev, start));
             }
-            end = Math.max(end, curEnd);
+            prev = Math.max(prev, end);
+            if(y+1<schedule.get(x).size()) {
+                pq.offer(new Cell(x,y+1,schedule.get(x).get(y+1)));
+            }
         }
         return result;
     }
