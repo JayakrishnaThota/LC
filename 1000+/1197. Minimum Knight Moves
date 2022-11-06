@@ -1,27 +1,26 @@
-
+//O(max(x,y)^2) time and space
 class Solution {
-    
-    int[][] dirs = new int[][] {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
-    
-    public int minKnightMoves(int x, int y) {
-        x = Math.abs(x);
-        y = Math.abs(y);
+    int[][] dirs = {{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{-2,1},{2,-1},{-2,-1}};
+    public int minKnightMoves(int dx, int dy) {
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
         Queue<int[]> queue = new LinkedList();
         Set<String> visited = new HashSet();
         queue.offer(new int[]{0,0});
-        visited.add("0"+","+"0");
-        int level = 0;
-        while(!queue.isEmpty()){
+        visited.add(0+","+0);
+        if(dx==0 && dy==0) return 0;
+        int level = 1;
+        while(!queue.isEmpty()) {
             int size = queue.size();
-            for(int k=0;k<size;k++){
-                int[] temp = queue.poll();
-                if(temp[0]==x && temp[1]==y) return level;
-                for(int[] dir:dirs){
-                    int nx = temp[0] + dir[0];
-                    int ny = temp[1] + dir[1];
-                    if(!visited.contains(nx+","+ny) && nx>=-1 && ny>=-1) {
-                        visited.add(nx+","+ny);
-                        queue.offer(new int[]{nx, ny});
+            for(int k=0;k<size;k++) {
+                int[] cell = queue.poll();
+                int i = cell[0], j = cell[1];
+                for(int[] dir:dirs) {
+                    int x = i + dir[0], y = j + dir[1];
+                    if(x>=-1 && y>=-1 && !visited.contains(x+","+y)) {
+                        if(x==dx && y==dy) return level;
+                        queue.offer(new int[]{x,y});
+                        visited.add(x+","+y);
                     }
                 }
             }
@@ -29,5 +28,4 @@ class Solution {
         }
         return -1;
     }
-    
 }
