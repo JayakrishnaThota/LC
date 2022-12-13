@@ -1,35 +1,28 @@
-//O(n) time and O(1) space
 class Solution {
     public List<String> commonChars(String[] words) {
-        List<String> list = new ArrayList();
-        if(words==null || words.length==0) return list;
+        List<String> result = new ArrayList();
+        if(words==null || words.length==0) return result;
+        int n = words.length;
         int[] map = new int[26];
-        Arrays.fill(map, -1);
         for(String word:words) {
-            int[] tmp = freq(word);
+            int[] temp = new int[26];
+            for(char c:word.toCharArray()) {
+                temp[c-'a']++;
+            }
             for(int i=0;i<26;i++) {
-                if(tmp[i]==0) map[i] = 0;
-                else {
-                    if(map[i]==-1) map[i] = tmp[i];
-                    map[i] = Math.min(map[i], tmp[i]);
+                if(temp[i]>0) {
+                    if(map[i]==0)
+                    map[i] = Math.min(map[i], temp[i])
                 }
             }
         }
         for(int i=0;i<26;i++) {
-            char c = (char)(i+'a');
-            for(int j=0;j<map[i];j++) {
-                list.add(c+"");
+            if(map[i]==n) {
+                int key = i+97;
+                String res = (char)key + "";
+                result.add(res);
             }
         }
-        return list;
+        return result;
     }
-    
-    public int[] freq(String s) {
-        int[] map = new int[26];
-        for(char c:s.toCharArray()) {
-            map[c-'a']++;
-        }
-        return map;
-    }
-    
 }
