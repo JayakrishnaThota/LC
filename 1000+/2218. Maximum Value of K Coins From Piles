@@ -1,0 +1,22 @@
+//O(nk) time and space 
+class Solution {
+    public int maxValueOfCoins(List<List<Integer>> piles, int k) {
+        if (piles==null || piles.size()==0) return 0;
+        Integer[][] dp = new Integer[piles.size()+1][k+1];
+        return helper(piles, dp, 0, k, piles.size());
+    }
+
+    private int helper(List<List<Integer>> piles, Integer[][] dp, int i, int coins, int n) {
+        if(coins==0 || i==n) return 0;
+        if(dp[i][coins]!=null) return dp[i][coins];
+        int res = helper(piles, dp, i+1, coins, n);
+        int cur = 0;
+        for(int j=0;j<Math.min(piles.get(i).size(), coins);j++) {
+            cur += piles.get(i).get(j);
+            res = Math.max(res, cur+helper(piles, dp, i+1, coins-j-1, n));
+        }
+        dp[i][coins] = res;
+        return res;
+    }
+
+}
