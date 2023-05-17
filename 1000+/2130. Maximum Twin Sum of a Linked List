@@ -1,0 +1,34 @@
+// O(n) time and O(1) space
+class Solution {
+    public int pairSum(ListNode head) {
+        if(head==null) return 0;
+        int max = Integer.MIN_VALUE;
+        ListNode slow = head, fast = head;
+        while(fast != null && fast.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if(fast!=null) slow = slow.next;
+        ListNode rev = reverse(slow);
+        ListNode cur = head;
+        while(rev!=null) {
+            max = Math.max(max, rev.val + cur.val);
+            cur = cur.next;
+            rev = rev.next;
+        }
+        return max;
+    }
+
+    private ListNode reverse(ListNode head) {
+        if(head==null || head.next==null) return head;
+        ListNode cur = head, prev = null;
+        while(cur!=null) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+
+}
