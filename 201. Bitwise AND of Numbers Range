@@ -1,13 +1,13 @@
-//O(1) time and O(1) space
+// O(1) time and space
 class Solution {
-    public int rangeBitwiseAnd(int m, int n) {
-        if(m==0) return 0;
-        int index = 1;
-        while(m!=n){
-            m>>=1;
-            n>>=1;
-            index<<=1;
+    public int rangeBitwiseAnd(int left, int right) {
+        if(left==0) return 0;
+        int moveFactor = 0;
+        while(left!=right) {
+            moveFactor++;
+            left>>=1;
+            right>>=1;
         }
-        return m*index;
+        return left<<moveFactor;
     }
 }
