@@ -1,0 +1,27 @@
+//O(n+k) time and O(1) space 
+class Solution {
+    public int maxConsecutiveAnswers(String answerKey, int k) {
+        if(answerKey == null || answerKey.length()==0) return 0;
+        return Math.max(longestSubstringWithKSwaps(answerKey, k, 'T'), longestSubstringWithKSwaps(answerKey, k, 'F'));
+    }
+
+    private int longestSubstringWithKSwaps(String answerKey, int k, char ch) {
+        int n = answerKey.length(), max = 0, left = 0, right = 0, swaps = 0;
+        while(right<n) {
+            char c = answerKey.charAt(right++);
+            if(c!=ch) {
+                swaps++;
+                if(swaps>k) {
+                    while(answerKey.charAt(left)==ch) {
+                        left++;
+                    }
+                    left++;
+                    swaps--;
+                }
+            }
+            max = Math.max(max, right-left);
+        }
+        return max;
+    }
+
+}
