@@ -1,0 +1,36 @@
+//O(n(k+logn)) time and O(nk) space
+class Solution {
+    public int maxValue(int[][] events, int k) {
+        if(events==null || events.length==0 || k<1) return 0;
+        int n = events.length; 
+        int[][] dp = new int[n][k+1];
+        for(int[] d:dp) {
+            Arrays.fill(d, -1);
+        }
+        Arrays.sort(events, (a,b) -> (a[0]-b[0]));
+        return topDown(events, dp, 0, k);
+    }
+
+    private int topDown(int[][] events, int[][] dp, int index, int count) {
+        if(index==events.length || count==0) return 0;
+        if(dp[index][count]!=-1) return dp[index][count];
+        int nextIndex = FindNextStartGreaterThanEnd(events, events[index][1]);
+        dp[index][count] = Math.max(topDown(events, dp, nextIndex, count-1) + events[index][2], topDown(events, dp, index+1, count));
+        return dp[index][count];
+    }
+
+    private int FindNextStartGreaterThanEnd(int[][] events, int target) {
+        int low = 0, high = events.length;
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(events[mid][0]<=target) {
+                low = mid+1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+
+}
