@@ -1,4 +1,4 @@
-//O(n*2^n-1) time and O(n) space
+//O(n*2^n) time and O(2^n) space
 class Solution {
     public List<String> removeInvalidParentheses(String s) {
         List<String> result = new ArrayList();
@@ -6,44 +6,43 @@ class Solution {
         Set<String> visited = new HashSet();
         queue.offer(s);
         visited.add(s);
-        boolean done = false;
         while(!queue.isEmpty()) {
             int size = queue.size();
             for(int k=0;k<size;k++) {
                 String key = queue.poll();
-                if(isValid(key)) {
+                if(isBalanced(key)) {
                     result.add(key);
-                    done = true;
-                }
-                else {
-                    for(int i=0;i<key.length();i++) {
+                } else {
+                    int n = key.length();
+                    for(int i=0;i<n;i++) {
                         char c = key.charAt(i);
-                        if(c!=')' && c!='(') continue;
-                        String newKey = key.substring(0,i)+key.substring(i+1);
-                        if(!visited.contains(newKey)) {
+                        if(c!='(' && c!=')') continue;
+                        String newKey = key.substring(0,i) + key.substring(i+1);
+                        if(visited.add(newKey)) {
                             queue.offer(newKey);
-                            visited.add(newKey);
                         }
                     }
                 }
             }
-            if(done) break;
+            if(result.size()>0) break;
         }
-        if(result.size()==0)
+        if(result.size()==0) {
             result.add("");
+        }
         return result;
     }
-    
-    public boolean isValid(String s) {
+
+    private boolean isBalanced(String s) {
         if(s==null || s.length()==0) return true;
-        int balance = 0;
+        int bal = 0;
         for(char c:s.toCharArray()) {
-            if(c=='(') balance++;
+            if(c=='(') bal++;
             else if(c==')') {
-                balance--;
-                if(balance<0) return false;
+                bal--;
+                if(bal<0) return false;
             }
         }
-        return (balance==0);
+        return (bal==0);
     }
+
 }
