@@ -1,0 +1,24 @@
+//O(n) time and O(1) space
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        int zeroes = 0, ones = 0;
+        for(int s:students) {
+            if(s==1) ones++;
+            else if(s==0) zeroes++;
+        }
+        for(int s:sandwiches) {
+            if(s==0) {
+                if(zeroes==0) {
+                    return ones;
+                }
+                zeroes--;
+            } else {
+                if(ones==0) {
+                    return zeroes;
+                }
+                ones--;
+            }
+        }
+        return 0;
+    }
+}
