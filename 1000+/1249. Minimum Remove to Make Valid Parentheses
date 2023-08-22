@@ -2,29 +2,27 @@
 class Solution {
     public String minRemoveToMakeValid(String s) {
         if(s==null || s.length()==0) return "";
-        int n = s.length(), par = 0, open = 0;
-        StringBuilder sb = new StringBuilder();
-        for(char c:s.toCharArray()) {
-            if(c=='(') { 
-                par++;
-                open++;
-            }
-            else if(c==')') {
-                par--;
-                if(par<0) { par = 0; continue; }
-            }
-            sb.append(c);
-        }
-        int openCount = open - par;
-        StringBuilder res = new StringBuilder();
-        for(int i=0;i<sb.length();i++) {
-            char c = sb.charAt(i);
+        Stack<Integer> stack = new Stack();
+        for(int i=0;i<s.length();i++) {
+            char c = s.charAt(i);
             if(c=='(') {
-                if(openCount==0) continue;
-                openCount--;
+                stack.push(i);
+            } else if(c==')') {
+                if(!stack.isEmpty() && s.charAt(stack.peek())=='(') {
+                    stack.pop();
+                } else {
+                    stack.push(i);
+                }
             }
-            res.append(c);
         }
-        return res.toString();
+        StringBuilder sb = new StringBuilder();
+        Set<Integer> set = new HashSet(stack);
+        for(int i=0;i<s.length();i++) {
+            if(!set.contains(i)) {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
     }
 }
+
