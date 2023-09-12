@@ -1,0 +1,19 @@
+//O(n) time and O(1) space
+class Solution {
+    public int minDeletions(String s) {
+        if(s==null || s.length()==0) return 0;
+        int[] count = new int[26];
+        int res = 0;
+        Set<Integer> set = new HashSet();
+        for(char c:s.toCharArray()) {
+            count[c-'a']++;
+        }
+        for(int i=0;i<26;i++) {
+            while(count[i] > 0 && !set.add(count[i])) {
+                count[i]--;
+                res++;
+            }
+        }
+        return res;
+    }
+}
