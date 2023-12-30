@@ -1,5 +1,6 @@
 //O(h) time and O(1) space
 class Solution {
+    int closest;
     public int closestValue(TreeNode root, double target) {
         int result = 0;
         double min = Double.MAX_VALUE;
@@ -8,11 +9,14 @@ class Solution {
             if(Math.abs(iter.val-target)<min) {
                 min = Math.abs(iter.val-target);
                 result = iter.val;
+            } else if (Math.abs(iter.val-target)==min) {
+                if(iter.val<result) {
+                    result = iter.val;
+                }
             }
             if(iter.val<target) {
                 iter = iter.right;
-            }
-            else {
+            } else {
                 iter = iter.left;
             }
         }
