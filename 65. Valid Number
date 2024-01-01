@@ -3,30 +3,26 @@ class Solution {
     public boolean isNumber(String s) {
         if(s==null || s.length()==0) return true;
         s = s.trim();
-        boolean eSeen = false, pointSeen = false;
-        boolean numberSeen = false, numberAfterE = true;
+        boolean pointSeen = false, eSeen = false;
+        boolean numberSeen = false, numberSeenAfterE = true;
         for(int i=0;i<s.length();i++) {
             char c = s.charAt(i);
             if(Character.isDigit(c)) {
-                numberAfterE = true;
                 numberSeen = true;
-            } else if(c=='.') {
+                numberSeenAfterE = true;
+            } else if (c=='.') {
                 if(pointSeen || eSeen) return false;
                 pointSeen = true;
-                
-            } else if(c=='e' || c=='E') {
+            } else if ((c=='e') || (c=='E')) {
                 if(!numberSeen || eSeen) return false;
                 eSeen = true;
-                numberAfterE = false;
-            } else if(c=='+' || c=='-') {
-                if(i!=0 && s.charAt(i-1)!='e') {
-                    return false;
-                }
+                numberSeenAfterE = false;
+            } else if((c=='+') || (c=='-')) {
+                if(i!=0 && !(s.charAt(i-1)=='e' || s.charAt(i-1)=='E')) return false;
             } else {
                 return false;
             }
         }
-        return numberSeen && numberAfterE;
-        
+        return numberSeen && numberSeenAfterE;
     }
 }
