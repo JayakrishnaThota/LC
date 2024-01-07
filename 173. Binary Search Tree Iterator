@@ -1,36 +1,32 @@
-public class BSTIterator {
+class BSTIterator {
+
     Stack<TreeNode> stack;
     public BSTIterator(TreeNode root) {
         stack = new Stack();
-        TreeNode cur = root;
-        while(cur!=null){
-            stack.push(cur);
-            if(cur.left!=null)
-                cur = cur.left;
-            else 
-                break;
+        while(root!=null) {
+            stack.push(root);
+            root = root.left;
         }
     }
-
-    /** @return whether we have a next smallest number */
-    public boolean hasNext() {
-        return !stack.isEmpty();
-    }
-
-    /** @return the next smallest number */
+    
+    //O(1) amortize time and O(n) space
     public int next() {
         TreeNode ret = stack.pop();
         TreeNode cur = ret;
-        if(cur.right!=null){
+        if(cur.right!=null) {
             cur = cur.right;
-            while(cur!=null){
-            stack.push(cur);
-            if(cur.left!=null)
+            while(cur!=null) {
+                stack.push(cur);
                 cur = cur.left;
-            else 
-                break;
+            }
         }
-        }
+
         return ret.val;
     }
+    
+    //O(1) time and space
+    public boolean hasNext() {
+        return !stack.isEmpty();
+    }
 }
+
