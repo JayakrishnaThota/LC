@@ -1,155 +1,62 @@
-//O(nlogn) time and O(n) space
-//Where n is the length of all accounts
+//O(nklognk) time and O(nk) space
 class Solution {
-    Map<String, String> map;    //Mapping from email to name
-    Map<String, List<String>> adjlist;  //Mapping from root of each email account to all the other account emails
-    
+    Map<String, Set<String>> adjlist;
+    Map<String, String> emailToNameMapping;
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
-        initialise(accounts);
-        return dfs();
+        if(accounts==null || accounts.size()==0) return accounts;
+        initialize(accounts);
+        return traverse();
     }
-    
-    public void initialise(List<List<String>> accounts){
-        map = new HashMap();
+
+    private void initialize(List<List<String>> accounts) {
         adjlist = new HashMap();
-        for (List<String> account: accounts) {
-            String name = "";
-            for (String email: account) {
-                if (name == "") {
-                    name = email;
-                    continue;
+        emailToNameMapping = new HashMap();
+        for(List<String> account:accounts) {
+            if(account==null || account.size()<2) continue;
+            String name = account.get(0);
+            if(account.size()>1) {
+                String root = account.get(1);
+                emailToNameMapping.put(root, name);
+                adjlist.putIfAbsent(root, new HashSet());
+                for(int i=2;i<account.size();i++) {
+                    adjlist.get(root).add(account.get(i));
+                    adjlist.putIfAbsent(account.get(i), new HashSet());
+                    adjlist.get(account.get(i)).add(root);
+                    emailToNameMapping.put(account.get(i), name);
                 }
-                adjlist.computeIfAbsent(email, x-> new ArrayList<String>()).add(account.get(1));
-                adjlist.computeIfAbsent(account.get(1), x-> new ArrayList<String>()).add(email);
-                map.put(email, name);
             }
         }
     }
-    
-    public List<List<String>> dfs(){
-        Set<String> seen = new HashSet();
-        List<List<String>> ans = new ArrayList();
-        for (String email: adjlist.keySet()) {
-            if (!seen.contains(email)) {
-                seen.add(email);
-                Stack<String> stack = new Stack();
-                stack.push(email);
-                List<String> component = new ArrayList();
-                while (!stack.empty()) {
-                    String node = stack.pop();
-                    component.add(node);
-                    for (String nei: adjlist.get(node)) {
-                        if (!seen.contains(nei)) {
-                            seen.add(nei);
-                            stack.push(nei);
+
+    private List<List<String>> traverse() {
+        List<List<String>> result = new ArrayList();
+        Set<String> visited = new HashSet();
+        for(String key:adjlist.keySet()) {
+            if(visited.contains(key)) continue;
+            Queue<String> queue = new LinkedList();
+            List<String> list = new ArrayList();
+            queue.offer(key);
+            visited.add(key);
+            list.add(key);
+            while(!queue.isEmpty()) {
+                int size = queue.size();
+                for(int k=0;k<size;k++) {
+                    String u = queue.poll();
+                    if(adjlist.get(u)==null) continue;
+                    for(String v:adjlist.get(u)) {
+                        if(!visited.contains(v)) {
+                            visited.add(v);
+                            list.add(v);
+                            queue.offer(v);
                         }
                     }
                 }
-                Collections.sort(component);
-                component.add(0, map.get(email));
-                ans.add(component);
             }
+            Collections.sort(list);
+            list.add(0, emailToNameMapping.get(key));
+            result.add(list);
         }
-        return ans;
+        return result;
     }
+
 }
-
-
-//Union Find Solution
-class UnionFind {
-        int[] parent;
-        int[] rank;
-        UnionFind(int n)
-        {
-            parent = new int[n];
-            rank = new int[n];
-            for(int i=0; i<n; i++)
-            {
-                parent[i] = i;
-                rank[i] = 1;
-            }
-        }
-        
-        public void union(int nodeA, int nodeB) 
-        {
-            if(nodeA == nodeB)
-                return;
-            int parentA = find(nodeA);
-            int parentB = find(nodeB);
-            if(parentA == parentB)
-                return;
-            if(rank[parentA] < rank[parentB])
-            {
-                parent[parentA] = parentB;
-                rank[parentB] += rank[parentA];
-            }
-            else
-            {
-                parent[parentB] = parentA;
-                rank[parentA] += rank[parentB];
-            }
-        }
-        
-        public int find(int nodeA)
-        {
-            if(parent[nodeA] == nodeA)
-                return nodeA;
-            
-            parent[nodeA] = find(parent[nodeA]);
-            return parent[nodeA];
-        }
-    }
-    
-    public List<List<String>> accountsMerge(List<List<String>> accounts) {
-        List<List<String>> res = new ArrayList();
-        
-        if(accounts == null || accounts.size() == 0)
-            return res;
-        
-        HashMap<String, Integer> emailMap = new HashMap();  
-        
-        int n = accounts.size();
-        UnionFind uf = new UnionFind(n);
-        
-        //Union Accounts Based on Email
-        for(int i=0; i<n; i++)
-        {
-            List<String> account = accounts.get(i);
-            for(int j=1; j<account.size(); j++)
-            {
-                String email = account.get(j);
-                if(emailMap.containsKey(email))
-                {
-                    int prevIdx = emailMap.get(email);
-                    uf.union(prevIdx, i);
-                }
-                else
-                {
-                    emailMap.put(email, i);
-                }
-            }
-        }
-        
-        //Map each email to particular parentAccountClusterIndex
-        HashMap<Integer, HashSet<String>> mergedAccMap = new HashMap();
-        for(String key: emailMap.keySet())
-        {
-            int idx = uf.find(emailMap.get(key));
-            mergedAccMap.putIfAbsent(idx, new HashSet());
-            mergedAccMap.get(idx).add(key);
-        }
-        
-        //Rearrange values in Map, 
-        // Sort it, 
-        // append UserName and add to result
-        for(int index: mergedAccMap.keySet())
-        {
-            HashSet<String> emails = mergedAccMap.get(index);
-            LinkedList<String> mergedMails = new LinkedList(emails);
-            Collections.sort(mergedMails);
-            mergedMails.addFirst(accounts.get(index).get(0));
-            res.add(mergedMails);
-        }
-        
-        return res;
-    }
