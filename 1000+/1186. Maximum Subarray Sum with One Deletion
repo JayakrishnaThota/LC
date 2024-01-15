@@ -1,0 +1,22 @@
+//O(n) time and space
+class Solution {
+    public int maximumSum(int[] arr) {
+        if(arr==null || arr.length==0) return 0;
+        int n = arr.length;
+        int[] maxEndingHere = new int[n], maxStartingHere = new int[n];
+        int maxSoFar = arr[0];
+        maxEndingHere[0] = arr[0];
+        maxStartingHere[n-1] = arr[n-1];
+        for(int i=1;i<n;i++) {
+            maxEndingHere[i] = Math.max(maxEndingHere[i-1]+arr[i], arr[i]);
+            maxSoFar = Math.max(maxSoFar, maxEndingHere[i]);
+        }
+        for(int i=n-2;i>=0;i--) {
+            maxStartingHere[i] = Math.max(maxStartingHere[i+1]+arr[i], arr[i]);
+        }
+        for(int i=1;i<n-1;i++) {
+            maxSoFar = Math.max(maxSoFar, maxStartingHere[i+1] + maxEndingHere[i-1]);
+        }
+        return maxSoFar;
+    }
+}
