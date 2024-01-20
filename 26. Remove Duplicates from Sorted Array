@@ -1,44 +1,12 @@
-//O(n) and O(n)
+//O(n) time and O(1) space
 class Solution {
     public int removeDuplicates(int[] nums) {
-        //Sanity Check
-        if(nums==null || nums.length==0) return 0;
-        int[] aux = new int[nums.length];
-        int np = 0, ap = 0;
-        aux[ap] = nums[np++];
-        while(np<nums.length){
-            if(nums[np]==aux[ap]){
-                np++;
-            }
-            else{
-                aux[++ap] = nums[np++];
+       int index = 0;
+        for(int i=0;i<nums.length;i++) {
+            if(i==0 || (nums[i]!=nums[i-1])) {
+                nums[index++] = nums[i];
             }
         }
-        ap++;
-        //Copy all the first ap elements from aux to nums
-        for(int i=0;i<ap;i++){
-            nums[i] = aux[i];
-        }
-        return ap;
-    }
-}
-
-//O(n) and O(1)
-class Solution {
-    public int removeDuplicates(int[] nums) {
-        //Sanity Check
-        if(nums==null || nums.length==0) return 0;
-        int index = 0;
-        int i = 1;
-        while(i<nums.length){
-            if(nums[i]==nums[index]){
-                i++;
-            }
-            else{
-                nums[++index] = nums[i++];
-            }
-        }
-        index++;
-        return index;
+        return index;        
     }
 }
