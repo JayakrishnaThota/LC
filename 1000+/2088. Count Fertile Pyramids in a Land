@@ -1,0 +1,32 @@
+//O(mn) time and space
+class Solution {
+    public int countPyramids(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int m = grid.length, n = grid[0].length;
+        int[][] inverseGrid = getInverseGrid(grid,m,n);
+        return helper(grid,m,n) + helper(inverseGrid,m,n);
+    }
+
+    private int helper(int[][] grid, int m, int n) {
+        int res = 0;
+        for(int i=1;i<m;i++) {
+            for(int j=1;j<n-1;j++) {
+                if(grid[i][j]>0) {
+                    grid[i][j] = 1 + Math.min(grid[i-1][j-1], Math.min(grid[i-1][j], grid[i-1][j+1]));
+                    res += (grid[i][j]-1);
+                }
+            }
+        }
+        return res;
+    }
+
+    private int[][] getInverseGrid(int[][] grid, int m, int n) {
+        int[][] res = new int[m][n];
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                res[i][j] = grid[m-1-i][j];
+            }
+        }
+        return res;
+    }
+}
