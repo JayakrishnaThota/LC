@@ -1,0 +1,62 @@
+class Solution {
+
+    class DisjointSet {
+        int[] parent;
+        int[] rank;
+        int size;
+        public DisjointSet(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++) {
+                rank[i] = 1;
+                parent[i] = i;
+            }
+            size = n;
+        }
+        
+        //O(1) amortized
+        public void union(int a, int b) {
+            int parentA = find(a);
+            int parentB = find(b);
+            if(parentA==parentB) return;
+            if(rank[parentA]>rank[parentB]) {
+                parent[parentB] = parentA;
+                rank[parentA]+=rank[parentB];
+            }
+            else {
+                parent[parentA] = parentB;
+                rank[parentB]+=rank[parentA];
+            }
+            size--;
+        }
+        
+        //O(1) amortized
+        public int find(int a) {
+            if(a==parent[a]) return a;
+            parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        
+    }
+
+    //O(V+E) time and space
+    public long countPairs(int n, int[][] edges) {
+        DisjointSet ds = new DisjointSet(n);
+        for(int[] edge:edges) {
+            int u = edge[0], v = edge[1];
+            ds.union(u, v);
+        }
+        Map<Integer, Integer> sizes = new HashMap<>();
+        for(int i=0;i<n;i++) {
+            int parent = ds.find(i);
+            sizes.put(parent, sizes.getOrDefault(parent,0)+1);
+        }
+        long numberOfPaths = 0;
+        long remainingNodes = n;
+        for (int size : sizes.values()) {
+            numberOfPaths += size * (remainingNodes - size);
+            remainingNodes -= size;
+        }
+        return numberOfPaths;
+    }
+}
