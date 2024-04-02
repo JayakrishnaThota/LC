@@ -2,30 +2,37 @@
 class Solution {
     public String nearestPalindromic(String n) {
         int len = n.length();
-        int i = len % 2 == 0 ? len / 2 - 1: len / 2;
-        long left = Long.parseLong(n.substring(0, i+1));
-        // input: n 12345, 1234
-        List<Long> candidate = new ArrayList<>();
-        candidate.add(getPalindrome(left, len % 2 == 0)); // 12321, 1221
-        candidate.add(getPalindrome(left+1, len % 2 == 0)); // 12421, 1331
-        candidate.add(getPalindrome(left-1, len % 2 == 0)); // 12221, 1111
-        candidate.add((long)Math.pow(10, len-1) - 1); // 9999, 999
-        candidate.add((long)Math.pow(10, len) + 1); // 100001, 10001
-        
-        long diff = Long.MAX_VALUE, res = 0, nl = Long.parseLong(n);
-        for (long cand : candidate) {
-            if (cand == nl) continue;
-            if (Math.abs(cand - nl) < diff) {
-                diff = Math.abs(cand - nl);
+        //12345, 1234
+        int i = (len%2==0) ? len/2 : len/2 + 1;
+        //123, 12
+        Long half = Long.parseLong(n.substring(0, i));
+
+        List<Long> candidates = new ArrayList();
+        candidates.add(getPalindrome(half, len % 2 == 0)); // 12321, 1221
+        candidates.add(getPalindrome(half+1, len % 2 == 0)); // 12421, 1331
+        candidates.add(getPalindrome(half-1, len % 2 == 0)); // 12221, 1111
+        candidates.add((long)Math.pow(10, len-1) - 1); // 9999, 999
+        candidates.add((long)Math.pow(10, len) + 1); // 100001, 10001
+
+        return nearest(Long.parseLong(n), candidates);
+    }
+
+    private String nearest(Long s, List<Long> candidates) {
+        long res = 0, min = Long.MAX_VALUE;
+        for(Long cand:candidates) {
+            if(cand.equals(s)) {
+                continue;
+            }
+            if(Math.abs(s-cand) < min) {
+                min = Math.abs(s-cand);
                 res = cand;
-            } else if (Math.abs(cand - nl) == diff) {
+            } else if(Math.abs(s-cand) == min) {
                 res = Math.min(res, cand);
             }
         }
-        
         return String.valueOf(res);
     }
-    
+
     private long getPalindrome(long left, boolean even) {
         long res = left;
         if (!even) left = left / 10;
