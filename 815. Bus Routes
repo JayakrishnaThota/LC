@@ -1,39 +1,44 @@
-//O(n^2) time and O(n) space
+//O(m^2*k) time and O(mk) space
+// m = routes.length
+// k = max of routes[i]
 class Solution {
     Map<Integer, Set<Integer>> adjlist;
-    public int numBusesToDestination(int[][] routes, int S, int T) {
+    public int numBusesToDestination(int[][] routes, int source, int target) {
         construct(routes);
-        return bfs(routes, S, T);
+        return bfs(routes, source, target);
+
     }
-    
-    public void construct(int[][] routes) {
+
+    //O(mn) time and space
+    private void construct(int[][] routes) {
         adjlist = new HashMap();
-        if(routes==null || routes.length==0) return;
         for(int i=0;i<routes.length;i++) {
-            for(int j=0;j<routes[i].length;j++) {
-                int u = routes[i][j];
-                adjlist.putIfAbsent(u, new HashSet());
-                adjlist.get(u).add(i);
+            int bus = i;
+            for(int stop:routes[i]) {
+                adjlist.putIfAbsent(stop, new HashSet());
+                adjlist.get(stop).add(bus);
             }
         }
     }
-    
-    public int bfs(int[][] routes, int source, int destination) {
-        if(source==destination) return 0;
+
+    private int bfs(int[][] routes, int source, int target) {
+        if(source==target) return 0;
         Queue<Integer> queue = new LinkedList();
-        Set<Integer> set = new HashSet();
         queue.offer(source);
+        Set<Integer> visited = new HashSet();
         int level = 0;
         while(!queue.isEmpty()) {
             int size = queue.size();
             for(int k=0;k<size;k++) {
                 int u = queue.poll();
-                for(int v:adjlist.get(u)) {
-                    if(set.contains(v)) continue;
-                    set.add(v);
-                    for(int i=0;i<routes[v].length;i++) {
-                        queue.offer(routes[v][i]);
-                        if(routes[v][i]==destination) return level+1;
+                if(adjlist.get(u)==null) continue;
+                for(int bus:adjlist.get(u)) {
+                    if(!visited.contains(bus)) {
+                        visited.add(bus);
+                        for(Integer v:routes[bus]) {
+                            queue.offer(v);
+                            if(v==target) return level+1;
+                        }
                     }
                 }
             }
@@ -41,4 +46,5 @@ class Solution {
         }
         return -1;
     }
+    
 }
