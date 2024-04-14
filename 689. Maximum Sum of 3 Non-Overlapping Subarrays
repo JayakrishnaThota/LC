@@ -1,47 +1,46 @@
 //O(n) time and space
 class Solution {
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-        int maxSum = 0;
-        int[] result = new int[3];
-        int n = nums.length;
-        int[] leftPos = new int[n], rightPos = new int[n];
-        int[] sum = new int[n+1];
-        for(int i=1;i<=n;i++) sum[i] = sum[i-1] + nums[i-1];
-        int leftMax = sum[k];
-        for(int i=k;i<n;i++) {
-            int curSum = sum[i+1]-sum[i+1-k];
-            if(curSum>leftMax) {
-                leftMax = curSum;
-                leftPos[i] = i+1-k;
+        int n = nums.length, runningSumOfLastKNums = 0;
+        int[] prefixSumOfLengthK = new int[n+1-k];
+        for(int i=0;i<n;i++) {
+            runningSumOfLastKNums += nums[i];
+            if(i>=k) {
+                runningSumOfLastKNums-=nums[i-k];
             }
-            else {
-                leftPos[i] = leftPos[i-1];
+            if(i>=k-1) {
+                prefixSumOfLengthK[i+1-k] = runningSumOfLastKNums;
             }
         }
-        rightPos[n-k] = n-k;
-        int rightMax = sum[n]-sum[n-k];
-        for(int i=n-k-1;i>=0;i--) {
-            int curSum = sum[i+k]-sum[i];
-            if(curSum>=rightMax) {
-                rightMax = curSum;
-                rightPos[i] = i;
+        int chunksSize = prefixSumOfLengthK.length;
+        int leftMaxIndex = 0, rightMaxIndex = chunksSize-1;
+        int[] left = new int[chunksSize];
+        int[] right = new int[chunksSize];
+        // Populate left
+        for(int i=0;i<chunksSize;i++) {
+            if(prefixSumOfLengthK[i]>prefixSumOfLengthK[leftMaxIndex]) {
+                leftMaxIndex = i;
             }
-            else {
-                rightPos[i] = rightPos[i+1];
+            left[i] = leftMaxIndex;
+        }
+        // Populate right
+        for(int i=chunksSize-1;i>=0;i--) {
+            if(prefixSumOfLengthK[i]>=prefixSumOfLengthK[rightMaxIndex]) {
+                rightMaxIndex = i;
+            }
+            right[i] = rightMaxIndex;
+        }
+        int[] res = new int[3];
+        Arrays.fill(res, -1);
+        for(int j=k;j<chunksSize-k;j++) {
+            int i = left[j-k], l = right[j+k];
+            int curSum = prefixSumOfLengthK[i] + prefixSumOfLengthK[j] + prefixSumOfLengthK[l];
+            if(res[0]==-1 || curSum> prefixSumOfLengthK[res[0]] + prefixSumOfLengthK[res[1]] + prefixSumOfLengthK[res[2]]) {
+                res[0] = i;
+                res[1] = j;
+                res[2] = l;
             }
         }
-        for(int i=k;i<=n-2*k;i++) {
-            int l = leftPos[i-1], r = rightPos[i+k];
-            int a = sum[l+k] - sum[l];
-            int b = sum[i+k] - sum[i];
-            int c = sum[r+k] - sum[r];
-            int curSum = a+b+c;
-            if(curSum>maxSum) {
-                maxSum = curSum;
-                result[0] = l; result[1] = i; result[2] = r;
-            }
-            
-        }
-        return result;
+        return res;
     }
 }
