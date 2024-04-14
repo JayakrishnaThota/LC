@@ -1,23 +1,24 @@
-//O(nlogn) time and O(n) space
+//O(log⁡(n−k)+k) time and O(1) space
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
-        List<Integer> list = new ArrayList<Integer>();
-        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>(){
-            public int compare(int[] i1, int[] i2){
-                if(i1[0]!=i2[0])
-                    return i1[0]-i2[0];
-                else
-                    return i1[1]-i2[1];
+        int n = arr.length;
+        int low = 0, high = n-k;
+        //O(log(n-k)) time
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(x-arr[mid] > arr[mid+k]-x) {
+                low = mid+1;
+            } else {
+                high = mid;
             }
-        });
-        for(int i=0;i<arr.length;i++){
-            pq.offer(new int[]{Math.abs(arr[i]-x), arr[i]});
         }
-        while(list.size()<k){
-            int[] temp = pq.poll();
-            list.add(temp[1]);
+
+        //O(k) time. This can be avoided if the input is a list & then we can use list.subList(low, low+k)
+        List<Integer> result = new ArrayList<Integer>();
+        for (int i = low; i < low + k; i++) {
+            result.add(arr[i]);
         }
-        Collections.sort(list);
-        return list;
+        
+        return result;
     }
 }
