@@ -16,35 +16,32 @@ class Solution {
         Map<Character, Integer> map = new HashMap();
         for(char c:s.toCharArray()) {
             map.put(c, map.getOrDefault(c,0)+1);
-            int val = map.get(c);
-            if(val>((n+1)/2)) return "";
+            if(map.get(c)>((n+1)/2)) return "";
         }
-        PriorityQueue<Tuple> pq = new PriorityQueue(1, new Comparator<Tuple>(){
-            public int compare(Tuple a, Tuple b) {
-                return b.count - a.count;
-            }
-        });
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>((a,b)->(b.count-a.count));
         for(Character key:map.keySet()) {
             pq.offer(new Tuple(key, map.get(key)));
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while(!pq.isEmpty()) {
             Tuple first = pq.poll();
             if(sb.length()==0 || sb.charAt(sb.length()-1)!=first.c) {
-                sb.append(first.c);
-                first.count--;
-                if(first.count==0) continue;
-                pq.offer(first);
+                insertTuple(pq, sb, first);
             }
             else {
                 Tuple second = pq.poll();
-                sb.append(second.c);
-                second.count--;
+                insertTuple(pq, sb, second);
                 pq.offer(first);
-                if(second.count==0) continue;
-                pq.offer(second);
             }
         }
         return sb.toString();
+    }
+
+    private void insertTuple(PriorityQueue<Tuple> pq, StringBuilder sb, Tuple t) {
+        sb.append(t.c);
+        t.count--;
+        if(t.count>0) {
+          pq.offer(t);
+        }
     }
 }
