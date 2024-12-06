@@ -1,0 +1,22 @@
+//O(n) time and O(1) space
+class Solution {
+    public boolean canChange(String start, String target) {
+        int i = 0, j = 0, n = start.length();
+        while(i<n || j<n) {
+            // Skip underscores in start
+            while(i<n && start.charAt(i)=='_') i++;
+            // Skip underscores in target
+            while(j<n && target.charAt(j)=='_') j++;
+            if(i<n && j<n) {
+                if(start.charAt(i)!=target.charAt(j)) return false;
+                if(start.charAt(i)=='R' && i>j) return false;
+                if(target.charAt(j)=='L' && i<j) return false;
+                i++;
+                j++;
+            } else {
+                return (i == n) && (j == n);
+            }
+        }
+        return (i == n) && (j == n);
+    }
+}
