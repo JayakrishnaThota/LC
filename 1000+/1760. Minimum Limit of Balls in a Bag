@@ -1,0 +1,31 @@
+// O(N * log M) tc and O(1) sc
+// N - Number of elements in the nums array
+// M - Maximum value in the nums array
+class Solution {
+    public int minimumSize(int[] nums, int maxOperations) {
+        int low = 1, high = 1;
+        for(int num:nums) {
+            high = Math.max(num, high);
+        }
+        while(low<high) {
+            int mid = low + (high-low)/2;
+            if(!helper(nums, maxOperations, mid)) {
+                low = mid+1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+    private boolean helper(int[] nums, int maxOperations, int maxSize) {
+        int operations = 0;
+        for (int num : nums) {
+            operations += (num - 1) / maxSize;
+            if (operations > maxOperations) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
