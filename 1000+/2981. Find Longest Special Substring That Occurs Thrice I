@@ -1,0 +1,23 @@
+//O(n^3) time and O(n^2) space
+class Solution {
+    public int maximumLength(String s) {
+        if(s==null || s.length()==0) return -1;
+        int n = s.length(), res = 0;
+        Map<String, Integer> countMap = new HashMap();
+        for(int start=0;start<n;start++) {
+            StringBuilder cur = new StringBuilder();
+            for(int end=start;end<n;end++) {
+                if(cur.length()==0 || cur.charAt(cur.length()-1)==s.charAt(end)) {
+                    cur.append(s.charAt(end));
+                    countMap.put(cur.toString(), countMap.getOrDefault(cur.toString(), 0) + 1);
+                } else 
+                    break;
+            }
+        }
+        for(String key:countMap.keySet()) {
+            if(countMap.get(key) >= 3 && key.length() > res)
+                res = key.length(); 
+        }
+        return (res==0) ? -1 : res;
+    }
+}
