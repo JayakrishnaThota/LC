@@ -21,3 +21,39 @@ class Solution {
         return (res==0) ? -1 : res;
     }
 }
+
+// O(n^2) time and O(n^2) space
+class Solution {
+
+    public int maximumLength(String s) {
+        if (s == null || s.length() == 0) return -1;
+        int n = s.length(), res = 0;
+        Map<String, Integer> countMap = new HashMap<>();
+        
+        for (int start = 0; start < n; start++) {
+            char cur = s.charAt(start);
+            int len = 0;
+
+            for (int end = start; end < n; end++) {
+                if (cur == s.charAt(end)) {
+                    len++;
+                    String key = cur + ":" + len; // Create a unique key for each Pair
+                    countMap.put(key, countMap.getOrDefault(key, 0) + 1);
+                } else {
+                    break; // Stop extending if the substring is no longer "special"
+                }
+            }
+        }
+
+        for (String key : countMap.keySet()) {
+            int count = countMap.get(key);
+            int length = Integer.parseInt(key.split(":")[1]);
+            if (count >= 3 && length > res) {
+                res = length;
+            }
+        }
+
+        return (res == 0) ? -1 : res;
+    }
+}
+
