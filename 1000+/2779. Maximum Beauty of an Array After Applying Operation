@@ -1,0 +1,15 @@
+//O(nlogn) time and O(1) space
+class Solution {
+    public int maximumBeauty(int[] nums, int k) {
+        Arrays.sort(nums);
+        //Find longest window where max-min<=2*k
+        int left = 0, n = nums.length, max = 0;
+        for(int right=0;right<n;right++) {
+            if(nums[right]-nums[left]>2*k) {
+                left++;
+            }
+            max = Math.max(max, right+1-left);
+        }
+        return max;
+    }
+}
