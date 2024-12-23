@@ -1,0 +1,44 @@
+// O(nlogn) time and O(n) space
+class Solution {
+    public int minimumOperations(TreeNode root) {
+        if(root==null) return 0;
+        Queue<TreeNode> queue = new LinkedList();
+        int res = 0;
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList();
+            for(int k=0;k<size;k++) {
+                TreeNode node = queue.poll();
+                if(node.left!=null) queue.offer(node.left);
+                if(node.right!=null) queue.offer(node.right);
+                list.add(node.val);
+            }
+            res += helper(list);
+        }
+        return res;
+    }
+
+    private int helper(List<Integer> list) {
+        List<Integer> sortedList = new ArrayList<>(list);
+        Collections.sort(sortedList);
+
+        Map<Integer, Integer> posMap = new HashMap<>();
+        int res = 0, n = list.size();
+        for (int i = 0; i < n; i++) {
+            posMap.put(list.get(i), i);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (!list.get(i).equals(sortedList.get(i))) {
+                res++;
+                int correctIndex = posMap.get(sortedList.get(i));
+                posMap.put(list.get(i), correctIndex);
+                posMap.put(sortedList.get(i), i);
+                Collections.swap(list, i, correctIndex);
+            }
+        }
+        return res;
+    }
+
+}
