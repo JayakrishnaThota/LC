@@ -1,40 +1,12 @@
-//O(n) and O(n)
+//O(n) time and O(1) space
 class Solution {
     public int removeElement(int[] nums, int val) {
-        //Sanity Check
-        if(nums==null || nums.length==0) return 0;
-        int[] aux = new int[nums.length];
-        int ap = 0, np = 0;
-        while(np<nums.length){
-            if(val==nums[np]){
-                np++;
-            }
-            else{
-                aux[ap++] = nums[np++];
+        int index = 0;
+        for(int num:nums) {
+            if(num!=val) {
+                nums[index++] = num;
             }
         }
-        for(int i=0;i<ap;i++){
-            nums[i] = aux[i];
-        }
-        return ap;
-    }
-}
-
-
-//O(n) and O(1)
-class Solution {
-    public int removeElement(int[] nums, int val) {
-        //Sanity Check
-        if(nums==null || nums.length==0) return 0;
-        int ap = 0, np = 0;
-        while(np<nums.length){
-            if(val==nums[np]){
-                np++;
-            }
-            else{
-                nums[ap++] = nums[np++];
-            }
-        }
-        return ap;
+        return index;
     }
 }
