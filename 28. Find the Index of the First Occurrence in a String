@@ -1,0 +1,60 @@
+//O(mn) time and O(1) space
+class Solution {
+    public int strStr(String haystack, String needle) {
+        if(needle.length()==0) return 0;
+        if(haystack.length()==0) return -1;
+        int m = haystack.length(), n = needle.length(), i = 0;
+        while(i<m+1-n) {
+            int j = 0;
+            while(j<n && haystack.charAt(i+j)==needle.charAt(j)) {
+                j++;
+            }
+            if(j==n) return i;
+            i++;
+        }
+        return -1;
+    }
+}
+
+
+//O(m+n) time and O(n) space
+class Solution {
+    public int strStr(String haystack, String needle) {
+        if(needle.length()==0) return 0;
+        if(haystack.length()==0) return -1;
+        int m = haystack.length(), n = needle.length();
+        int[] lps = longestPrefixWhichIsAlsoSuffix(needle, n);
+        int i = 0, j = 0;
+        while(i<m && j<n) {
+            if(haystack.charAt(i)==needle.charAt(j)) {
+                if(j+1==n) return i+1-n;
+                i++;
+                j++;
+            } else if(j>0) {
+                j = lps[j-1];
+            } else {
+                i++;
+            }
+        }
+        return -1;
+    }
+
+    // This method rerturn lps table
+    // longest proper prefix of the substring that is also a suffix of the same substring.
+    private int[] longestPrefixWhichIsAlsoSuffix(String needle, int n) {
+        int[] lps = new int[n];
+        int i = 1, j = 0;
+        while(i<n) {
+            if(needle.charAt(i)==needle.charAt(j)) {
+                lps[i] = j+1;
+                i++;
+                j++;
+            } else if(j>0) {
+                j = lps[j-1];
+            } else {
+                i++;
+            }
+        }
+        return lps;
+    }
+}
