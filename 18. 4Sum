@@ -1,39 +1,31 @@
-//O(n3) time and O(1) space
+//O(n^3) time and O(1) space
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
-        List<List<Integer>> list = new ArrayList();
-        //Sanity Check
-        if(nums==null || nums.length<4) return list;
+        List<List<Integer>> res = new ArrayList();
+        if(nums==null || nums.length<4) return res;
         int n = nums.length;
         Arrays.sort(nums);
-        for(int i=0;i<n-3;i++){
-            if(i>0 && nums[i]==nums[i-1]) continue;
-            for(int j=i+1;j<n-2;j++){
-                if(j>i+1 && nums[j]==nums[j-1]) continue;
-                int low = j+1, high = n-1;
-                while(low<high){
-                    int sum = nums[i] + nums[j] + nums[low] + nums[high];
-                    if(sum==target){
-                        List<Integer> sublist = new ArrayList();
-                        sublist.add(nums[i]);
-                        sublist.add(nums[j]);
-                        sublist.add(nums[low]);
-                        sublist.add(nums[high]);
-                        list.add(sublist);
-                        while(low<high && nums[low]==nums[low+1]) low++;  
+        for(int j=0;j<n-3;j++) {
+            if(j>0 && nums[j]==nums[j-1]) continue;
+            for(int i=j+1;i<n-2;i++) {    
+                if(i>j+1 && nums[i]==nums[i-1]) continue;
+                int low = i+1, high = n-1;
+                while(low<high) {
+                    long sum = (long) nums[j] + nums[i] + nums[low] + nums[high];
+                    if(sum==target) {
+                        res.add(Arrays.asList(nums[i], nums[low], nums[high], nums[j]));
+                        while(low<high && nums[low]==nums[low+1]) low++;
                         while(low<high && nums[high]==nums[high-1]) high--;
                         low++;
                         high--;
-                    }
-                    else if(sum<target){
-                        low++;
-                    }
-                    else{
+                    } else if (sum>target) {
                         high--;
+                    } else {
+                        low++;
                     }
                 }
             }
         }
-        return list;
+        return res;
     }
 }
