@@ -1,38 +1,51 @@
-//O(nk) time and O(m) space
+// O(n * wordLen) time and O(wordLen) space
 class Solution {
     public List<Integer> findSubstring(String s, String[] words) {
-        List<Integer> list = new ArrayList();
-        if(s==null || s.length()==0) return list;
+        List<Integer> result = new ArrayList<>();
+        if (s == null || s.length() == 0 || words == null || words.length == 0) return result;
+        int wordLen = words[0].length();
+        int numWords = words.length;
+        int totalLen = wordLen * numWords;
         int n = s.length();
-        Map<String, Integer> map = new HashMap();
-        int m = words.length;
-        int k = words[0].length();
-        for(String word:words){
-            map.put(word, map.getOrDefault(word,0)+1);
+        if (n < totalLen) return result;
+
+        // Create a frequency map for words
+        Map<String, Integer> wordCount = new HashMap<>();
+        for (String word : words) {
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
         }
-        Map<String, Integer> copy = new HashMap(map);
-        for(int i=0;i<=(n-m*k);i++){
-            map = new HashMap(copy);
-            int j = i;
-            while(true){
-                String key = s.substring(j,j+k);
-                if(map.containsKey(key) && map.get(key)>0){
-                    map.put(key,map.get(key)-1);
-                    if(map.get(key)==0) map.remove(key);
-                    if(map.size()==0){
-                        list.add(i);
-                        map = new HashMap(copy);
-                        break;
+
+        // Sliding window over each possible starting index
+        for (int i = 0; i < wordLen; i++) {
+            int left = i, right = i, count = 0;
+            Map<String, Integer> seen = new HashMap<>();
+
+            while (right + wordLen <= n) {
+                String word = s.substring(right, right + wordLen);
+                right += wordLen;
+
+                if (wordCount.containsKey(word)) {
+                    seen.put(word, seen.getOrDefault(word, 0) + 1);
+                    count++;
+
+                    while (seen.get(word) > wordCount.get(word)) {
+                        String leftWord = s.substring(left, left + wordLen);
+                        seen.put(leftWord, seen.get(leftWord) - 1);
+                        left += wordLen;
+                        count--;
                     }
-                    else{
-                        j+=k;
+
+                    if (count == numWords) {
+                        result.add(left);
                     }
-                }
-                else{
-                    break;
+                } else {
+                    seen.clear();
+                    count = 0;
+                    left = right;
                 }
             }
         }
-        return list;
+
+        return result;
     }
 }
