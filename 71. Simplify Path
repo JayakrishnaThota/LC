@@ -1,28 +1,14 @@
 //O(n) time and space
 class Solution {
     public String simplifyPath(String path) {
-        if(path==null || path.length()==0) return path;
-        int n = path.length();
-        Stack<String> stack = new Stack();
-        Set<String> set = new HashSet(Arrays.asList("..",".",""));
-        for(String p:path.split("/")) {
-            if(p.equals("..") && !stack.isEmpty()) stack.pop();
-            else if(!set.contains(p)) stack.push(p);
+        Stack<String> stack = new Stack<>();
+        Set<String> skip = new HashSet<>(Arrays.asList("..", ".", ""));
+        
+        for (String dir : path.split("/")) {
+            if (dir.equals("..") && !stack.isEmpty()) stack.pop();
+            else if (!skip.contains(dir)) stack.push(dir);
         }
-        StringBuffer sb = new StringBuffer();
-        while(!stack.isEmpty()) { String s = reverse(stack.pop()); sb.append(s+"/"); }
-        return (sb.length()==0)?"/":sb.reverse().toString();
+        
+        return "/" + String.join("/", stack);
     }
-    
-    public String reverse(String s) {
-        char[] ch = s.toCharArray();
-        int low = 0, high = ch.length-1;
-        while(low<high) {
-            char temp = ch[low];
-            ch[low++] = ch[high];
-            ch[high--] = temp;
-        }
-        return String.valueOf(ch);
-    }
-    
 }
