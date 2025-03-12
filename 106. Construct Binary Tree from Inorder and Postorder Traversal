@@ -1,17 +1,21 @@
 //O(n) time and space
-public class Solution {
+class Solution {
+    private Map<Integer, Integer> inorderMap;
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        return helper(postorder,0,postorder.length-1,inorder,0,inorder.length-1);
+        inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        return helper(postorder, 0, postorder.length - 1, inorder, 0, inorder.length - 1);
     }
-     public TreeNode helper(int[] postorder, int poststart, int postend, int[] inorder, int instart, int inend)
-    {
-        if(poststart>postend||instart>inend) return null;
-        int data = postorder[postend];
-        TreeNode curr = new TreeNode(data);
-        int offset = instart;
-        for(;offset<inend;offset++) { if(inorder[offset]==data) break; }
-        curr.left = helper(postorder,poststart,poststart+offset-instart-1,inorder,instart,offset-1);
-        curr.right = helper(postorder,poststart+offset-instart,postend-1,inorder,offset+1,inend);
-        return curr;
+
+    private TreeNode helper(int[] postorder, int ps, int pe, int[] inorder, int is, int ie) {
+        if (ps > pe || is > ie) return null;
+
+        TreeNode root = new TreeNode(postorder[pe]);
+        int offset = inorderMap.get(postorder[pe]);
+        root.left = helper(postorder, ps, ps+offset-is-1, inorder, is, offset - 1);
+        root.right = helper(postorder, ps+offset - is , pe - 1, inorder, offset + 1, ie);
+        return root;
     }
 }
