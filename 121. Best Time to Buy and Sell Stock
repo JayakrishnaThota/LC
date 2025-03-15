@@ -1,12 +1,12 @@
 //O(n) time and O(1) space
 class Solution {
     public int maxProfit(int[] prices) {
-        if(prices==null || prices.length<2)
-            return 0;
-        int b0 = -prices[0], s0 = 0;
-        for(int i=1;i<prices.length;i++) {
-            s0 = Math.max(s0, prices[i]+b0);
-            b0 = Math.max(b0, -prices[i]);
+         if(prices==null || prices.length<2) return 0;
+        int b0 = Integer.MAX_VALUE;
+        int s0 = 0;
+        for(int price:prices) {
+           b0 = Math.min(b0, price);
+           s0 = Math.max(s0, price-b0);
         }
         return s0;
     }
