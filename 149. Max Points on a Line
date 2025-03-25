@@ -1,48 +1,40 @@
-//O(n2) time and O(n2) space
+//O(n^2) time and O(n) space
 class Solution {
-    public int maxPoints(Point[] points) {
-        if(points==null || points.length==0) return 0;
-        if(points.length<=2) return points.length;
-        Map<Integer,Map<Integer,Integer>> map = new HashMap();
+    public int maxPoints(int[][] points) {
+        if (points == null || points.length == 0) return 0;
+        if (points.length <= 2) return points.length;
+        
         int result = 0;
-        for(int i=0;i<points.length;i++){
-            map.clear();
+        for (int i = 0; i < points.length; i++) {
+            Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
             int overlap = 0, line = 0;
-            for(int j=i+1;j<points.length;j++){
-                int x = points[i].x - points[j].x;
-                int y = points[i].y - points[j].y;
-                if(x==0 && y==0){
+            
+            for (int j = i + 1; j < points.length; j++) {
+                int x = points[i][0] - points[j][0];
+                int y = points[i][1] - points[j][1];
+                
+                if (x == 0 && y == 0) {
                     overlap++;
                     continue;
                 }
-                int gcd = gcd(x,y);
-                if(gcd!=0){
-                    x/=gcd;
-                    y/=gcd;
+                
+                int gcd = gcd(x, y);
+                if (gcd != 0) {
+                    x /= gcd;
+                    y /= gcd;
                 }
-                if(map.containsKey(x)){
-                    if(map.get(x).containsKey(y)){
-                        map.get(x).put(y, map.get(x).get(y)+1);
-                    }
-                    else{
-                        map.get(x).put(y,1);
-                    }
-                }
-                else{
-                    Map<Integer, Integer> m = new HashMap();
-                    m.put(y,1);
-                    map.put(x,m);
-                }
-                 line = Math.max(line,map.get(x).get(y));
+                
+                map.putIfAbsent(x, new HashMap<>());
+                map.get(x).put(y, map.get(x).getOrDefault(y, 0) + 1);
+                
+                line = Math.max(line, map.get(x).get(y));
             }
-            result = Math.max(result, line+overlap+1);
+            result = Math.max(result, line + overlap + 1);
         }
         return result;
     }
     
-    public int gcd(int a, int b){
-        if(b==0) return a;
-        else return gcd(b,a%b);
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
     }
-    
 }
