@@ -5,30 +5,27 @@ class Solution {
         if(nums==null || nums.length==0) return list;
         int n = nums.length;
         int count = 1;
-        String temp = nums[0]+"";
-        StringBuffer sb = new StringBuffer();
+        int prev = nums[0];
         for(int i=1;i<n;i++){
             if((nums[i]==nums[i-1]+1)){
                 count++;
             }
             else{
                 if(count==1){
-                    list.add(temp);
-                    temp = nums[i] + "";
-                    count = 1;
+                    list.add(prev+"");
                 }
                 else{
-                    list.add(temp+"->"+nums[i-1]);
-                    temp = nums[i]  + "";
-                    count = 1;
+                    list.add(prev+"->"+nums[i-1]);
                 }
+                prev = nums[i];
+                count = 1;
             }
         }
         if(count==1){
-            list.add(temp);
+            list.add(prev+"");
         }
         else{
-            list.add(temp+"->"+nums[n-1]);
+            list.add(prev+"->"+nums[n-1]);
         }
         return list;
     }
