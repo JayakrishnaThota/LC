@@ -1,4 +1,5 @@
-//O(log(n2)) time and O(n) space
+//O(log^2(n)) time and O(logn) space
+// T(n) = T(n/2) + O(logn)
 class Solution {
     public int countNodes(TreeNode root) {
         if(root==null) return 0;
