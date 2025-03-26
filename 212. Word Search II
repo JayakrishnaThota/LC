@@ -1,5 +1,5 @@
 class Solution {
-    
+
     class TrieNode {
         TrieNode[] children;
         String word;
@@ -8,34 +8,34 @@ class Solution {
             word = null;
         }
     }
-    
-    //O(n) time and space
-    public void addWord(String word, TrieNode node) {
+
+    private void addWord(String word, TrieNode node) {
         for(char c:word.toCharArray()) {
-            int index = c-'a';
-            if(node.children[index]==null) node.children[index] = new TrieNode();
-            node = node.children[index];
+            if(node.children[c-'a'] == null) {
+                node.children[c-'a'] = new TrieNode();
+            }
+            node = node.children[c-'a'];
         }
         node.word = word;
     }
-    
-    public TrieNode buildTrie(String[] words) {
+
+    private TrieNode buildTrie(String[] words) {
         TrieNode root = new TrieNode();
         for(String word:words) {
             addWord(word, root);
         }
         return root;
     }
-    
-    public void helper(char[][] board, int i, int j, TrieNode node, List<String> result) {
-        if(board[i][j]=='#' || node.children[board[i][j]-'a']==null) return;
-        char c = board[i][j];
-        board[i][j] = '#';
-        node = node.children[c-'a'];
+
+    private void helper(char[][] board, int i, int j, TrieNode node, List<String> result) {
+        if(board[i][j]=='*' || node.children[board[i][j]-'a']==null) return;
+        node = node.children[board[i][j]-'a'];
         if(node.word!=null) {
             result.add(node.word);
             node.word = null;
         }
+        char c = board[i][j];
+        board[i][j] = '*';
         if(i>0) helper(board, i-1, j, node, result);
         if(j>0) helper(board, i, j-1, node, result);
         if(i<board.length-1) helper(board, i+1, j, node, result);
@@ -43,14 +43,14 @@ class Solution {
         board[i][j] = c;
     }
     
-    //O(mn*k^26) time and O(k) space
+    //O(k×L+m×n×L) time and O(k×L) space
     public List<String> findWords(char[][] board, String[] words) {
         List<String> result = new ArrayList();
-        if(words==null || words.length==0) return result;
+        if(board==null || board.length==0 || words==null || words.length==0) return result;
         TrieNode root = buildTrie(words);
         for(int i=0;i<board.length;i++) {
             for(int j=0;j<board[0].length;j++) {
-                helper(board,i,j,root,result);
+                helper(board, i, j, root, result);
             }
         }
         return result;
