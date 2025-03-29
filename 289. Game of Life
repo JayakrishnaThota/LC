@@ -1,5 +1,6 @@
 //O(mn) time and O(1) space
 class Solution {
+    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
     public void gameOfLife(int[][] board) {
         if(board==null || board.length==0) return;
         int m = board.length, n = board[0].length;
@@ -23,17 +24,11 @@ class Solution {
     
     public int count(int[][] board, int i, int j, int m, int n){
         int count = 0;
-        for(int x=-1;x<=1;x++){
-            for(int y=-1;y<=1;y++){
-                if(x==0 && y==0) continue;
-                count+=dfs(board,i+x,j+y,m,n);
-            }
+        for(int[] dir:dirs) {
+            int x = i + dir[0], y = j + dir[1];
+            if(x<0 || x>=m || y<0 || y>=n || ((board[x][y]&1)==0)) continue;
+            count++;
         }
         return count;
-    }
-    
-    public int dfs(int[][] board, int i, int j, int m, int n){
-        if(i<0 || j<0 || i>=m || j>=n || (board[i][j]&1)==0) return 0;
-        return 1;
     }
 }
