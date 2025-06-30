@@ -2,7 +2,7 @@ class Solution {
     Map<Integer, Map<Integer, Integer>> adjlist;
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
         construct(flights);
-        return dijkstra(n, src, dst, k);
+        return dijkstra(src, dst, k);
     }
 
     //O(e) time and O(v+e) space
@@ -16,7 +16,7 @@ class Solution {
     }
 
     //O(elogv) time and O(v*k + e) space
-    private int dijkstra(int n, int src, int dst, int k) {
+    private int dijkstra(int src, int dst, int k) {
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
         pq.offer(new int[]{0, src, 0}); // cost, node, stops
 
