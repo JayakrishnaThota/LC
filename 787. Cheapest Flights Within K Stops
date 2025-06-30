@@ -1,60 +1,52 @@
-//O(E+NlogN) time and O(V+E) space
 class Solution {
     Map<Integer, Map<Integer, Integer>> adjlist;
-    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-        construct(flights, n);
-        return dijkstras(src, dst, K);
-    }
-    
-    public void construct(int[][] flights, int n) {
-        adjlist = new HashMap();
-        for(int i=0;i<n;i++) {
-            adjlist.put(i, new HashMap());
-        }
-        for(int[] flight:flights) {
-            int u = flight[0], v = flight[1], w = flight[2];
-            adjlist.get(u).put(v,w);
-        }
-    }
-    
-    public int dijkstras(int s, int d, int k) {
-        PriorityQueue<int[]> pq = new PriorityQueue(1, new Comparator<int[]>(){
-            public int compare(int[] a, int[] b) {
-                return a[1]-b[1];
-            }
-        });
-        pq.offer(new int[]{s, 0, 0});
-        while(!pq.isEmpty()) {
-            int[] cell = pq.poll();
-            int u = cell[0], distance = cell[1], stops = cell[2];
-            if(u==d) return distance;
-            if(stops<=k) {
-                Map<Integer, Integer> map = adjlist.get(u);
-                for(int v:map.keySet()) {
-                    pq.offer(new int[]{v, distance+map.get(v), stops+1});
-                }
-            }
-        }
-        return -1;
-    }
-}
-
-
-//O(VE) time and O(V) space
-class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        int[] prices = new int[n];
-        Arrays.fill(prices, Integer.MAX_VALUE);
-        prices[src] = 0;
-        for(int i=0;i<=k;i++) {
-            int[] temp = Arrays.copyOf(prices, n);
-            for(int[] f:flights) {
-                int u = f[0], v = f[1], w = f[2];
-                if(prices[u]==Integer.MAX_VALUE) continue;
-                temp[v] = Math.min(temp[v], prices[u] + w);
-            }
-            prices = temp;
+        construct(flights);
+        return dijkstra(n, src, dst, k);
+    }
+
+    //O(e) time and O(v+e) space
+    private void construct(int[][] flights) {
+        adjlist = new HashMap<>();
+        for (int[] flight : flights) {
+            int u = flight[0], v = flight[1], w = flight[2];
+            adjlist.putIfAbsent(u, new HashMap<>());
+            adjlist.get(u).put(v, w);
         }
-        return (prices[dst]==Integer.MAX_VALUE) ? -1 : prices[dst];
+    }
+
+    //O(elogv) time and O(v*k + e) space
+    private int dijkstra(int n, int src, int dst, int k) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.offer(new int[]{0, src, 0}); // cost, node, stops
+
+        Map<Integer, Integer> visitedStops = new HashMap<>();
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int cost = curr[0], node = curr[1], stops = curr[2];
+
+            if (node == dst) {
+                return cost;
+            }
+
+            if (visitedStops.containsKey(node) && visitedStops.get(node) <= stops) {
+                continue;
+            }
+
+            visitedStops.put(node, stops);
+
+            if (stops > k) {
+                continue;
+            }
+
+            Map<Integer, Integer> neighbors = adjlist.getOrDefault(node, new HashMap<>());
+            for (Integer neighbor : neighbors.keySet()) {
+                int price = neighbors.get(neighbor);
+                pq.offer(new int[]{cost + price, neighbor, stops + 1});
+            }
+        }
+
+        return -1;
     }
 }
