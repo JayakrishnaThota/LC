@@ -7,21 +7,46 @@
  * };
  */
 
+
 //O(V+E) time and O(V) space
-public class Solution {
-    Map<Integer, UndirectedGraphNode> map;
-    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+class Solution {
+    Map<Node, Node> map;
+    public Node cloneGraph(Node node) {
         map = new HashMap();
-        return helper(node);
+        return dfs(node);
     }
-    public UndirectedGraphNode helper(UndirectedGraphNode node){
-        if(node==null) return null;
-        if(map.containsKey(node.label)) return map.get(node.label);
-        UndirectedGraphNode ret = new UndirectedGraphNode(node.label);
-        map.put(node.label,ret);
-        for(UndirectedGraphNode neighbor:node.neighbors){
-            ret.neighbors.add(helper(neighbor));
+
+    private Node dfs(Node node) {
+        if(node==null) return node;
+        if(map.containsKey(node)) return map.get(node);
+        Node cloneNode = new Node(node.val);
+        map.put(node, cloneNode);
+        for(Node neighbor:node.neighbors) {
+            cloneNode.neighbors.add(dfs(neighbor));
         }
-        return ret;
+        return cloneNode;
+    }
+}
+
+
+//O(V+E) time and O(V) space
+class Solution {
+    public Node cloneGraph(Node node) {
+        if(node==null) return node;
+        Queue<Node> queue = new LinkedList();
+        Map<Node, Node> visited = new HashMap();
+        queue.offer(node);
+        visited.put(node, new Node(node.val));
+        while(!queue.isEmpty()) {
+            Node originalNode = queue.poll();
+            for(Node neighbor:originalNode.neighbors) {
+                if(!visited.containsKey(neighbor)) {
+                    queue.offer(neighbor);
+                    visited.put(neighbor, new Node(neighbor.val));
+                }
+                visited.get(originalNode).neighbors.add(visited.get(neighbor));
+            }
+        }
+        return visited.get(node);
     }
 }
