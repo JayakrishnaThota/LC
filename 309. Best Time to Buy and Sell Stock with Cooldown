@@ -1,4 +1,4 @@
-//O(n) and O(1)
+//O(n) and O(n)
 class Solution {
     public int maxProfit(int[] prices) {
         if (prices == null || prices.length < 2) return 0;
