@@ -1,19 +1,25 @@
+//O(n*n!) time and space
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> list = new ArrayList();
-        helper(list, new ArrayList<>(), nums);
-        return list;
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> list = new ArrayList();
+        boolean[] used = new boolean[nums.length];
+        backtrack(result, list, nums, used);
+        return result; 
     }
-    public void helper(List<List<Integer>> list, List<Integer> sublist, int[] nums){
-        if(sublist.size()==nums.length){
-            list.add(new ArrayList(sublist));
+
+    private void backtrack(List<List<Integer>> result, List<Integer> list, int[] nums, boolean[] used) {
+        if(list.size()==nums.length) {
+            result.add(new ArrayList(list));
             return;
         }
-        for(int i=0;i<nums.length;i++){
-            if(sublist.contains(nums[i])) continue;
-            sublist.add(nums[i]);
-            helper(list, sublist, nums);
-            sublist.remove(sublist.size()-1);
+        for(int i=0;i<nums.length;i++) {
+            if(used[i]) continue;
+            list.add(nums[i]);
+            used[i] = true;
+            backtrack(result, list, nums, used);
+            list.remove(list.size()-1);
+            used[i] = false;
         }
     }
 }
