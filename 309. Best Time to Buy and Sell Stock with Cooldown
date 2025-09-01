@@ -1,16 +1,33 @@
 //O(n) and O(1)
 class Solution {
     public int maxProfit(int[] prices) {
-    if(prices == null || prices.length <= 1) return 0;
-  
-    int b0 = -prices[0], b1 = b0;
-    int s0 = 0, s1 = 0, s2 = 0;
- 
-    for(int i = 1; i < prices.length; i++) {
-    	b0 = Math.max(b1, s2 - prices[i]);
-    	s0 = Math.max(s1, b1 + prices[i]);
-    	b1 = b0; s2 = s1; s1 = s0; 
+        if (prices == null || prices.length < 2) return 0;
+        int n = prices.length;
+        
+        // b[i] = max profit ending on day i, with a stock in hand
+        int[] b = new int[n];
+        
+        // s[i] = max profit ending on day i, with no stock in hand
+        int[] s = new int[n];
+        
+        // Base cases for day 0
+        b[0] = -prices[0];
+        s[0] = 0;
+        
+        for (int i = 1; i < n; i++) {
+            // Recurrence for b[i]: 
+            // 1. You hold a stock from the previous day (b[i-1]).
+            // 2. You buy a stock today. This is only possible if you sold it two days ago (s[i-2]) 
+            //    due to the cooldown. If i < 2, the profit from selling two days ago is 0.
+            b[i] = Math.max(b[i - 1], (i >= 2 ? s[i - 2] : 0) - prices[i]);
+            
+            // Recurrence for s[i]:
+            // 1. You don't hold a stock from the previous day (s[i-1]).
+            // 2. You sell a stock today (b[i-1] + prices[i]).
+            s[i] = Math.max(s[i - 1], b[i - 1] + prices[i]);
+        }
+        
+        // The maximum profit at the end is the profit on the last day, with no stock in hand.
+        return s[n - 1];
     }
-    return s0;
-}
 }
