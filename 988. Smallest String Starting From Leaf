@@ -1,24 +1,25 @@
-//O(n) time and space
+//O(n*h) time and O(h) space
 class Solution {
+    String smallest = null;
     public String smallestFromLeaf(TreeNode root) {
-        return dfs(root, "");
+        if(root==null) return "";
+        dfs(root, new StringBuilder());
+        return smallest;
     }
 
-    public String dfs(TreeNode node, String suffix) {
-        if(null == node) {
-            return suffix;
+    private void dfs(TreeNode node, StringBuilder path) {
+        if(node==null) return;
+        char cur = (char)(node.val+'a');
+        path.insert(0, cur);
+        if(node.left == null && node.right == null) {
+            String pathString = path.toString();
+            if(smallest == null || smallest.compareTo(pathString) > 0) {
+                smallest = pathString;
+            }
+        } else {
+            dfs(node.left, path);
+            dfs(node.right, path);
         }
-        suffix = "" + (char)('a' + node.val) + suffix;
-        if(null == node.left && null == node.right) {
-            return suffix;
-        }
-        if(null == node.left || null == node.right) {
-            return (null == node.left)? dfs(node.right, suffix) :dfs(node.left, suffix);
-        }
-
-        String left = dfs(node.left, suffix);
-        String right = dfs(node.right, suffix);
-
-        return left.compareTo(right) <= 0? left: right;
+        path.deleteCharAt(0);
     }
 }
