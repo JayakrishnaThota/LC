@@ -40,26 +40,29 @@ Given the list [1,[4,[6]]], return 17. (one 1 at depth 3, one 4 at depth 2, and 
 */
 
 class Solution {
-    public int depthSumInverse(List<NestedInteger> nestedList) {
-        if(nestedList==null || nestedList.size()==0) return 0;
-        int maxDepth = maxDepth(nestedList);
-        return dfs(nestedList, maxDepth);
-    }
-    public int maxDepth(List<NestedInteger> nestedList){
-        if(nestedList==null || nestedList.size()==0) return 0;
-        int maxDepth = 0;
-        for(NestedInteger nl:nestedList){
-            if(nl.isInteger()) maxDepth = Math.max(maxDepth, 1);
-            else maxDepth = Math.max(maxDepth, 1+maxDepth(nl.getList()));
+     public int depthSumInverse(List<NestedInteger> nestedList) {
+        if (nestedList == null || nestedList.isEmpty()) return 0;
+        Queue<NestedInteger> q = new LinkedList<>();
+        for (NestedInteger ni : nestedList) q.offer(ni);
+
+        int unweighted = 0;
+        int weighted = 0;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            int levelSum = 0;
+            for (int i = 0; i < size; i++) {
+                NestedInteger cur = q.poll();
+                if (cur.isInteger()) {
+                    levelSum += cur.getInteger();
+                } else {
+                    for (NestedInteger child : cur.getList()) q.offer(child);
+                }
+            }
+            unweighted += levelSum;
+            weighted += unweighted;
         }
-        return maxDepth;
-    }
-    public int dfs(List<NestedInteger> nestedList, int level){
-        int sum = 0;
-        for(NestedInteger nl:nestedList){
-            if(nl.isInteger()) sum = sum + level*nl.getInteger();
-            else sum = sum + dfs(nl.getList(), level-1);
-        }
-        return sum;
+
+        return weighted;
     }
 }
