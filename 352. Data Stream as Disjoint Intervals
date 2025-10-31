@@ -15,6 +15,7 @@ class SummaryRanges {
         map = new TreeMap();
     }
     
+    //O(logk) time
     public void addNum(int val) {
         if(map.containsKey(val)) return;
         Integer l = map.lowerKey(val);
@@ -35,14 +36,13 @@ class SummaryRanges {
         }
     }
     
+    //O(k) time
     public int[][] getIntervals() {
         int[][] result = new int[map.values().size()][2];
         int index = 0;
-        for(Integer key:map.keySet()) {
-            Interval i = map.get(key);
+        for(Interval i:map.values()) {
             result[index][0] = i.start;
-            result[index][1] = i.end;
-            index++;
+            result[index++][1] = i.end;
         }
         return result;
     }
