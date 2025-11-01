@@ -2,12 +2,12 @@
 class Solution {
     public int pathSum(TreeNode root, int targetSum) {
         if(root==null) return 0;
-        Map<Integer, Integer> map = new HashMap();
-        map.put(0,1);
+        Map<Long, Integer> map = new HashMap();
+        map.put(0L,1);
         return preOrder(root, targetSum, 0, map);
     }
     
-    public int preOrder(TreeNode root, int targetSum, int curSum, Map<Integer, Integer> map) {
+    public int preOrder(TreeNode root, long targetSum, long curSum, Map<Long, Integer> map) {
         if(root==null) return 0;
         curSum+=root.val;
         int res = map.getOrDefault(curSum-targetSum, 0);
