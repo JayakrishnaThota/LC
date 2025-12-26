@@ -1,31 +1,51 @@
 class BoundedBlockingQueue {
 
-    private Semaphore enq;
-
-    private Semaphore deq;
-
-    ConcurrentLinkedDeque<Integer> q;
-
+    int capacity;
+    Queue<Integer> queue;
+    ReentrantLock lock;
+    Condition notFull;
+    Condition notEmpty;
     public BoundedBlockingQueue(int capacity) {
-        q =  new ConcurrentLinkedDeque<>();
-        enq = new Semaphore(capacity);
-        deq = new Semaphore(0);
+        this.capacity = capacity;
+        this.queue = new LinkedList();
+        lock = new ReentrantLock();
+        notFull = lock.newCondition();
+        notEmpty = lock.newCondition();
     }
-
+    
     public void enqueue(int element) throws InterruptedException {
-        enq.acquire();
-        q.add(element);
-        deq.release();
+        lock.lock();
+        try {
+            while(queue.size()==capacity) {
+                notFull.await();
+            }
+            queue.offer(element);
+            notEmpty.signal();
+        } finally {
+            lock.unlock();
+        }
     }
-
+    
     public int dequeue() throws InterruptedException {
-        deq.acquire();
-        int val = q.poll();
-        enq.release();
-        return val;
+        lock.lock();
+        try {
+            while(queue.size()==0) {
+                notEmpty.await();
+            }
+            int item = queue.poll();
+            notFull.signal();
+            return item;
+        } finally {
+            lock.unlock();
+        }
     }
-
+    
     public int size() {
-        return q.size();
+        lock.lock();
+        try {
+            return queue.size();
+        } finally {
+            lock.unlock();
+        }  
     }
 }
