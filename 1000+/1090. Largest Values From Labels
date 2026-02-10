@@ -1,28 +1,46 @@
 //O(nlogn) time and O(n) space
-class Solution {
-    public int largestValsFromLabels(int[] values, int[] labels, int num_wanted, int use_limit) {
-        TreeMap<Integer, List<Integer>> map = new TreeMap(Collections.reverseOrder());
-        int index = 0;
-        for(int value:values) {
-            map.putIfAbsent(value, new ArrayList());
-            map.get(value).add(labels[index++]);            
+class Solution {    
+    public int largestValsFromLabels(int[] values, int[] labels, int numWanted, int useLimit) {
+         TreeMap<Integer, List<Integer>> map =
+                new TreeMap<>(Collections.reverseOrder());
+
+        int n = values.length;
+        for (int i = 0; i < n; i++) {
+            int value = values[i];
+            int label = labels[i];
+            map.putIfAbsent(value, new ArrayList<>());
+            map.get(value).add(label);
         }
-        int max = 0;
-        Map<Integer, Integer> freqMap = new HashMap();
-        for(Integer value:map.keySet()) {
-            System.out.print(value);
-            List<Integer> list = map.get(value);
-            for(Integer label:list) {
-                int freq = freqMap.getOrDefault(label,0);
-                if(freq==use_limit) continue;
-                System.out.print(label);
-                freqMap.put(label, freq+1);
-                max+=value;
-                num_wanted--;
-                System.out.println(num_wanted);
-                if(num_wanted==0) return max;
+
+        Map<Integer, Integer> freqMap = new HashMap<>(); // label -> used count
+        int taken = 0;
+        int ans = 0;
+
+        // Iterate values from largest to smallest
+        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
+            int value = entry.getKey();
+            List<Integer> labelList = entry.getValue();
+
+            for (int label : labelList) {
+                if (taken == numWanted) {
+                    return ans;
+                }
+
+                int used = freqMap.getOrDefault(label, 0);
+                if (used == useLimit) {
+                    continue; // can't take more of this label
+                }
+
+                freqMap.put(label, used + 1);
+                ans += value;
+                taken++;
+            }
+
+            if (taken == numWanted) {
+                break;
             }
         }
-        return max;
+
+        return ans;
     }
 }
