@@ -1,0 +1,22 @@
+//(nlogmax(MaxLogins)) time and O(n) space
+class Solution {
+    public List<String> alertNames(String[] keyName, String[] keyTime) {
+        if(keyName==null || keyName.length==0) return new ArrayList();
+        Map<String, TreeSet<Integer>> map = new HashMap();
+        for(int i=0;i<keyName.length;i++) {
+            int time = Integer.parseInt(keyTime[i].substring(0,2))*60 + Integer.parseInt(keyTime[i].substring(3));
+            map.putIfAbsent(keyName[i], new TreeSet());
+            map.get(keyName[i]).add(time);
+        }
+        TreeSet<String> result = new TreeSet();
+        for(String key:map.keySet()) {
+            List<Integer> values = new ArrayList<>(map.get(key));
+            for(int i=2;i<values.size();i++) {
+                if(values.get(i)-values.get(i-2) <= 60 ) {
+                    result.add(key);
+                }
+            }
+        }
+        return new ArrayList<>(result);
+    }
+}
