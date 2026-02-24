@@ -1,0 +1,67 @@
+class Solution {
+    Map<Integer, List<Integer>> graph;
+    Map<Integer, Integer> inDegree;
+
+    public int minimumTime(int n, int[][] relations, int[] time) {
+        construct(relations, time, n);
+        int[] dp = new int[n+1];
+        return topSort(dp, n, time);
+    }
+
+    private int topSort(int[] dp, int n, int[] time)
+    {
+        int res = 0;
+        Queue<Integer> queue = new LinkedList();
+        for(int i=1; i<=n; i++)
+        {
+            if(inDegree.get(i) == 0)
+            {
+                queue.offer(i);
+                dp[i] = time[i-1];
+            }
+        }
+
+        while(!queue.isEmpty())
+        {
+            int u = queue.poll();
+            List<Integer> neighbors = graph.get(u);
+
+            for(int v: neighbors)
+            {
+                inDegree.put(v, inDegree.get(v)-1);
+                int t = time[v-1];
+                dp[v] = Math.max(dp[v], dp[u]+t);
+                if(inDegree.get(v) == 0)
+                {
+                    queue.offer(v);
+                }
+            }
+        }
+
+        for(int distance: dp)
+        {
+            res = Math.max(res, distance);
+        }
+        return res;
+    }
+
+    private void construct(int[][] relations, int[] time, int n)
+    {
+        graph = new HashMap();
+        inDegree = new HashMap();
+
+        for(int i=1; i<=n; i++)
+        {
+            graph.put(i, new ArrayList());
+            inDegree.put(i, 0);
+        }
+
+        for(int[] relation: relations)
+        {
+            int u = relation[0], v = relation[1];
+
+            graph.get(u).add(v);
+            inDegree.put(v, inDegree.getOrDefault(v, 0)+1);
+        }
+    }
+}
