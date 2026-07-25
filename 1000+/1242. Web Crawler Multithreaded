@@ -1,38 +1,75 @@
-/**
- * // This is the HtmlParser's API interface.
- * // You should not implement it, or speculate about its implementation
- * interface HtmlParser {
- *     public List<String> getUrls(String url) {}
- * }
- */
+//O(V+E) time and O(V) space
 class Solution {
     public List<String> crawl(String startUrl, HtmlParser htmlParser) {
-       String hostname = getHostname(startUrl);
-       Set<String> visited = ConcurrentHashMap.newKeySet();
-       visited.add(startUrl);
-       return crawl(startUrl, htmlParser, hostname, visited)
-            .collect(Collectors.toList());
-    }
-    
-    private Stream<String> crawl(String startUrl, HtmlParser htmlParser, String hostname, Set<String> visited) {
-        Stream<String> stream = htmlParser.getUrls(startUrl)
-            .parallelStream()
-            .filter(url -> isSameHostname(url, hostname))
-            .filter(url -> visited.add(url))
-            .flatMap(url -> crawl(url, htmlParser, hostname, visited));
+        // 1. Thread-safe Set to prevent duplicate crawling
+        Set<String> visited = ConcurrentHashMap.newKeySet();
+        visited.add(startUrl);
         
-        return Stream.concat(Stream.of(startUrl), stream);
-    }
-    
-    private String getHostname(String url) {
-        int idx = url.indexOf('/', 7);
-        return (idx != -1) ? url.substring(0, idx) : url;
-    }
-    
-    private boolean isSameHostname(String url, String hostname) {
-        if (!url.startsWith(hostname)) {
-            return false;
+        String hostname = getHostname(startUrl);
+        
+        // 2. Thread pool to handle concurrent blocking HTTP calls
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        
+        // 3. Coordination primitives
+        AtomicInteger activeTasks = new AtomicInteger(1);
+        ReentrantLock lock = new ReentrantLock();
+        Condition allDone = lock.newCondition();
+
+        // Submit the root task
+        executor.submit(() -> 
+            crawlWorker(startUrl, htmlParser, hostname, visited, executor, activeTasks, lock, allDone)
+        );
+
+        // 4. Main thread goes to sleep until the state changes
+        lock.lock();
+        try {
+            while (activeTasks.get() > 0) {
+                allDone.await(); // Wake me up when activeTasks hits 0
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            lock.unlock();
         }
-        return url.length() == hostname.length() || url.charAt(hostname.length()) == '/';
+
+        // Cleanup and return
+        executor.shutdownNow();
+        return new ArrayList<>(visited);
+    }
+
+    private void crawlWorker(String url, HtmlParser htmlParser, String hostname, 
+                             Set<String> visited, ExecutorService executor, 
+                             AtomicInteger activeTasks, ReentrantLock lock, Condition allDone) {
+        try {
+            // This is the blocking call (15ms simulated)
+            List<String> nextUrls = htmlParser.getUrls(url);
+            
+            for (String next : nextUrls) {
+                // Check host AND attempt to add to Set atomically
+                if (getHostname(next).equals(hostname) && visited.add(next)) {
+                    // MUST increment before submitting to avoid race conditions
+                    activeTasks.incrementAndGet();
+                    executor.submit(() -> 
+                        crawlWorker(next, htmlParser, hostname, visited, executor, activeTasks, lock, allDone)
+                    );
+                }
+            }
+        } finally {
+            // Decrement. If we are the absolute last task to finish, signal the Condition.
+            if (activeTasks.decrementAndGet() == 0) {
+                lock.lock();
+                try {
+                    allDone.signal(); // Wake up the main thread
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+    }
+
+    // Helper to extract "http://example.com" from "http://example.com/path"
+    private String getHostname(String url) {
+        int idx = url.indexOf('/', 7); // skip "http://"
+        return (idx != -1) ? url.substring(0, idx) : url;
     }
 }
