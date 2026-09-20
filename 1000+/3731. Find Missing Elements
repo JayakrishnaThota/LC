@@ -1,0 +1,17 @@
+//O(n) time and space
+class Solution {
+    public List<Integer> findMissingElements(int[] nums) {
+        List<Integer> result = new ArrayList();
+        Set<Integer> set = new HashSet();
+        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        for(int num:nums) {
+            set.add(num);
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        for(int i=min;i<=max;i++) {
+            if(!set.contains(i)) result.add(i);
+        }
+        return result;
+    }
+}
